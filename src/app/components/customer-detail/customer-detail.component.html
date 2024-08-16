@@ -1,0 +1,598 @@
+<title>Customers</title>
+<app-breadcrumb [title]="'Customers'" [items]="[{'name':'Customers', 'route':'/customers'}]" [active_item]="'View'">
+</app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-lg-4 col-md-6 col-sm-12 px-1">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 col-4">
+                            <div *ngIf="!customer?.profilePicUrl else upload">
+                                <dd><img src="../../../assets/images/userprofile.png" class="rounded-pill" width="80px" height="80px" alt="" /></dd>
+                            </div>
+                            <ng-template #upload>
+                                <dd> <img [src]="customer?.profilePicUrl" class="rounded-pill" width="80px" height="80px" alt="" /> </dd>
+                            </ng-template>
+                        </div>
+                        <div class="col-md-8 col-8" style="margin-top: 15px;">
+                            <h2 class="mb-0">{{customer?.fullName}}</h2>
+                            <h6>{{customer?.temporaryCode}}</h6>
+                        </div>
+                    </div>
+                    <table class="table" style="margin-bottom: 5px; margin-top: 10px;" aria-label="customer">
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: 550;">Contact</td>
+                                <td>{{customer?.contactNo}}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 550;">Gender</td>
+                                <td>{{customer?.gender}}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 550;">Birth Date</td>
+                                <td>{{customer?.birthdate | date}}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 550;">Email</td>
+                                <td>{{customer?.email}}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 550;">Address</td>
+                                <td>{{customer?.label}},{{customer?.addressLine1}}
+                                    <span *ngIf="customer?.addressLine2 != ''">
+                                        ,{{customer?.partnerAddressLine2}}
+                                    </span>
+                                    <span>
+                                        {{customer?.city}},{{customer?.district}},{{customer?.state}} -
+                                        {{customer?.pincode}}
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8 col-md-6 col-sm-12 px-1">
+            <div class="card">
+                <div class="card-body">
+                    <div class="tabs-menu">
+                        <ul ngbNav #nav="ngbNav" class=" nav-tabs profile navtab-custom panel-tabs">
+
+                            <li [ngbNavItem]="1" *ngIf="customer.groupDetail != null">
+                                <a ngbNavLink>
+                                    <span class="visible-xs">
+                                        <i class="fa fa-sm fa-suitcase tx-16 mr-1"></i>
+                                    </span>
+                                    <span class="hidden-xs">Customer Group</span>
+                                </a>
+                                <ng-template ngbNavContent>
+                                    <div class="p-1 border-top" style="height: calc(100vh - 330px);">
+                                        <div class="p-1 ">
+                                            <h6 class="sub-title">Partner Detail</h6>
+                                            <dl>
+                                                <dt>Code - <span style="font-weight:lighter;">{{customer?.groupDetail.permanentCode}}</span>
+                                                </dt>
+                                                <dt>Name - <span style="font-weight:lighter;">{{customer?.groupDetail.fullName}}</span>
+                                                </dt>
+                                                <dt>Contact No - <span style="font-weight:lighter;">{{customer?.groupDetail.contactNo}}</span>
+                                                </dt>
+                                                <dt>Gender - <span style="font-weight:lighter;">{{customer?.groupDetail.gender}}</span>
+                                                </dt>
+                                                <dt>Role - <span style="font-weight:lighter;">{{customer?.groupDetail.partnerRoleName}}</span>
+                                                </dt>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </li>
+
+                            <li [ngbNavItem]="2">
+                                <a ngbNavLink>
+                                    <span class="visible-xs">
+                                        <i class="fa fa-sm fa-user tx-16 mr-1"></i>
+                                    </span>
+                                    <span class="hidden-xs">More Basic Detail</span>
+                                </a>
+                                <ng-template ngbNavContent>
+                                    <div class="p-1 border-top" style="height: calc(100vh - 330px); overflow: auto;">
+                                        <div class="p-1">
+                                            <h6 class="sub-title">Personal Detail</h6>
+                                            <dl>
+                                                <dt>Aadhaar Card No - <span style="font-weight:lighter;">{{customer?.aadhaarCardNo}}</span>
+                                                </dt>
+                                                <dt>PAN Card No - <span style="font-weight:lighter;">{{customer?.panCardNo}}</span>
+                                                </dt>
+                                                <dt>Marital Status - <span style="font-weight:lighter;">{{customer?.maritalStatus}}</span>
+                                                </dt>
+                                                <dt>AlternativeContactNo - <span style="font-weight:lighter;">{{customer?.alternativeContactNo}}</span>
+                                                </dt>
+                                                <dt>Cibil Score - <span style="font-weight:lighter;">{{customer?.cibilScore}}</span>
+                                                </dt>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </li>
+
+                            <li [ngbNavItem]="3">
+                                <a ngbNavLink>
+                                    <span class="visible-xs">
+                                        <i class="fa fa-sm fa-suitcase tx-16 mr-1"></i>
+                                    </span>
+                                    <span class="hidden-xs">Loan</span>
+                                </a>
+                                <ng-template ngbNavContent>
+                                    <div class="p-1 border-top" style="height: calc(100vh - 330px);">
+                                        <ng-container *ngIf="customer.customerLoans && customer.customerLoans.length > 0 else NoDsasData">
+                                            <div class="loan table-responsive userlist-table" style="height: calc(100vh - 338px);">
+                                                <table mat-table [dataSource]="customer.customerLoans" class="mat-elevation-z8 table-striped table-vcenter" style="min-width: 1400px;"
+                                                    aria-label="customerLoan">
+                                                    <ng-container matColumnDef="id">
+                                                        <th mat-header-cell *matHeaderCellDef style="width:6%">#Id
+                                                        </th>
+                                                        <td mat-cell *matCellDef="let element;let  i=index" style="width:6%">
+                                                            {{i + 1}}
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="serviceName">
+                                                        <th mat-header-cell *matHeaderCellDef>Loan Type</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            {{element?.serviceName}}
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="loanAmount">
+                                                        <th mat-header-cell *matHeaderCellDef>Amount Requested</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            ₹{{element?.loanAmount}}
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="disbursedAmount">
+                                                        <th mat-header-cell *matHeaderCellDef>Amount Disbursed</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <ng-container *ngIf="element?.amountDisbursed else NoData">
+                                                                ₹{{element?.amountDisbursed}}
+                                                            </ng-container>
+                                                            <ng-template #NoData>
+                                                                <p>--</p>
+                                                            </ng-template>
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="emi">
+                                                        <th mat-header-cell *matHeaderCellDef>EMI</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <ng-container *ngIf="element?.amountDisbursed else NoEmiData">
+                                                                ₹{{element?.emi}}
+                                                            </ng-container>
+                                                            <ng-template #NoEmiData>
+                                                                <p>--</p>
+                                                            </ng-template>
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="ROI">
+                                                        <th mat-header-cell *matHeaderCellDef>ROI</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <ng-container *ngIf="element?.amountDisbursed else NoROI">
+                                                                {{element?.ROI}}%
+                                                            </ng-container>
+                                                            <ng-template #NoROI>
+                                                                <p>--</p>
+                                                            </ng-template>
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="tenure">
+                                                        <th mat-header-cell *matHeaderCellDef>Tenure</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <ng-container *ngIf="element?.amountDisbursed else NoTenure">
+                                                                {{element?.tenure}} Months
+                                                            </ng-container>
+                                                            <ng-template #NoTenure>
+                                                                <p>--</p>
+                                                            </ng-template>
+                                                        </td>
+                                                    </ng-container>
+
+                                                    <ng-container matColumnDef="loanTransactionDate">
+                                                        <th mat-header-cell *matHeaderCellDef>Loan Transaction Date</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <ng-container *ngIf="element?.amountDisbursed else NoTransactionDate">
+                                                                {{element.loanTransactionDate | date}}
+                                                            </ng-container>
+                                                            <ng-template #NoTransactionDate>
+                                                                <p>--</p>
+                                                            </ng-template>
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="status">
+                                                        <th mat-header-cell *matHeaderCellDef>Status</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            {{element?.loanStatus}}
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="action" stickyEnd>
+                                                        <th mat-header-cell *matHeaderCellDef>Action</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <a title="View Detail" href="javascript:;" class="btn btn-sm btn-info"
+                                                                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px; text-align: center;" (click)="viewLoanDetail(element)">
+                                                                <i class="icon-eye"></i>
+                                                            </a>
+                                                        </td>
+                                                    </ng-container>
+
+                                                    <tr mat-header-row *matHeaderRowDef="LoanDisplayColumns; sticky: true">
+                                                    </tr>
+                                                    <tr mat-row *matRowDef="let row; columns: LoanDisplayColumns;" class="student-element-row" style="cursor: pointer;"></tr>
+                                                </table>
+                                            </div>
+                                        </ng-container>
+                                        <ng-template #NoDsasData>
+                                            <div class="d-flex vertical-center nodata" style="height:calc(100vh - 350px)">
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                </ng-template>
+                            </li>
+
+                            <li [ngbNavItem]="4">
+                                <a ngbNavLink>
+                                    <span class="visible-xs">
+                                        <i class="fa fa-sm fa-info tx-16 mr-1"></i>
+                                    </span>
+                                    <span class="hidden-xs">Lead</span>
+                                </a>
+                                <ng-template ngbNavContent>
+                                    <div class="p-1 border-top" style="height: calc(100vh - 330px);">
+                                        <div class="loan table-responsive userlist-table" style="height: calc(100vh - 338px);">
+                                            <ng-container *ngIf="customer.leads && customer.leads.length > 0 else NoLeads">
+                                                <table mat-table [dataSource]="customer.leads" class="mat-elevation-z8 table-striped table-vcenter" style="min-width: 1000px;" aria-label="Leads">
+                                                    <ng-container matColumnDef="id">
+                                                        <th mat-header-cell *matHeaderCellDef style="width:6%">#Id
+                                                        </th>
+                                                        <td mat-cell *matCellDef="let element;let  i=index" style="width:6%">
+                                                            {{i + 1}}
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="type">
+                                                        <th mat-header-cell *matHeaderCellDef>Employment Type</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            {{element?.employmentType}}
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="serviceName">
+                                                        <th mat-header-cell *matHeaderCellDef>Service Name</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            {{element?.serviceName}}
+                                                        </td>
+                                                    </ng-container>
+
+                                                    <ng-container matColumnDef="loanAmount">
+                                                        <th mat-header-cell *matHeaderCellDef>AMount</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <ng-container *ngIf="element?.loanAmount else NoData">
+                                                                ₹{{element?.loanAmount}}
+                                                            </ng-container>
+                                                            <ng-template #NoData>
+                                                                <p>--</p>
+                                                            </ng-template>
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="leadStatus">
+                                                        <th mat-header-cell *matHeaderCellDef>Lead Status</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            {{element?.leadStatus}}
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="assignPartner">
+                                                        <th mat-header-cell *matHeaderCellDef>Assign Partner</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <ng-container *ngIf="element?.assignPartnerName else NoAssignPartner">
+                                                                {{element?.assignPartnerName}}-{{element?.assignPartnerContactNo}}
+                                                            </ng-container>
+                                                            <ng-template #NoAssignPartner>
+                                                                <p>--</p>
+                                                            </ng-template>
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="assignOn">
+                                                        <th mat-header-cell *matHeaderCellDef>Assign On</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <ng-container *ngIf="element?.assignOn else NoAssign">
+                                                                {{element?.assignOn | date}}
+                                                            </ng-container>
+                                                            <ng-template #NoAssign>
+                                                                <p>--</p>
+                                                            </ng-template>
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="createdDate">
+                                                        <th mat-header-cell *matHeaderCellDef>Created Date</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            {{element?.createdDate |date}}
+                                                        </td>
+                                                    </ng-container>
+                                                    <tr mat-header-row *matHeaderRowDef="leadDisplayColumn; sticky: true">
+                                                    </tr>
+                                                    <tr mat-row *matRowDef="let row; columns: leadDisplayColumn;" class="student-element-row" style="cursor: pointer;"></tr>
+                                                </table>
+                                            </ng-container>
+                                        </div>
+                                        <ng-template #NoLeads>
+                                            <div class="d-flex vertical-center nodata" style="height:calc(100vh - 350px)">
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                </ng-template>
+                            </li>
+
+                            <li [ngbNavItem]="5">
+                                <a ngbNavLink>
+                                    <span class="visible-xs">
+                                        <i class="fa fa-sm fa-inr tx-16 mr-1"></i>
+                                    </span>
+                                    <span class="hidden-xs">Wallet History</span>
+                                </a>
+                                <ng-template ngbNavContent style="padding-bottom: 20px;">
+                                    <div class="p-1 border-top" style="height: calc(100vh - 330px);">
+                                        <div class="total">
+                                            <div class="m-auto">
+                                                <img src="../../../assets/images/favicon-2.jpg" alt="favicon">
+                                                <ng-container *ngIf="customer.walletHistory && customer.walletHistory.length > 0 else NoHistory">
+                                                    <span style="font-size:35px;padding-left:10px">{{customer.walletHistory[0].totalCoin}}</span>
+                                                </ng-container>
+                                                <ng-template #NoHistory><span style="font-size:35px;padding-left:6px">0</span>
+                                                </ng-template>
+                                            </div>
+                                        </div>
+                                        <ng-container *ngIf="customer.walletHistory && customer.walletHistory.length > 0 else NoLeads">
+                                            <div class="example-container table-responsive border-top userlist-table" style="height: calc(100vh - 380px);">
+                                                <table mat-table [dataSource]="customer.walletHistory" class="walletTable maintable mat-elevation-z8 table-striped table-vcenter"
+                                                    style="min-width: 600px;" aria-label="Wallet">
+                                                    <ng-container matColumnDef="id">
+                                                        <th mat-header-cell *matHeaderCellDef style="width: 10%;">#</th>
+                                                        <td mat-cell *matCellDef="let element;let  i=index" style="width: 10%;">
+                                                            {{i + 1}}
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="coin">
+                                                        <th mat-header-cell *matHeaderCellDef style="width: 10%;">Coin
+                                                        </th>
+                                                        <td mat-cell *matCellDef="let element" style="width: 10%;">
+                                                            {{element?.coin}}
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="rewardType">
+                                                        <th mat-header-cell *matHeaderCellDef>Reward Type</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            {{element?.name}}
+                                                        </td>
+                                                    </ng-container>
+
+                                                    <ng-container matColumnDef="isWithdrawal">
+                                                        <th mat-header-cell *matHeaderCellDef>isWithdrawal</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <ng-container *ngIf="element?.isWithdrawal else noWithdrawal">
+                                                                true
+                                                            </ng-container>
+                                                            <ng-template #noWithdrawal>
+                                                                false
+                                                            </ng-template>
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="createdDate">
+                                                        <th mat-header-cell *matHeaderCellDef style="width: 30%;">
+                                                            Transaction Date</th>
+                                                        <td mat-cell *matCellDef="let element" style="width: 30%;">
+                                                            {{element?.createdDate |date}}
+                                                        </td>
+                                                    </ng-container>
+                                                    <tr mat-header-row *matHeaderRowDef="walletColumns; sticky: true">
+                                                    </tr>
+                                                    <tr mat-row *matRowDef="let row; columns: walletColumns;" class="student-element-row" style="cursor: pointer;"></tr>
+                                                </table>
+                                            </div>
+                                        </ng-container>
+
+                                        <ng-template #NoLeads>
+                                            <div class="d-flex vertical-center nodata" style="height:calc(100vh - 420px)">
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                </ng-template>
+
+                            </li>
+
+                            <li [ngbNavItem]="6">
+                                <a ngbNavLink>
+                                    <span class="visible-xs">
+                                        <i class="fa fa-sm fa-suitcase tx-16 mr-1"></i>
+                                    </span>
+                                    <span class="hidden-xs">Other Loan & Other Service</span>
+                                </a>
+                                <ng-template ngbNavContent>
+                                    <div class="p-1 border-top" style="height: calc(100vh - 330px);">
+                                        <ng-container *ngIf="customer.otherLoans && customer.otherLoans.length > 0 else NoService">
+                                            <div class="order table-responsive userlist-table" style="height: calc(100vh - 338px);">
+                                                <table mat-table [dataSource]="customer.otherLoans" class="mat-elevation-z8 table-striped table-vcenter" style="min-width: 1000px;"
+                                                    aria-label="OtherLoans">
+                                                    <ng-container matColumnDef="id">
+                                                        <th mat-header-cell *matHeaderCellDef style="width:6%">#Id
+                                                        </th>
+                                                        <td mat-cell *matCellDef="let element;let  i=index" style="width:6%">
+                                                            {{i + 1}}
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="serviceType">
+                                                        <th mat-header-cell *matHeaderCellDef>Service Type</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            {{element?.serviceType}}
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="serviceName">
+                                                        <th mat-header-cell *matHeaderCellDef>Service</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            {{element?.serviceName}}
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="fullName">
+                                                        <th mat-header-cell *matHeaderCellDef>Name</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <ng-container *ngIf="element?.fullName else NoFullName">
+                                                                {{element?.fullName}}
+                                                            </ng-container>
+                                                            <ng-template #NoFullName>
+                                                                <p>--</p>
+                                                            </ng-template>
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="contactNo">
+                                                        <th mat-header-cell *matHeaderCellDef>Contact No</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <ng-container *ngIf="element?.contactNo else Nocontact">
+                                                                ₹{{element?.contactNo}}
+                                                            </ng-container>
+                                                            <ng-template #Nocontact>
+                                                                <p>--</p>
+                                                            </ng-template>
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="createdDate">
+                                                        <th mat-header-cell *matHeaderCellDef>Created Date</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <ng-container *ngIf="element?.createdDate else NoCreateddate">
+                                                                {{element?.createdDate | date}}
+                                                            </ng-container>
+                                                            <ng-template #NoCreateddate>
+                                                                <p>--</p>
+                                                            </ng-template>
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="employmentType">
+                                                        <th mat-header-cell *matHeaderCellDef>Employment Type</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <ng-container *ngIf="element?.employmentType else NoEmploymentType">
+                                                                {{element?.employmentType}}
+                                                            </ng-container>
+                                                            <ng-template #NoEmploymentType>
+                                                                <p>--</p>
+                                                            </ng-template>
+                                                        </td>
+                                                    </ng-container>
+                                                    <tr mat-header-row *matHeaderRowDef="OtherLoanDisplayColumns; sticky: true">
+                                                    </tr>
+                                                    <tr mat-row *matRowDef="let row; columns: OtherLoanDisplayColumns;" class="student-element-row" style="cursor: pointer;"></tr>
+                                                </table>
+                                            </div>
+                                        </ng-container>
+                                        <ng-template #NoService>
+                                            <div class="d-flex vertical-center nodata" style="height:calc(100vh - 350px)">
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                </ng-template>
+                            </li>
+
+                            <li [ngbNavItem]="7">
+                                <a ngbNavLink>
+                                    <span class="visible-xs">
+                                        <i class="fa fa-sm fa-suitcase tx-16 mr-1"></i>
+                                    </span>
+                                    <span class="hidden-xs">Orders</span>
+                                </a>
+                                <ng-template ngbNavContent>
+                                    <div class="p-1 border-top" style="height: calc(100vh - 330px);">
+                                        <ng-container *ngIf="customer.orders && customer.orders.length > 0 else NoDsasData">
+                                            <div class="order table-responsive userlist-table" style="height: calc(100vh - 338px);">
+                                                <table mat-table [dataSource]="customer.orders" class="mat-elevation-z8 table-striped table-vcenter" style="min-width: 1000px;" aria-label="Orders">
+                                                    <ng-container matColumnDef="id">
+                                                        <th mat-header-cell *matHeaderCellDef style="width:6%">#
+                                                        </th>
+                                                        <td mat-cell *matCellDef="let element;let  i=index" style="width:6%">
+                                                            {{i + 1}}
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="productName">
+                                                        <th mat-header-cell *matHeaderCellDef>Product Name</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            {{element?.productName}}
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="quantity">
+                                                        <th mat-header-cell *matHeaderCellDef>Quantity</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            {{element?.quantity}}
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="unitCoin">
+                                                        <th mat-header-cell *matHeaderCellDef>Unit Coin</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <ng-container *ngIf="element?.unitCoin else NoUnitCoin">
+                                                                {{element?.unitCoin}}
+                                                            </ng-container>
+                                                            <ng-template #NoUnitCoin>
+                                                                <p>--</p>
+                                                            </ng-template>
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="totalcoin">
+                                                        <th mat-header-cell *matHeaderCellDef>Unit Coin</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <ng-container *ngIf="element?.totalCoin else NoTotalcoin">
+                                                                {{element?.totalCoin}}
+                                                            </ng-container>
+                                                            <ng-template #NoTotalcoin>
+                                                                <p>--</p>
+                                                            </ng-template>
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="orderstatus">
+                                                        <th mat-header-cell *matHeaderCellDef>Unit Coin</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <ng-container *ngIf="element?.status else NoOrderstatus">
+                                                                {{element?.status}}
+                                                            </ng-container>
+                                                            <ng-template #NoOrderstatus>
+                                                                <p>--</p>
+                                                            </ng-template>
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="transactiondate">
+                                                        <th mat-header-cell *matHeaderCellDef>
+                                                            Transaction Date</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <ng-container *ngIf="element?.transactionDate else NoTransactionDate">
+                                                                {{element?.transactionDate | date}}
+                                                            </ng-container>
+                                                            <ng-template #NoTransactionDate>
+                                                                <p>--</p>
+                                                            </ng-template>
+                                                        </td>
+                                                    </ng-container>
+
+                                                    <tr mat-header-row *matHeaderRowDef="OrderDisplayColumns; sticky: true">
+                                                    </tr>
+                                                    <tr mat-row *matRowDef="let row; columns: OrderDisplayColumns;" class="student-element-row" style="cursor: pointer;"></tr>
+                                                </table>
+                                            </div>
+                                        </ng-container>
+                                        <ng-template #NoDsasData>
+                                            <div class="d-flex vertical-center nodata" style="height:calc(100vh - 350px)">
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                </ng-template>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class=" border-left border-bottom border-right border-top-0">
+                        <div [ngbNavOutlet]="nav" class="mt-0 tab-content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

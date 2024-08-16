@@ -1,0 +1,385 @@
+<title>Partner Payout</title>
+<app-breadcrumb [title]="'Partner Payout'" [active_item]="'Partner Payout'">
+</app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-drawer-container class="example-container" autosize>
+                <div class="card">
+                    <div class="card-header p-1">
+                        <div class="d-flex justify-content-between">
+                            <div class="main-header-left "></div>
+                            <div ngbDropdown class="btn-group">
+                                <div class="ml-2">
+                                    <button type="button" class="btn btn-info"
+                                        style="margin-right: 5px;border-radius: 10px;padding:8px 14px"
+                                        title="Filter Partner Payout" (click)="drawer.toggle();">
+                                        <i class="icon-filter p-0"></i>
+                                        <span>Filter</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="partnerPayouts && partnerPayouts.length > 0 else NoPayout">
+                        <div class="table-responsive border-top userlist-table">
+                            <table mat-table [dataSource]="partnerPayouts"
+                                class=" maintable mat-elevation-z8 table-striped table-vcenter" aria-label="">
+                                <ng-container matColumnDef="id">
+                                    <th mat-header-cell *matHeaderCellDef style="width:75px">#</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:75px">
+                                        {{(paginate.currentPage - 1) * paginate.pageSize + i + 1}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="partner">
+                                    <th mat-header-cell *matHeaderCellDef style="width: 30%;">Partner</th>
+                                    <td mat-cell *matCellDef="let element" style="width: 30%;">
+                                        <div *ngIf="element.fullName else NoValue">
+                                            {{element.fullName}}-{{element.contactNo}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="totalIN">
+                                    <th mat-header-cell *matHeaderCellDef>Total Commission</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.totalIn else NoValue">
+                                            {{element.totalIn | currency:'INR'}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="totalOut">
+                                    <th mat-header-cell *matHeaderCellDef>Release Commission</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.totalOut else NoValue">
+                                            {{element.totalOut | currency:'INR'}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="action">
+                                    <th mat-header-cell *matHeaderCellDef translate class="text-right">Action</th>
+                                    <td mat-cell *matCellDef="let element" class="text-right">
+                                        <a title="View History" href="javascript:;" class="btn btn-sm btn-info"
+                                            style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                            (click)="viewPayoutHistory(element.id,basicmodal)">
+                                            <i class="icon-eye"></i>
+                                        </a>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayColumns;" class="student-element-row"
+                                    style="cursor: pointer;"></tr>
+                            </table>
+                        </div>
+                    </ng-container>
+
+                    <ng-template #NoPayout>
+                        <div class="d-flex vertical-center nodata" style="height:calc(100vh - 260px)">
+                        </div>
+                    </ng-template>
+
+                    <div class="card-footer" *ngIf="partnerPayouts && partnerPayouts.length > 0">
+                        <ul class="pagination mb-0 float-right">
+                            <li [ngClass]="{ disabled: paginate.currentPage == 1 }" class="page-item page-prev">
+                                <a class="page-link" href="javascript:;" tabindex="-1"
+                                    (click)="setPage(paginate.currentPage - 1)">
+                                    <span>Prev</span>
+                                </a>
+                            </li>
+                            <li *ngFor="let page of paginate.pages" class="page-item active"
+                                [ngClass]="{ active: paginate.currentPage == page }"><a
+                                    [ngClass]="{current:paginate.currentPage == page}" class="page-link"
+                                    href="javascript:;" (click)="setPage(page)">{{page}}</a></li>
+                            <li [ngClass]="{ disabled: paginate.currentPage === paginate.totalPages}"
+                                (click)="setPage(paginate.currentPage + 1)" class="page-item page-next">
+                                <a class="page-link" href="javascript:;"><span>Next</span></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+                <mat-drawer #drawer class="example-sidenav" mode="over" position="end">
+                    <div class="col-lg-12 px-3 pt-3">
+                        <div class="d-inline" style="width: 100%;"><i class="fa fa-filter pr-1"><span
+                                    class="ml-1">Filter</span></i>
+                            <button v class="close" aria-label="Close" (click)="drawer.toggle();">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="position px-3">
+                        <div class="form-group">
+                            <label for="fullName">Search</label>
+                            <input class="form-control" type="text" name="search" [(ngModel)]="searchString" />
+                        </div>                   
+                        <div class="col-form-label">From Date</div>
+                        <mat-form-field appearance="outline" class="d-block w-100" (click)="toggleMenuService.togglePickerStyles()">
+                            <input matInput [matDatepicker]="filterPickerFrom" [max]="toDate" placeholder="From Date"
+                                [(ngModel)]="fromDate" name="fromDate" [readonly]="true"
+                                (focus)="filterPickerFrom.open()" (click)="toggleMenuService.togglePickerStyles()">
+                            <mat-datepicker-toggle matSuffix [for]="filterPickerFrom" (click)="toggleMenuService.togglePickerStyles()">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #filterPickerFrom></mat-datepicker>
+                        </mat-form-field>
+                        <div class="col-form-label">To Date</div>
+                        <mat-form-field appearance="outline" class="d-block w-100 " (click)="toggleMenuService.togglePickerStyles()">
+                            <input matInput [matDatepicker]="FilterPickerTo" placeholder="To Date" [(ngModel)]="toDate"
+                                name="toDate" [readonly]="true" (focus)="FilterPickerTo.open()" (click)="toggleMenuService.togglePickerStyles()">
+                            <mat-datepicker-toggle matSuffix [for]="FilterPickerTo" (click)="toggleMenuService.togglePickerStyles()">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #FilterPickerTo></mat-datepicker>
+                        </mat-form-field>
+                    <div class="form-group">
+                        <label>Select Service</label>
+                        <ng-select [items]="services" class="js-example-basic-single p-0" [(ngModel)]="selectedService"
+                            placeholder="Select Service" bindLabel="displayName" bindValue="id" name="service">
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="modal-footer p-0" style="margin-bottom: 20px;justify-content: center;">
+                        <div class="float-right d-inline">
+                            <button type="button" class="btn btn-sm btn-info"
+                                style="margin-right: 5px;border-radius: 10px;padding:8px 14px" title="Clear Filter"
+                                (click)="drawer.toggle();clearSearch();">
+                                <span>Clear</span>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-info"
+                                style="margin-right: 5px;border-radius: 10px; padding:8px 14px" title="Filter Loans"
+                                (click)="drawer.toggle();setPage(1);">
+                                <span>Search</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="px-3">
+                    </div>
+                </mat-drawer>
+            </mat-drawer-container>
+        </div>
+    </div>
+</div>
+
+<ng-template #basicmodal let-modal>
+    <div>
+
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body pd-20">
+            <ng-container *ngIf="isInsertPayout">
+                <div class="d-inline">
+                    <h3 class="mb-1">Bank Detail <span style="color: red;">*</span></h3>
+                </div>
+                <div class="d-inline float-right">
+                    <a title="Edit Bank Detail" href="javascript:;" class="btn btn-sm btn-info"
+                        style="padding: 5px;border-radius: 10px;margin: 5px 3px;" (click)="openEditBankDetailDialog()">
+                        <i class="icon-pencil"></i>
+                    </a>
+                </div>
+                <div class="border p-3">
+                    <h4 class="mb-1">AccountHolder Name: {{dsa.partnerBankDetail.accountHolderName}} </h4>
+                    <h4 class="mb-1">Account No: {{dsa.partnerBankDetail.accountNo}} </h4>
+                    <h4 class="mb-1">Bank: {{dsa.partnerBankDetail.bankName}} </h4>
+                    <h4 class="mb-1">IFSC: {{dsa.partnerBankDetail.ifscCode}} </h4>
+                </div>
+                <h4>Partner Commission:{{partnerCommission | currency:"INR"}}</h4>
+                <div class="form-group">
+                    <label for="name">Payout Release <span style="color: red;">*</span></label>
+                    <input class="form-control" type="text" id="name" [formControl]="payout" required onlyNumbers
+                        (keyup)="checkPayout()">
+                    <mat-error *ngIf="(payout && !payout?.valid && payout?.touched)">
+                        Payout is required
+                    </mat-error>
+                    <mat-error *ngIf="(commissionError)">
+                        Payout must be less than th actual commission
+                    </mat-error>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="isPayoutHistory">
+                <button type="button" class="float-right mb-2 btn btn-info"
+                    style="margin-right: 5px;border-radius: 10px;padding:8px 14px" title="DownLoad CSV"
+                    (click)="downloadCsv()">
+                    <i class="fa fa-download p-0"></i>
+                    <span>DownLoad CSV</span>
+                </button>
+                <div class="table-responsive border-top userlist-table">
+                    <table mat-table [dataSource]="payoutHistory"
+                        class=" maintable mat-elevation-z8 table-striped table-vcenter" aria-label="">
+                        <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef style="width:75px">#</th>
+                            <td mat-cell *matCellDef="let element; let i = index;" style="width:75px">
+                                {{i + 1}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="commission">
+                            <th mat-header-cell *matHeaderCellDef>Commission</th>
+                            <td mat-cell *matCellDef="let element">
+                                <div *ngIf="element.commission else NoValue">
+                                    {{element.commission | currency:'INR'}}
+                                </div>
+                                <ng-template #NoValue>
+                                    --
+                                </ng-template>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="commissionPercent">
+                            <th mat-header-cell *matHeaderCellDef>Commission(IN %)</th>
+                            <td mat-cell *matCellDef="let element">
+                                <div *ngIf="element.commissionPercent else NoValue">
+                                    {{element.commissionPercent}}%
+                                </div>
+                                <ng-template #NoValue>
+                                    --
+                                </ng-template>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="serviceName">
+                            <th mat-header-cell *matHeaderCellDef>Service</th>
+                            <td mat-cell *matCellDef="let element">
+                                <div *ngIf="element.serviceName else NoService">
+                                    {{element.serviceName}}
+                                </div>
+                                <ng-template #NoService>
+                                    --
+                                </ng-template>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="bankName">
+                            <th mat-header-cell *matHeaderCellDef>Bank</th>
+                            <td mat-cell *matCellDef="let element">
+                                <div *ngIf="element.bankName else NoBank">
+                                    {{element.bankName}}
+                                </div>
+                                <ng-template #NoBank>
+                                    --
+                                </ng-template>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="loanDetail">
+                            <th mat-header-cell *matHeaderCellDef colspan="2">LoanDetail</th>
+                            <td mat-cell *matCellDef="let element" colspan="2">
+                                <div *ngIf="element.amountDisbursed else NoDetail">
+                                    ₹{{element.amountDisbursed}}<br>
+                                    {{element.fullName}}-
+                                    {{element.contactNo}}
+                                </div>
+                                <ng-template #NoDetail>
+                                    --
+                                </ng-template>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="view">
+                            <th mat-header-cell *matHeaderCellDef class="text-right">Invoice</th>
+                            <td mat-cell *matCellDef="let element" class="text-right">
+                                <a *ngIf="element.url else NoUrl" title="View Invoice" class="btn btn-sm btn-info"
+                                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" [href]="element.url"
+                                    target="_blanck">
+                                    <i class="icon-download"></i>
+                                </a>
+
+                                <ng-template #NoUrl>
+                                    --
+                                </ng-template>
+
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="releaseDate">
+                            <th mat-header-cell *matHeaderCellDef class="text-right">Release Date</th>
+                            <td mat-cell *matCellDef="let element" class="text-right">
+                                <ng-container *ngIf="element.releaseDate else NoRelease">{{element.releaseDate |
+                                    date:'medium'}}
+                                </ng-container>
+                                <ng-template #NoRelease>--</ng-template>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="release">
+                            <th mat-header-cell *matHeaderCellDef class="text-right">Release</th>
+                            <td mat-cell *matCellDef="let element" class="text-right">
+                                <a *ngIf="!element.isReleased else NoRelease" title="Payout Release" href="javascript:;"
+                                    class="btn btn-sm btn-info"
+                                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                    (click)="payoutRelease(element.id,basicmodal)">
+                                    <i class="fa fa-forward"></i>
+                                </a>
+                                <ng-template #NoRelease>--</ng-template>
+
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayHistoryColumns; sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayHistoryColumns;" class="student-element-row"
+                            style="cursor: pointer;"></tr>
+                    </table>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="isInsertBankDetail">
+
+                <form [formGroup]="bankDetailForm">
+                    <div class="form-group mb-2">
+                        <label>Select Bank <span style="color: red;">*</span></label>
+                        <ng-select [items]="banks" class="js-example-basic-single p-0" formControlName="bankId"
+                            placeholder="Select Bank" bindLabel="name" bindValue="id" name="bank">
+                        </ng-select>
+                        <mat-error
+                            *ngIf="(bankDetailForm.get('bankId') && !bankDetailForm.get('bankId')?.valid && bankDetailForm.get('bankId')?.touched)">
+                            Bank is required
+                        </mat-error>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Account HolderName <span style="color: red;">*</span></label>
+                        <input class="form-control" type="text" id="name" formControlName="accountHolderName" required>
+                        <mat-error
+                            *ngIf="(bankDetailForm.get('accountHolderName') && !bankDetailForm.get('accountHolderName')?.valid && bankDetailForm.get('accountHolderName')?.touched)">
+                            Account Holder Name is required
+                        </mat-error>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Account Number <span style="color: red;">*</span></label>
+                        <input class="form-control" type="text" id="name" formControlName="accountNo" required
+                            onlyNumbers>
+                        <mat-error
+                            *ngIf="(bankDetailForm.get('accountNo') && !bankDetailForm.get('accountNo')?.valid && bankDetailForm.get('accountNo')?.touched)">
+                            Account Number is required
+                        </mat-error>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">IFSC Code <span style="color: red;">*</span></label>
+                        <input class="form-control" type="text" id="name" formControlName="ifscCode" required
+                            oninput="this.value = this.value.toUpperCase()" maxlength="10"
+                            (keypress)="keyPressAlphanumeric($event)" oninput="this.value = this.value.toUpperCase()">
+                        <mat-error
+                            *ngIf="(bankDetailForm.get('ifscCode') && !bankDetailForm.get('ifscCode')?.valid && bankDetailForm.get('ifscCode')?.touched)">
+                            IFSC Code is required
+                        </mat-error>
+                    </div>
+
+                </form>
+            </ng-container>
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="isInsertPayout" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                class="btn btn-info" (click)="insertPayout()">
+                Save
+            </button>
+            <button *ngIf="isInsertBankDetail" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                class="btn btn-info" (click)="insertUpdateBankDetail()">
+                Save
+            </button>
+            <button style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" class="btn btn-info"
+                (click)="closeDialog()">
+                Cancel
+            </button>
+        </div>
+    </div>
+</ng-template>

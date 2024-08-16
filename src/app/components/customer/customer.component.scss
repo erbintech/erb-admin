@@ -1,0 +1,182 @@
+tr.student-element-row:not(.student-expanded-row):hover {
+    background: whitesmoke;
+}
+
+tr.student-element-row:not(.student-expanded-row):active {
+    background: #efefef;
+}
+
+.student-element-row td {
+    border-bottom-width: 0;
+    padding-right      : 15px;
+}
+
+.student-element-detail {
+    overflow        : auto;
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    background-color: #e1e1e1;
+    box-shadow      : inset 2px 3px 8px #c1c1c1;
+    border-radius   : 8px;
+}
+
+.card {
+    height    : calc(100vh - 200px);
+    overflow-x: auto;
+}
+
+.card-footer {
+    padding: 10px !important;
+}
+
+.table-responsive {
+    display: block;
+    width  : 100%;
+}
+
+::ng-deep .customerTable tbody {
+    display     : block;
+    height      : calc(100vh - 372px);
+    table-layout: fixed;
+}
+
+::ng-deep .customerTable thead {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+::ng-deep .customerTable tr {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+::ng-deep .listTable tbody {
+    display     : block;
+    height      : calc(100vh - 372px);
+    table-layout: fixed;
+}
+
+::ng-deep .listTable thead {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+::ng-deep .listTable tr {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+.table-striped thead tbody tr {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+table {
+    width      : 100%;
+    white-space: inherit !important;
+}
+
+
+.position {
+    height    : calc(100vh - 310px);
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+
+.modal-title {
+    font-weight  : 500 !important;
+    font-size    : 18px !important;
+    margin-bottom: 0 !important;
+    line-height  : 1.2 !important;
+}
+
+.input-icons mat-icon {
+    position  : absolute;
+    text-align: end;
+    float     : right;
+    right     : 15px;
+    padding   : 7px !important;
+}
+
+.input-icons {
+    width        : 100%;
+    margin-bottom: 10px;
+}
+
+.icon {
+    padding  : 10px;
+    min-width: 50px;
+}
+
+.input-field {
+    width  : 100%;
+    padding: 10px;
+}
+
+::ng-deep .modal-backdrop.show {
+    z-index: 1050 !important;
+}
+
+::ng-deep {
+
+    .cdk-global-overlay-wrapper,
+    .cdk-overlay-container {
+        z-index: 9999 !important;
+    }
+}
+
+@media screen and (max-width: 2100px) {
+    ::ng-deep .customer tbody {
+        width: 1700px !important;
+    }
+
+    ::ng-deep .listTable tbody {
+        width: 800px !important;
+    }
+}
+
+.customer {
+    height: calc(100vh - 200px);
+}
+
+::ng-deep.city .mat-form-field-infix {
+    border-top: none !important;
+}
+
+.service {
+    border-bottom: 1px solid #ddd;
+    padding      : 10px;
+    cursor       : pointer;
+}
+
+
+::ng-deep.mat-form-field-wrapper {
+    padding-bottom: 0px !important
+}
+
+::ng-deep.mat-form-field-infix {
+    border-top: 0px !important;
+    padding   : 0.7em !important;
+}
+
+::ng-deep.mat-form-field-flex {
+    padding: 0px !important;
+}
+
+th,
+td {
+    white-space : break-spaces;
+    padding-left: 10px;
+}
+
+.example-container {
+    overflow-x: auto;
+    overflow-y: auto;
+}

@@ -1,0 +1,1781 @@
+<title *ngIf="serviceName=='personal-loan'">Personal Loan </title>
+<title *ngIf="serviceName=='instant-loan'">Instant Loan</title>
+
+<div *ngIf="serviceName=='personal-loan'">
+    <div *ngIf="customerLoanId  else Add">
+        <app-breadcrumb [title]="'Personal Loan'" [items]="[{'name':'Personal Loan', route:'/personal-loan'}]" [active_item]="basicDetailForm.get('fullName').value">
+        </app-breadcrumb>
+    </div>
+    <ng-template #Add>
+        <app-breadcrumb [title]="'Personal Loan'" [items]="[{'name':'Personal Loan', route:'/personal-loan'}]" [active_item]="'Add'">
+        </app-breadcrumb>
+    </ng-template>
+</div>
+
+<div *ngIf="serviceName=='instant-loan'">
+    <div *ngIf="customerLoanId else Add">
+        <app-breadcrumb [title]="'Instant Loan'" [items]="[{'name':'Instant Loan', route:'/instant-loan'}]" [active_item]="basicDetailForm.get('fullName').value">
+        </app-breadcrumb>
+    </div>
+    <ng-template #Add>
+        <app-breadcrumb [title]="'Instant Loan'" [items]="[{'name':'Instant Loan', route:'/instant-loan'}]" [active_item]="'Add'">
+        </app-breadcrumb>
+    </ng-template>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card drawercard">
+                <mat-stepper #stepper>
+                    <mat-step label="Select Type">
+                        <div class="setup-content" id="step-1">
+                            <div class="row mx-0">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="name" style="font-size: 20px;">Select Loan Type
+                                        </label>
+                                        <div class="form-group m-t-15 m-checkbox-inline mb-0 custom-radio-ml ml-2">
+                                            <div class="radio radio-primary">
+                                                <input type="radio" id="new" value="New" [formControl]="isTransfer" (change)="changeLoanType()">
+                                                <label class="mb-0" for="new">New</label>
+                                            </div>
+                                            <div class="radio radio-primary">
+                                                <input type="radio" id="transfer" value="Bank Transfer" [formControl]="isTransfer" (change)="changeLoanType()">
+                                                <label class="mb-0" for="transfer">Transfer</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modalButton">
+                            <button class="btn btn-info pull-right " style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit" matStepperNext>Next</button>
+                        </div>
+                    </mat-step>
+                    <mat-step label="Basic Detail">
+                        <form [formGroup]="basicDetailForm">
+                            <div class="setup-content" id="step-1">
+                                <div class="row mx-0">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="name">Full Name <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="refernce" formControlName="fullName" required onlyAlphabets>
+                                            <mat-error *ngIf="(basicDetailForm.get('fullName') && !basicDetailForm.get('fullName').valid && basicDetailForm.get('fullName').touched)">
+                                                FullName is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>BirthDate(Min.Age:21year) <span style="color: red;">*</span></label>
+                                            <mat-form-field appearance="outline" class="d-block w-100" (click)="toggleMenuService.togglePickerStyles()">
+                                                <input matInput [matDatepicker]="filterPickerFrom" formControlName="birthdate" placeholder="From Date" name="fromDate" [readonly]="true"
+                                                    (focus)="filterPickerFrom.open()" (dateChange)="getAge()" (click)="toggleMenuService.togglePickerStyles()">
+                                                <mat-datepicker-toggle matSuffix [for]="filterPickerFrom" (click)="toggleMenuService.togglePickerStyles()">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #filterPickerFrom></mat-datepicker>
+                                            </mat-form-field>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('birthdate') && !basicDetailForm.get('birthdate').valid && basicDetailForm.get('birthdate').touched) && !basicDetailForm.get('birthdate').hasError('minAge')">
+                                                BirthDate is Required
+                                            </mat-error>
+                                            <mat-error *ngIf="basicDetailForm.get('birthdate').hasError('minAge')">
+                                                minimum Age 21 year is required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="name">PanCard No <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="refernce" formControlName="panCardNo" required oninput="this.value = this.value.toUpperCase()" maxlength="10"
+                                                (keypress)="keyPressAlphanumeric($event)">
+                                            <mat-error *ngIf="(basicDetailForm.get('panCardNo') && !basicDetailForm.get('panCardNo').valid  && basicDetailForm.get('panCardNo').touched)">
+                                                <span *ngIf="basicDetailForm.get('panCardNo').errors.required">PanCardNo
+                                                    is Required</span>
+                                                <span *ngIf="basicDetailForm.get('panCardNo').errors.pattern">Enter
+                                                    Valid PanCard</span>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mx-0">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="name">AlterNateContactNo <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="contact" formControlName="alternativeContactNo" ContactNo required>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('alternativeContactNo') && !basicDetailForm.get('alternativeContactNo').valid  && basicDetailForm.get('alternativeContactNo').touched)">
+                                                <span *ngIf="basicDetailForm.get('alternativeContactNo').errors.required">AlterNate
+                                                    ContactNo is Required</span>
+                                                <span *ngIf="basicDetailForm.get('alternativeContactNo').errors.minlength">Enter
+                                                    Valid ContactNo</span>
+                                            </mat-error>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <div class="col-form-label">Select Marital Status <span style="color: red;">*</span></div>
+                                            <ng-select [items]="maritalStatuses" class="js-example-basic-single p-0" placeholder="Select Marital Status" bindLabel="status" bindValue="id" name="Status"
+                                                required name="selectStatus" formControlName="maritalStatusId">
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('maritalStatusId') && !basicDetailForm.get('maritalStatusId').valid && basicDetailForm.get('maritalStatusId').touched)">
+                                                maritalStatus is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="name">Mother's Name <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="refernce" formControlName="motherName" onlyAlphabets>
+                                            <mat-error *ngIf="(basicDetailForm.get('motherName') && !basicDetailForm.get('motherName').valid && basicDetailForm.get('motherName').touched)">
+                                                Mother's Name is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mx-0">
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label for="name">Father's Name <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="refernce" formControlName="fatherName" onlyAlphabets>
+                                            <mat-error *ngIf="(basicDetailForm.get('fatherName') && !basicDetailForm.get('fatherName').valid  && basicDetailForm.get('fatherName').touched)">
+                                                Father's Name is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label for="name">Loan Amount <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" formControlName="loanAmount" required onlyNumbers>
+                                            <mat-error *ngIf="(basicDetailForm.get('loanAmount') && !basicDetailForm.get('loanAmount').valid  && basicDetailForm.get('loanAmount').touched)">
+                                                Loan Amount is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <div class="col-form-label">Select Tenure <span style="color: red;">*</span>
+                                            </div>
+                                            <ng-select [items]="tenures" class="js-example-basic-single p-0" placeholder="Select Tenure" bindLabel="name" bindValue="id" name="tenureId"
+                                                formControlName="tenureId" required>
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('maritalStatusId') && !basicDetailForm.get('maritalStatusId').valid && basicDetailForm.get('maritalStatusId').touched)">
+                                                Tanure is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <label for="name">Gender <span style="color: red;">*</span></label>
+                                        <div class="form-group m-t-15 m-checkbox-inline mb-0 custom-radio-ml ml-2">
+                                            <div class="radio radio-primary">
+                                                <input type="radio" id="Male" value="Male" formControlName="gender">
+                                                <label class="mb-0" for="Male">Male</label>
+                                            </div>
+                                            <div class="radio radio-primary">
+                                                <input type="radio" id="Female" value="Female" formControlName="gender">
+                                                <label class="mb-0" for="Female">Female</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mx-0 border mb-3 mx-3">
+                                    <div class="col-lg-12">
+                                        <h3 class="mt-2" style="font-size:25px">Current Address</h3>
+                                    </div>
+                                    <div class="row w-100 mx-0">
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">Label <span style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" formControlName="label" name="label">
+                                                <mat-error *ngIf="(basicDetailForm.get('label') && !basicDetailForm.get('label').valid && basicDetailForm.get('label').touched)">
+                                                    Label is Required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="addressLine1">AddressLine1 <span style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" formControlName="addressLine1" name="addressLine1" required>
+                                                <mat-error *ngIf="(basicDetailForm.get('addressLine1') && !basicDetailForm.get('addressLine1').valid && basicDetailForm.get('addressLine1').touched)">
+                                                    Address is Required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">AddressLine2</label>
+                                                <input class="form-control" type="text" formControlName="addressLine2" name="addressLine2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row w-100 mx-0">
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">Pincode <span style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" formControlName="pincode" (keyup)="onKeyUpEvent($event,'currentAddress',true)" onlyNumbers maxlength="6"
+                                                    required>
+                                                <mat-error *ngIf="(basicDetailForm.get('pincode') && !basicDetailForm.get('pincode').valid  && basicDetailForm.get('pincode').touched)">
+                                                    <span *ngIf="basicDetailForm.get('pincode').errors.required">
+                                                        Pincode is required</span>
+                                                    <span *ngIf="basicDetailForm.get('pincode').errors.minlength">
+                                                        Enter Valid Pincode</span>
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <div class="col-form-label">Select City <span style="color: red;">*</span></div>
+                                                <ng-select [items]="currentCities" class="js-example-basic-single p-0" placeholder="Select City" bindLabel="name" bindValue="id" name="cityName"
+                                                    required formControlName="cityId" (change)="selectedCityBasicDetail()">
+                                                </ng-select>
+                                                <mat-error *ngIf="(basicDetailForm.get('cityId') && !basicDetailForm.get('cityId').valid && basicDetailForm.get('cityId').touched)">
+                                                    City is Required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">District <span style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" formControlName="district" readonly required>
+                                                <mat-error *ngIf="(basicDetailForm.get('district') && !basicDetailForm.get('district').valid && basicDetailForm.get('district').touched)">
+                                                    District is Required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">State<span style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" formControlName="state" readonly required>
+                                                <mat-error *ngIf="(basicDetailForm.get('state') && !basicDetailForm.get('state').valid && basicDetailForm.get('state').touched)">
+                                                    State is Required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="basicDetailForm.get('maritalStatusId').value && basicDetailForm.get('maritalStatusId').value == 1" class="row mx-0 border mb-3 mx-3">
+                                    <div class="col-lg-12">
+                                        <h3 class="mt-2" style="font-size:25px">Spouse Detail</h3>
+                                    </div>
+                                    <div class="col-lg-12 mx-0">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="name">Spouse Name</label>
+                                                <input class="form-control" type="text" name="spouseName" formControlName="spouseName" onlyAlphabets>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row mx-0 border mb-3 mx-3" *ngIf="isTransfer.value=='Bank Transfer'">
+                                    <div class="col-lg-12">
+                                        <h3 class="mt-2" style="font-size:25px">Transfer</h3>
+                                    </div>
+                                    <div class="col-lg-12 mx-0">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="name">Loan Amount Taken Existing<span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" name="loanAmountTakenExisting" formControlName="loanAmountTakenExisting" onlyNumbers
+                                                        [required]="isTransfer.value=='Bank Transfer'">
+                                                    <mat-error
+                                                        *ngIf="(basicDetailForm.get('loanAmountTakenExisting') && !basicDetailForm.get('loanAmountTakenExisting').valid && basicDetailForm.get('loanAmountTakenExisting').touched)">
+                                                        Existing Loan Amount is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="name">Approx Date<span style="color: red;">*</span></label>
+                                                    <mat-form-field appearance="outline" class="d-block w-100" (click)="toggleMenuService.togglePickerStyles()">
+                                                        <input matInput [matDatepicker]="filterPickerFrom" formControlName="approxDate" placeholder="From Date" name="fromDate" [readonly]="true"
+                                                            (focus)="filterPickerFrom.open()" (dateChange)="getAge()" [required]="isTransfer.value=='Bank Transfer'"
+                                                            (click)="toggleMenuService.togglePickerStyles()">
+                                                        <mat-datepicker-toggle matSuffix [for]="filterPickerFrom" (click)="toggleMenuService.togglePickerStyles()">
+                                                        </mat-datepicker-toggle>
+                                                        <mat-datepicker #filterPickerFrom></mat-datepicker>
+
+                                                    </mat-form-field>
+                                                    <mat-error *ngIf="(basicDetailForm.get('approxDate') && !basicDetailForm.get('approxDate').valid && basicDetailForm.get('approxDate').touched)">
+                                                        Approx Date is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="name">Aprox Current EMI<span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" name="approxCurrentEMI" formControlName="approxCurrentEMI" onlyNumbers
+                                                        [required]="isTransfer.value=='Bank Transfer'">
+                                                    <mat-error
+                                                        *ngIf="(basicDetailForm.get('approxCurrentEMI') && !basicDetailForm.get('approxCurrentEMI').valid && basicDetailForm.get('approxCurrentEMI').touched)">
+                                                        Approx Current EMI is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="name">Bank<span style="color: red;">*</span></label>
+                                                    <ng-select [items]="banks" class="js-example-basic-single p-0" placeholder="Select Bank" bindLabel="name" bindValue="id" name="bankId"
+                                                        formControlName="bankId" [required]="isTransfer.value=='Bank Transfer'"></ng-select>
+                                                    <mat-error *ngIf="(basicDetailForm.get('bankId') && !basicDetailForm.get('bankId').valid && basicDetailForm.get('bankId').touched)">
+                                                        Bank is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="name">Top Up Amount<span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" name="topupAmount" formControlName="topupAmount" onlyNumbers [required]="isTransfer.value=='Bank Transfer'">
+                                                    <mat-error *ngIf="(basicDetailForm.get('topupAmount') && !basicDetailForm.get('topupAmount').valid && basicDetailForm.get('topupAmount').touched)">
+                                                        TopUp Amount is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modalButton">
+                                <button class="btn btn-info pull-right " style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit" matStepperNext
+                                    (click)="addBasicDetail(basicDetailForm)">Next</button>
+                                <button class="btn btn-info pull-right " style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit" matStepperPrevious>Previous</button>
+                            </div>
+                        </form>
+                    </mat-step>
+                    <mat-step label="Employment Detail">
+                        <form [formGroup]="employmentDetailForm">
+                            <div class="setup-content" id="step-1">
+                                <div class="row mx-0">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Select EmploymentType <span style="color: red;">*</span></label>
+                                            <ng-select [items]="employmentTypes" class="js-example-basic-single p-0" formControlName="employmentTypeId" placeholder="Select Employment Type"
+                                                bindLabel="employmentType" bindValue="employmentTypeId" name="commissionType" required (change)="changeEmploymentType()">
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(employmentDetailForm.get('employmentTypeId') && !employmentDetailForm.get('employmentTypeId').valid && employmentDetailForm.get('employmentTypeId').touched)">
+                                                EmploymentType is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Monthly Income <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="income" formControlName="monthlyIncome" required onlyNumbers>
+                                            <mat-error
+                                                *ngIf="(employmentDetailForm.get('monthlyIncome') && !employmentDetailForm.get('monthlyIncome').valid && employmentDetailForm.get('monthlyIncome').touched)">
+                                                Monthly Income is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="name">Name of the Organization/Company <span style="color: red;">*</span></label>
+
+                                            <div class="form-group">
+                                                <input class="form-control" list="cities" name="city" formControlName="companyName" (keyup)="searchCompany($event)">
+                                                <datalist id="cities">
+                                                    <option *ngFor="let company of companyCategory" [value]="company.companyName"></option>
+                                                </datalist>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mx-0">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="name"> Email Id <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" formControlName="officeEmailId" name="email">
+                                            <mat-error
+                                                *ngIf="(employmentDetailForm.get('officeEmailId') && !employmentDetailForm.get('officeEmailId').valid  && employmentDetailForm.get('officeEmailId').touched)">
+                                                <span *ngIf="employmentDetailForm.get('officeEmailId').errors.required">EmailId
+                                                    is required</span>
+                                                <span *ngIf="employmentDetailForm.get('officeEmailId').errors.pattern">Enter
+                                                    Valid Email</span>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="name">Designation <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" formControlName="designation" name="designation">
+                                            <mat-error
+                                                *ngIf="(employmentDetailForm.get('designation') && !employmentDetailForm.get('designation').valid && employmentDetailForm.get('designation').touched)">
+                                                Designation is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" *ngIf="employmentDetailForm.get('employmentTypeId').value != '6'">
+                                        <div class="form-group">
+                                            <div class="col-form-label">Select Company Category</div>
+                                            <ng-select [items]="companyTypes" class="js-example-basic-single p-0" placeholder="Select Company Category" bindLabel="name" bindValue="id" name="typeId"
+                                                formControlName="companyTypeId">
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mx-0">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="name">Experience in Profession/Current Company Experience <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="experience" formControlName="currentCompanyExperience" onlyNumbers>
+                                            <mat-error
+                                                *ngIf="(employmentDetailForm.get('currentCompanyExperience') && !employmentDetailForm.get('currentCompanyExperience').valid && employmentDetailForm.get('currentCompanyExperience').touched)">
+                                                Experience is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label> Duration</label>
+                                            <ng-select class="form-select" [formControl]="experienceTime">
+                                                <ng-option value="Months" name="experienceTime">Months</ng-option>
+                                                <ng-option value="Year" name="experienceTime">Year</ng-option>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mx-0 border mt-3 mx-3">
+                                    <div class="col-lg-12">
+                                        <h3 class="mt-2" style="font-size:25px">Office Address</h3>
+                                    </div>
+                                    <div class="row w-100 mx-0">
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">Label <span style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" formControlName="label" name="label">
+                                                <mat-error *ngIf="(employmentDetailForm.get('label') && !employmentDetailForm.get('label').valid && employmentDetailForm.get('label').touched)">
+                                                    Label is Required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">AddressLine1 <span style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" formControlName="addressLine1" name="addressLine1" required>
+                                                <mat-error
+                                                    *ngIf="(employmentDetailForm.get('addressLine1') && !employmentDetailForm.get('addressLine1').valid && employmentDetailForm.get('addressLine1').touched)">
+                                                    Address is Required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">AddressLine2</label>
+                                                <input class="form-control" type="text" formControlName="addressLine2" name="addressLine2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row w-100 mx-0">
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">Pincode <span style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" formControlName="pincode" (keyup)="onKeyUpEvent($event, 'officeAddress',true)" onlyNumbers maxlength="6"
+                                                    required>
+                                                <mat-error *ngIf="(employmentDetailForm.get('pincode') && !employmentDetailForm.get('pincode').valid  && employmentDetailForm.get('pincode').touched)">
+                                                    <span *ngIf="employmentDetailForm.get('pincode').errors.required">Pincode
+                                                        is required</span>
+                                                    <span *ngIf="employmentDetailForm.get('pincode').errors.minlength">Enter
+                                                        Valid Pincode</span>
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <div class="col-form-label">Select City <span style="color: red;">*</span></div>
+                                                <ng-select [items]="officeCities" class="js-example-basic-single p-0" placeholder="Select City" bindLabel="name" bindValue="id" name="cityName" required
+                                                    formControlName="cityId" (change)="selectedCity()">
+                                                </ng-select>
+                                                <mat-error *ngIf="(employmentDetailForm.get('cityId') && !employmentDetailForm.get('cityId').valid && employmentDetailForm.get('cityId').touched)">
+                                                    City is Required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">District <span style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" formControlName="district" readonly required>
+                                                <mat-error
+                                                    *ngIf="(employmentDetailForm.get('district') && !employmentDetailForm.get('district').valid && employmentDetailForm.get('district').touched)">
+                                                    District is Required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">State <span style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" formControlName="state" readonly required>
+                                                <mat-error *ngIf="(employmentDetailForm.get('state') && !employmentDetailForm.get('state').valid && employmentDetailForm.get('state').touched)">
+                                                    State is Required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modalButton">
+
+                                <button class="btn btn-info pull-right " style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit" matStepperNext
+                                    (click)="addEmploymentDetail(employmentDetailForm)">Next</button>
+                                <button class="btn btn-info pull-right " style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit" matStepperPrevious>Previous</button>
+                            </div>
+                        </form>
+                    </mat-step>
+                    <mat-step label="Upload Document">
+                        <div class="setup-content" id="step-3">
+                            <div class="row mx-0">
+                                <div class="col-lg-4 col-md-6 col-sm-12 mt-2" *ngFor="let document of documents;let i =index">
+                                    <div>
+                                        <a *ngIf="!document.isPdf" class="form-control documentcard" type="upload" id="resume" required>
+                                            <div>
+                                                <div class="fileUpload text-center">
+                                                    <i class="fa fa-file-pdf-o txt-info" style="font-size:30px"></i>
+                                                    <h4 class="px-2 pb-2">
+                                                        {{document.displayName}}(maxSize:{{document.maxSize}}KB)<span *ngIf="document.isRequired" style="color: red;">*</span>
+                                                        <ng-container *ngIf="document.documentCount > 1">
+                                                            {{document?.documentName}}-{{document.count}}</ng-container>
+                                                    </h4>
+                                                </div>
+                                                <mat-error *ngIf="document.documentError && !document.isPdf">
+                                                    {{document.displayName}} is required
+                                                </mat-error>
+                                                <a href="javascript:;" class="mt-2 btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" (click)="fileInput.click()"
+                                                    title="Insert Loan">
+                                                    <i class="fa fa-upload"></i>Upload
+                                                </a>
+                                                <a *ngIf="document.documentData" (click)="debugBase64(document.documentData)" target="_blank" class="mt-2 btn btn-sm btn-info"
+                                                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" title="View Document">
+                                                    <i class="fa fa-eye"></i>View
+                                                </a>
+                                            </div>
+                                            <input type="file" #fileInput id="uploadFile" (change)="selectedImage($event,document,i)" name="photo" accept="image/*" style="display:none;" />
+                                        </a>
+
+                                        <a *ngIf="document.isPdf" class="form-control documentcard" type="upload" id="resume" required>
+                                            <div>
+                                                <div class="fileUpload">
+                                                    <i class="fa fa-file-pdf-o txt-info" style="font-size:30px"></i>
+                                                    <h4 class="px-2 pb-2">
+                                                        {{document.displayName}}(maxSize:{{document.maxSize}}KB)<span *ngIf="document.isRequired" style="color: red;">*</span>
+                                                        <ng-container *ngIf="document.documentCount > 1">
+                                                            {{document?.documentName}}-{{document.count}}</ng-container>
+                                                    </h4>
+                                                </div>
+                                                <mat-error *ngIf="document.documentError && document.isPdf">
+                                                    {{document.displayName}} is required
+                                                </mat-error>
+                                                <a href="javascript:;" class="mt-2 btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" (click)="filePdfInput.click()"
+                                                    title="Insert Loan">
+                                                    <i class="fa fa-upload"></i>Upload
+                                                </a>
+                                                <a *ngIf="document.documentData" (click)="debugBase64(document.documentData)" target="_blank" class="mt-2 btn btn-sm btn-info"
+                                                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" title="View Document">
+                                                    <i class="fa fa-eye"></i>View
+                                                </a>
+                                            </div>
+                                            <input type="file" #filePdfInput id="uploadFile" (change)="selectedImage($event,document,i)" name="pdf" accept="application/pdf" style="display:none;" />
+
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 mx-0 border mt-3">
+                                    <div class="col-lg-12">
+                                        <h3 class="mt-2" style="font-size:25px">Two Refrences</h3>
+                                    </div>
+                                    <div class="col">
+                                        <h4 class="mt-2" style="font-size:20px">First Refrence</h4>
+                                    </div>
+                                    <form [formGroup]="refrenceForm">
+                                        <div class="row mx-0 w-100">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="name">Name <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" name="firstRefrenceName" formControlName="firstRefrenceName" onlyAlphabets required>
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('firstRefrenceName') && !refrenceForm.get('firstRefrenceName').valid  && refrenceForm.get('firstRefrenceName').touched)">
+                                                        Name is required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="name">Phone Number <span style="color: red">*</span></label>
+                                                    <input class="form-control" type="text" name="spouseContactNo" formControlName="firstRefrenceContactNo" ContactNo required>
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('firstRefrenceContactNo') && !refrenceForm.get('firstRefrenceContactNo').valid  && refrenceForm.get('firstRefrenceContactNo').touched)">
+                                                        <span *ngIf="refrenceForm.get('firstRefrenceContactNo').errors.required">ContactNo
+                                                            is required</span>
+                                                        <span *ngIf="refrenceForm.get('firstRefrenceContactNo').errors.minlength">Enter
+                                                            Valid ContactNo</span>
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row w-100 mx-0">
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="name">Label <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" formControlName="firstLabel" name="firstLabel">
+                                                    <mat-error *ngIf="(refrenceForm.get('firstLabel') && !refrenceForm.get('firstLabel').valid && refrenceForm.get('firstLabel').touched)">
+                                                        Label is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="addressLine1">AddressLine1 <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" formControlName="firstAddressLine1" name="firstAddressLine1" required>
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('firstAddressLine1') && !refrenceForm.get('firstAddressLine1').valid && refrenceForm.get('firstAddressLine1').touched)">
+                                                        Address is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="name">AddressLine2</label>
+                                                    <input class="form-control" type="text" formControlName="firstAddressLine2" name="firstAddressLine2">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row w-100 mx-0">
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="name">Pincode <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" formControlName="firstPincode" (keyup)="onKeyUpEvent($event, 'firstReferenceAddress',true)" onlyNumbers
+                                                        maxlength="6" required>
+                                                    <mat-error *ngIf="(refrenceForm.get('firstPincode') && !refrenceForm.get('firstPincode').valid  && refrenceForm.get('firstPincode').touched)">
+                                                        <span *ngIf="refrenceForm.get('firstPincode').errors.required">Pincode
+                                                            is required</span>
+                                                        <span *ngIf="refrenceForm.get('firstPincode').errors.minlength">Enter
+                                                            Valid Pincode</span>
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <div class="col-form-label">Select City <span style="color: red;">*</span></div>
+                                                    <ng-select [items]="firstCities" class="js-example-basic-single p-0" placeholder="Select City" bindLabel="name" bindValue="id" name="cityName"
+                                                        required formControlName="firstCityId" (change)="selectedCityFirstReference()">
+                                                    </ng-select>
+                                                    <mat-error *ngIf="(refrenceForm.get('firstCityId') && !refrenceForm.get('firstCityId').valid && refrenceForm.get('firstCityId').touched)">
+                                                        City is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="name">District <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" formControlName="firstDistrict" readonly required>
+                                                    <mat-error *ngIf="(refrenceForm.get('firstDistrict') && !refrenceForm.get('firstDistrict').valid && refrenceForm.get('firstDistrict').touched)">
+                                                        District is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="name">State <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" formControlName="firstState" readonly required>
+                                                    <mat-error *ngIf="(refrenceForm.get('firstState') && !refrenceForm.get('firstState').valid && refrenceForm.get('firstState').touched)">
+                                                        State is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <h4 class="mt-2" style="font-size:20px">Second Refrence</h4>
+                                        </div>
+                                        <div class="row mx-0 w-100">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="name">Name <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" name="secondRefrenceName" formControlName="secondRefrenceName" onlyAlphabets required>
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('secondRefrenceName') && !refrenceForm.get('secondRefrenceName').valid  && refrenceForm.get('secondRefrenceName').touched)">
+                                                        Name is required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="name">Phone Number <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" name="spouseContactNo" formControlName="secondRefrenceContactNo" ContactNo requried>
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('secondRefrenceContactNo') && !refrenceForm.get('secondRefrenceContactNo').valid  && refrenceForm.get('secondRefrenceContactNo').touched)">
+                                                        <span *ngIf="refrenceForm.get('secondRefrenceContactNo').errors.required">ContactNo
+                                                            is required</span>
+                                                        <span *ngIf="refrenceForm.get('secondRefrenceContactNo').errors.minlength">Enter
+                                                            Valid ContacNo</span>
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row w-100 mx-0">
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="name">Label <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" formControlName="secondLabel" name="secondLabel">
+                                                    <mat-error *ngIf="(refrenceForm.get('secondLabel') && !refrenceForm.get('secondLabel').valid && refrenceForm.get('secondLabel').touched)">
+                                                        Label is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="addressLine1">AddressLine1 <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" formControlName="secondAddressLine1" name="secondAddressLine1" required>
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('secondAddressLine1') && !refrenceForm.get('secondAddressLine1').valid && refrenceForm.get('secondAddressLine1').touched)">
+                                                        Address is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="name">AddressLine2</label>
+                                                    <input class="form-control" type="text" formControlName="secondAddressLine2" name="secondAddressLine2">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row w-100 mx-0">
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="name">Pincode <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" formControlName="secondPincode" (keyup)="onKeyUpEvent($event, 'secondReferenceAddress',true)" onlyNumbers
+                                                        maxlength="6" required>
+                                                    <mat-error *ngIf="(refrenceForm.get('secondPincode') && !refrenceForm.get('secondPincode').valid  && refrenceForm.get('secondPincode').touched)">
+                                                        <span *ngIf="refrenceForm.get('secondPincode').errors.required">Pincode
+                                                            is required</span>
+                                                        <span *ngIf="refrenceForm.get('secondPincode').errors.minlength">Enter
+                                                            Valid Pincode</span>
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <div class="col-form-label">Select City <span style="color: red;">*</span></div>
+                                                    <ng-select [items]="secondCities" class="js-example-basic-single p-0" placeholder="Select City" bindLabel="name" bindValue="id" name="cityName"
+                                                        required formControlName="secondCityId" (change)="selectedCitySecondReference()">
+                                                    </ng-select>
+                                                    <mat-error *ngIf="(refrenceForm.get('secondCityId') && !refrenceForm.get('secondCityId').valid && refrenceForm.get('secondCityId').touched)">
+                                                        City is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="name">District <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" formControlName="secondDistrict" readonly required>
+                                                    <mat-error *ngIf="(refrenceForm.get('secondDistrict') && !refrenceForm.get('secondDistrict').valid && refrenceForm.get('secondDistrict').touched)">
+                                                        District is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="name">State <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" formControlName="secondState" readonly required>
+                                                    <mat-error *ngIf="(refrenceForm.get('secondState') && !refrenceForm.get('secondState').valid && refrenceForm.get('secondState').touched)">
+                                                        State is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <div class="form-check" style="font-size: 16px; padding-top: 20px;">
+                                            <input id="checkbox-info-1" type="checkbox" value="isDone" name="isDone" [formControl]="isDone" [checked]="isSelect"> I hereby declare that the
+                                            information/documents submitted by me are true to the best of my
+                                            knowledge.<span style="color: red;">*</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modalButton">
+                            <button class="btn btn-info pull-right " style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit" matStepperNext
+                                (click)="addPersonalLoanDocumentAndRefrences(refrenceForm)">Save</button>
+                            <button class="btn btn-info pull-right " style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit" matStepperPrevious>Previous</button>
+                        </div>
+                    </mat-step>
+                </mat-stepper>
+                <!-- <aw-wizard navBarLayout='large-filled-symbols'>
+                    <aw-wizard-step [navigationSymbol]="{ symbol: '1' }">
+                        <ng-template awWizardStepTitle>
+                            <p>Select Type</p>
+                        </ng-template>
+                        <div class="setup-content" id="step-1">
+                            <div class="row mx-0">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="name" style="font-size: 20px;">Select Loan Type
+                                        </label>
+                                        <div class="form-group m-t-15 m-checkbox-inline mb-0 custom-radio-ml ml-2">
+                                            <div class="radio radio-primary">
+                                                <input type="radio" id="new" value="New" [formControl]="isTransfer"
+                                                    (change)="changeLoanType()">
+                                                <label class="mb-0" for="new">New</label>
+                                            </div>
+                                            <div class="radio radio-primary">
+                                                <input type="radio" id="transfer" value="Bank Transfer"
+                                                    [formControl]="isTransfer" (change)="changeLoanType()">
+                                                <label class="mb-0" for="transfer">Transfer</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modalButton">
+                            <button class="btn btn-info pull-right "
+                                style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit"
+                                awNextStep>Next</button>
+                        </div>
+                    </aw-wizard-step>
+                    <aw-wizard-step [navigationSymbol]="{ symbol: '2' }">
+                        <form [formGroup]="basicDetailForm">
+                            <ng-template awWizardStepTitle>
+                                <p>Basic Detail</p>
+                            </ng-template>
+                            <div class="setup-content" id="step-1">
+                                <div class="row mx-0">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="name">Full Name <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="refernce"
+                                                formControlName="fullName" required onlyAlphabets>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('fullName') && !basicDetailForm.get('fullName').valid && basicDetailForm.get('fullName').touched)">
+                                                FullName is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>BirthDate(Min.Age:21year) <span style="color: red;">*</span></label>
+                                            <mat-form-field appearance="outline" class="d-block w-100">
+                                                <input matInput [matDatepicker]="filterPickerFrom"
+                                                    formControlName="birthdate" placeholder="From Date" name="fromDate"
+                                                    [readonly]="true" (focus)="filterPickerFrom.open()"
+                                                    (dateChange)="getAge()">
+                                                <mat-datepicker-toggle matSuffix [for]="filterPickerFrom">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #filterPickerFrom></mat-datepicker>
+                                            </mat-form-field>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('birthdate') && !basicDetailForm.get('birthdate').valid && basicDetailForm.get('birthdate').touched) && !basicDetailForm.get('birthdate').hasError('minAge')">
+                                                BirthDate is Required
+                                            </mat-error>
+                                            <mat-error *ngIf="basicDetailForm.get('birthdate').hasError('minAge')">
+                                                minimum Age 21 year is required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="name">PanCard No <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="refernce"
+                                                formControlName="panCardNo" required
+                                                oninput="this.value = this.value.toUpperCase()" maxlength="10"
+                                                (keypress)="keyPressAlphanumeric($event)">
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('panCardNo') && !basicDetailForm.get('panCardNo').valid  && basicDetailForm.get('panCardNo').touched)">
+                                                <span *ngIf="basicDetailForm.get('panCardNo').errors.required">PanCardNo
+                                                    is Required</span>
+                                                <span *ngIf="basicDetailForm.get('panCardNo').errors.pattern">Enter
+                                                    Valid PanCard</span>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mx-0">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="name">AlterNateContactNo <span
+                                                    style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="contact"
+                                                formControlName="alternativeContactNo" ContactNo required>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('alternativeContactNo') && !basicDetailForm.get('alternativeContactNo').valid  && basicDetailForm.get('alternativeContactNo').touched)">
+                                                <span
+                                                    *ngIf="basicDetailForm.get('alternativeContactNo').errors.required">AlterNate
+                                                    ContactNo is Required</span>
+                                                <span
+                                                    *ngIf="basicDetailForm.get('alternativeContactNo').errors.minlength">Enter
+                                                    Valid ContactNo</span>
+                                            </mat-error>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <div class="col-form-label">Select Marital Status <span
+                                                    style="color: red;">*</span></div>
+                                            <ng-select [items]="maritalStatuses" class="js-example-basic-single p-0"
+                                                placeholder="Select Marital Status" bindLabel="status" bindValue="id"
+                                                name="Status" required name="selectStatus"
+                                                formControlName="maritalStatusId">
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('maritalStatusId') && !basicDetailForm.get('maritalStatusId').valid && basicDetailForm.get('maritalStatusId').touched)">
+                                                maritalStatus is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="name">Mother's Name <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="refernce"
+                                                formControlName="motherName" onlyAlphabets>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('motherName') && !basicDetailForm.get('motherName').valid && basicDetailForm.get('motherName').touched)">
+                                                Mother's Name is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mx-0">
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label for="name">Father's Name <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="refernce"
+                                                formControlName="fatherName" onlyAlphabets>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('fatherName') && !basicDetailForm.get('fatherName').valid  && basicDetailForm.get('fatherName').touched)">
+                                                Father's Name is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label for="name">Loan Amount <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" formControlName="loanAmount"
+                                                required onlyNumbers>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('loanAmount') && !basicDetailForm.get('loanAmount').valid  && basicDetailForm.get('loanAmount').touched)">
+                                                Loan Amount is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <div class="col-form-label">Select Tenure <span style="color: red;">*</span>
+                                            </div>
+                                            <ng-select [items]="tenures" class="js-example-basic-single p-0"
+                                                placeholder="Select Tenure" bindLabel="name" bindValue="id"
+                                                name="tenureId" formControlName="tenureId" required>
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('maritalStatusId') && !basicDetailForm.get('maritalStatusId').valid && basicDetailForm.get('maritalStatusId').touched)">
+                                                Tanure is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <label for="name">Gender <span style="color: red;">*</span></label>
+                                        <div class="form-group m-t-15 m-checkbox-inline mb-0 custom-radio-ml ml-2">
+                                            <div class="radio radio-primary">
+                                                <input type="radio" id="Male" value="Male" formControlName="gender">
+                                                <label class="mb-0" for="Male">Male</label>
+                                            </div>
+                                            <div class="radio radio-primary">
+                                                <input type="radio" id="Female" value="Female" formControlName="gender">
+                                                <label class="mb-0" for="Female">Female</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mx-0 border mb-3 mx-3">
+                                    <div class="col-lg-12">
+                                        <h3 class="mt-2" style="font-size:25px">Current Address</h3>
+                                    </div>
+                                    <div class="row w-100 mx-0">
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">Label <span style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" formControlName="label"
+                                                    name="label">
+                                                <mat-error
+                                                    *ngIf="(basicDetailForm.get('label') && !basicDetailForm.get('label').valid && basicDetailForm.get('label').touched)">
+                                                    Label is Required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="addressLine1">AddressLine1 <span
+                                                        style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" formControlName="addressLine1"
+                                                    name="addressLine1" required>
+                                                <mat-error
+                                                    *ngIf="(basicDetailForm.get('addressLine1') && !basicDetailForm.get('addressLine1').valid && basicDetailForm.get('addressLine1').touched)">
+                                                    Address is Required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">AddressLine2</label>
+                                                <input class="form-control" type="text" formControlName="addressLine2"
+                                                    name="addressLine2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row w-100 mx-0">
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">Pincode <span style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" formControlName="pincode"
+                                                    (keyup)="onKeyUpEvent($event,'currentAddress',true)" onlyNumbers
+                                                    maxlength="6" required>
+                                                <mat-error
+                                                    *ngIf="(basicDetailForm.get('pincode') && !basicDetailForm.get('pincode').valid  && basicDetailForm.get('pincode').touched)">
+                                                    <span *ngIf="basicDetailForm.get('pincode').errors.required">
+                                                        Pincode is required</span>
+                                                    <span *ngIf="basicDetailForm.get('pincode').errors.minlength">
+                                                        Enter Valid Pincode</span>
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <div class="col-form-label">Select City <span
+                                                        style="color: red;">*</span></div>
+                                                <ng-select [items]="currentCities" class="js-example-basic-single p-0"
+                                                    placeholder="Select City" bindLabel="name" bindValue="id"
+                                                    name="cityName" required formControlName="cityId"
+                                                    (change)="selectedCityBasicDetail()">
+                                                </ng-select>
+                                                <mat-error
+                                                    *ngIf="(basicDetailForm.get('cityId') && !basicDetailForm.get('cityId').valid && basicDetailForm.get('cityId').touched)">
+                                                    City is Required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">District <span style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" formControlName="district"
+                                                    readonly required>
+                                                <mat-error
+                                                    *ngIf="(basicDetailForm.get('district') && !basicDetailForm.get('district').valid && basicDetailForm.get('district').touched)">
+                                                    District is Required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">State<span style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" formControlName="state" readonly
+                                                    required>
+                                                <mat-error
+                                                    *ngIf="(basicDetailForm.get('state') && !basicDetailForm.get('state').valid && basicDetailForm.get('state').touched)">
+                                                    State is Required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="basicDetailForm.get('maritalStatusId').value && basicDetailForm.get('maritalStatusId').value == 1"
+                                    class="row mx-0 border mb-3 mx-3">
+                                    <div class="col-lg-12">
+                                        <h3 class="mt-2" style="font-size:25px">Spouse Detail</h3>
+                                    </div>
+                                    <div class="col-lg-12 mx-0">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="name">Spouse Name</label>
+                                                <input class="form-control" type="text" name="spouseName"
+                                                    formControlName="spouseName" onlyAlphabets>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row mx-0 border mb-3 mx-3" *ngIf="isTransfer.value=='Bank Transfer'">
+                                    <div class="col-lg-12">
+                                        <h3 class="mt-2" style="font-size:25px">Transfer</h3>
+                                    </div>
+                                    <div class="col-lg-12 mx-0">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="name">Loan Amount Taken Existing<span
+                                                            style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text"
+                                                        name="loanAmountTakenExisting"
+                                                        formControlName="loanAmountTakenExisting" onlyNumbers
+                                                        [required]="isTransfer.value=='Bank Transfer'">
+                                                    <mat-error
+                                                        *ngIf="(basicDetailForm.get('loanAmountTakenExisting') && !basicDetailForm.get('loanAmountTakenExisting').valid && basicDetailForm.get('loanAmountTakenExisting').touched)">
+                                                        Existing Loan Amount is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="name">Approx Date<span
+                                                            style="color: red;">*</span></label>
+                                                    <mat-form-field appearance="outline" class="d-block w-100">
+                                                        <input matInput [matDatepicker]="filterPickerFrom"
+                                                            formControlName="approxDate" placeholder="From Date"
+                                                            name="fromDate" [readonly]="true"
+                                                            (focus)="filterPickerFrom.open()" (dateChange)="getAge()"
+                                                            [required]="isTransfer.value=='Bank Transfer'">
+                                                        <mat-datepicker-toggle matSuffix [for]="filterPickerFrom">
+                                                        </mat-datepicker-toggle>
+                                                        <mat-datepicker #filterPickerFrom></mat-datepicker>
+
+                                                    </mat-form-field>
+                                                    <mat-error
+                                                        *ngIf="(basicDetailForm.get('approxDate') && !basicDetailForm.get('approxDate').valid && basicDetailForm.get('approxDate').touched)">
+                                                        Approx Date is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="name">Aprox Current EMI<span
+                                                            style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" name="approxCurrentEMI"
+                                                        formControlName="approxCurrentEMI" onlyNumbers
+                                                        [required]="isTransfer.value=='Bank Transfer'">
+                                                    <mat-error
+                                                        *ngIf="(basicDetailForm.get('approxCurrentEMI') && !basicDetailForm.get('approxCurrentEMI').valid && basicDetailForm.get('approxCurrentEMI').touched)">
+                                                        Approx Current EMI is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="name">Bank<span style="color: red;">*</span></label>
+                                                    <ng-select [items]="banks" class="js-example-basic-single p-0"
+                                                        placeholder="Select Bank" bindLabel="name" bindValue="id"
+                                                        name="bankId" formControlName="bankId"
+                                                        [required]="isTransfer.value=='Bank Transfer'"></ng-select>
+                                                    <mat-error
+                                                        *ngIf="(basicDetailForm.get('bankId') && !basicDetailForm.get('bankId').valid && basicDetailForm.get('bankId').touched)">
+                                                        Bank is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="name">Top Up Amount<span
+                                                            style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" name="topupAmount"
+                                                        formControlName="topupAmount" onlyNumbers
+                                                        [required]="isTransfer.value=='Bank Transfer'">
+                                                    <mat-error
+                                                        *ngIf="(basicDetailForm.get('topupAmount') && !basicDetailForm.get('topupAmount').valid && basicDetailForm.get('topupAmount').touched)">
+                                                        TopUp Amount is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modalButton">
+                                <button class="btn btn-info pull-right "
+                                    style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit"
+                                    awNextStep (click)="addBasicDetail(basicDetailForm)">Next</button>
+                            </div>
+                        </form>
+                    </aw-wizard-step>
+                    <aw-wizard-step [navigationSymbol]="{ symbol: '3' }" [canEnter]="basicDetailForm.valid">
+                        <form [formGroup]="employmentDetailForm">
+                            <ng-template awWizardStepTitle>
+                                <p>Employment Detail</p>
+                            </ng-template>
+                            <div class="setup-content" id="step-1">
+                                <div class="row mx-0">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Select EmploymentType <span style="color: red;">*</span></label>
+                                            <ng-select [items]="employmentTypes" class="js-example-basic-single p-0"
+                                                formControlName="employmentTypeId" placeholder="Select Employment Type"
+                                                bindLabel="employmentType" bindValue="employmentTypeId"
+                                                name="commissionType" required (change)="changeEmploymentType()">
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(employmentDetailForm.get('employmentTypeId') && !employmentDetailForm.get('employmentTypeId').valid && employmentDetailForm.get('employmentTypeId').touched)">
+                                                EmploymentType is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Monthly Income <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="income"
+                                                formControlName="monthlyIncome" required onlyNumbers>
+                                            <mat-error
+                                                *ngIf="(employmentDetailForm.get('monthlyIncome') && !employmentDetailForm.get('monthlyIncome').valid && employmentDetailForm.get('monthlyIncome').touched)">
+                                                Monthly Income is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="name">Name of the Organization/Company <span
+                                                    style="color: red;">*</span></label>
+
+                                            <div class="form-group">
+                                                <input class="form-control" list="cities" name="city"
+                                                    formControlName="companyName" (keyup)="searchCompany($event)">
+                                                <datalist id="cities">
+                                                    <option *ngFor="let company of companyCategory"
+                                                        [value]="company.companyName"></option>
+                                                </datalist>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mx-0">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="name"> Email Id <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" formControlName="officeEmailId"
+                                                name="email">
+                                            <mat-error
+                                                *ngIf="(employmentDetailForm.get('officeEmailId') && !employmentDetailForm.get('officeEmailId').valid  && employmentDetailForm.get('officeEmailId').touched)">
+                                                <span
+                                                    *ngIf="employmentDetailForm.get('officeEmailId').errors.required">EmailId
+                                                    is required</span>
+                                                <span
+                                                    *ngIf="employmentDetailForm.get('officeEmailId').errors.pattern">Enter
+                                                    Valid Email</span>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="name">Designation <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" formControlName="designation"
+                                                name="designation">
+                                            <mat-error
+                                                *ngIf="(employmentDetailForm.get('designation') && !employmentDetailForm.get('designation').valid && employmentDetailForm.get('designation').touched)">
+                                                Designation is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4"
+                                        *ngIf="employmentDetailForm.get('employmentTypeId').value != '6'">
+                                        <div class="form-group">
+                                            <div class="col-form-label">Select Company Category</div>
+                                            <ng-select [items]="companyTypes" class="js-example-basic-single p-0"
+                                                placeholder="Select Company Category" bindLabel="name" bindValue="id"
+                                                name="typeId" formControlName="companyTypeId">
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mx-0">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="name">Experience in Profession/Current Company Experience <span
+                                                    style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="experience"
+                                                formControlName="currentCompanyExperience" onlyNumbers>
+                                            <mat-error
+                                                *ngIf="(employmentDetailForm.get('currentCompanyExperience') && !employmentDetailForm.get('currentCompanyExperience').valid && employmentDetailForm.get('currentCompanyExperience').touched)">
+                                                Experience is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label> Duration</label>
+                                            <ng-select class="form-select" [formControl]="experienceTime">
+                                                <ng-option value="Months" name="experienceTime">Months</ng-option>
+                                                <ng-option value="Year" name="experienceTime">Year</ng-option>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mx-0 border mt-3 mx-3">
+                                    <div class="col-lg-12">
+                                        <h3 class="mt-2" style="font-size:25px">Office Address</h3>
+                                    </div>
+                                    <div class="row w-100 mx-0">
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">Label <span style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" formControlName="label"
+                                                    name="label">
+                                                <mat-error
+                                                    *ngIf="(employmentDetailForm.get('label') && !employmentDetailForm.get('label').valid && employmentDetailForm.get('label').touched)">
+                                                    Label is Required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">AddressLine1 <span
+                                                        style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" formControlName="addressLine1"
+                                                    name="addressLine1" required>
+                                                <mat-error
+                                                    *ngIf="(employmentDetailForm.get('addressLine1') && !employmentDetailForm.get('addressLine1').valid && employmentDetailForm.get('addressLine1').touched)">
+                                                    Address is Required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">AddressLine2</label>
+                                                <input class="form-control" type="text" formControlName="addressLine2"
+                                                    name="addressLine2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row w-100 mx-0">
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">Pincode <span style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" formControlName="pincode"
+                                                    (keyup)="onKeyUpEvent($event, 'officeAddress',true)" onlyNumbers
+                                                    maxlength="6" required>
+                                                <mat-error
+                                                    *ngIf="(employmentDetailForm.get('pincode') && !employmentDetailForm.get('pincode').valid  && employmentDetailForm.get('pincode').touched)">
+                                                    <span
+                                                        *ngIf="employmentDetailForm.get('pincode').errors.required">Pincode
+                                                        is required</span>
+                                                    <span
+                                                        *ngIf="employmentDetailForm.get('pincode').errors.minlength">Enter
+                                                        Valid Pincode</span>
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <div class="col-form-label">Select City <span
+                                                        style="color: red;">*</span></div>
+                                                <ng-select [items]="officeCities" class="js-example-basic-single p-0"
+                                                    placeholder="Select City" bindLabel="name" bindValue="id"
+                                                    name="cityName" required formControlName="cityId"
+                                                    (change)="selectedCity()">
+                                                </ng-select>
+                                                <mat-error
+                                                    *ngIf="(employmentDetailForm.get('cityId') && !employmentDetailForm.get('cityId').valid && employmentDetailForm.get('cityId').touched)">
+                                                    City is Required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">District <span style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" formControlName="district"
+                                                    readonly required>
+                                                <mat-error
+                                                    *ngIf="(employmentDetailForm.get('district') && !employmentDetailForm.get('district').valid && employmentDetailForm.get('district').touched)">
+                                                    District is Required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="name">State <span style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" formControlName="state" readonly
+                                                    required>
+                                                <mat-error
+                                                    *ngIf="(employmentDetailForm.get('state') && !employmentDetailForm.get('state').valid && employmentDetailForm.get('state').touched)">
+                                                    State is Required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modalButton">
+                                <button class="btn btn-info pull-right "
+                                    style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit"
+                                    awNextStep (click)="addEmploymentDetail(employmentDetailForm)">Next</button>
+                            </div>
+                        </form>
+                    </aw-wizard-step>
+                    <aw-wizard-step [navigationSymbol]="{ symbol: '4' }" [canEnter]="employmentDetailForm.valid">
+                        <ng-template awWizardStepTitle>
+                            <p>Upload Document</p>
+
+                        </ng-template>
+                        <div class="setup-content" id="step-3">
+                            <div class="row mx-0">
+                                <div class="col-lg-4 col-md-6 col-sm-12 mt-2"
+                                    *ngFor="let document of documents;let i =index">
+                                    <div>
+                                        <a *ngIf="!document.isPdf" class="form-control" type="upload" id="resume"
+                                            style="height: 220px; width: 100%; text-align: center; border: 1px solid #f1f1f1;align-items: center;background-color: #f6f7fb"
+                                            required>
+                                            <div>
+                                                <div class="fileUpload text-center">
+                                                    <i class="fa fa-file-pdf-o txt-info" style="font-size:30px"></i>
+                                                    <h4 class="px-2 pb-2">
+                                                        {{document.displayName}}(maxSize:{{document.maxSize}}KB)<span
+                                                            *ngIf="document.isRequired" style="color: red;">*</span>
+                                                        <ng-container *ngIf="document.documentCount > 1">
+                                                            {{document?.documentName}}-{{document.count}}</ng-container>
+                                                    </h4>
+                                                </div>
+                                                <mat-error *ngIf="document.documentError && !document.isPdf">
+                                                    {{document.displayName}} is required
+                                                </mat-error>
+                                                <a href="javascript:;" class="mt-2 btn btn-sm btn-info"
+                                                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                                    (click)="fileInput.click()" title="Insert Loan">
+                                                    <i class="fa fa-upload"></i>Upload
+                                                </a>
+                                                <a *ngIf="document.documentData"
+                                                    (click)="debugBase64(document.documentData)" target="_blank"
+                                                    class="mt-2 btn btn-sm btn-info"
+                                                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                                    title="View Document">
+                                                    <i class="fa fa-eye"></i>View
+                                                </a>
+                                            </div>
+                                            <input type="file" #fileInput id="uploadFile"
+                                                (change)="selectedImage($event,document,i)" name="photo"
+                                                accept="image/*" style="display:none;" />
+                                        </a>
+
+                                        <a *ngIf="document.isPdf" class="form-control" type="upload" id="resume"
+                                            style="height: 220px; width: 100%; text-align: center; border: 1px solid #f1f1f1;align-items: center;background-color: #f6f7fb"
+                                            required>
+                                            <div>
+                                                <div class="fileUpload">
+                                                    <i class="fa fa-file-pdf-o txt-info" style="font-size:30px"></i>
+                                                    <h4 class="px-2 pb-2">
+                                                        {{document.displayName}}(maxSize:{{document.maxSize}}KB)<span
+                                                            *ngIf="document.isRequired" style="color: red;">*</span>
+                                                        <ng-container *ngIf="document.documentCount > 1">
+                                                            {{document?.documentName}}-{{document.count}}</ng-container>
+                                                    </h4>
+                                                </div>
+                                                <mat-error *ngIf="document.documentError && document.isPdf">
+                                                    {{document.displayName}} is required
+                                                </mat-error>
+                                                <a href="javascript:;" class="mt-2 btn btn-sm btn-info"
+                                                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                                    (click)="filePdfInput.click()" title="Insert Loan">
+                                                    <i class="fa fa-upload"></i>Upload
+                                                </a>
+                                                <a *ngIf="document.documentData"
+                                                    (click)="debugBase64(document.documentData)" target="_blank"
+                                                    class="mt-2 btn btn-sm btn-info"
+                                                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                                    title="View Document">
+                                                    <i class="fa fa-eye"></i>View
+                                                </a>
+                                            </div>
+                                            <input type="file" #filePdfInput id="uploadFile"
+                                                (change)="selectedImage($event,document,i)" name="pdf"
+                                                accept="application/pdf" style="display:none;" />
+
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 mx-0 border mt-3">
+                                    <div class="col-lg-12">
+                                        <h3 class="mt-2" style="font-size:25px">Two Refrences</h3>
+                                    </div>
+                                    <div class="col">
+                                        <h4 class="mt-2" style="font-size:20px">First Refrence</h4>
+                                    </div>
+                                    <form [formGroup]="refrenceForm">
+                                        <div class="row mx-0 w-100">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="name">Name <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" name="firstRefrenceName"
+                                                        formControlName="firstRefrenceName" onlyAlphabets required>
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('firstRefrenceName') && !refrenceForm.get('firstRefrenceName').valid  && refrenceForm.get('firstRefrenceName').touched)">
+                                                        Name is required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="name">Phone Number <span
+                                                            style="color: red">*</span></label>
+                                                    <input class="form-control" type="text" name="spouseContactNo"
+                                                        formControlName="firstRefrenceContactNo" ContactNo required>
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('firstRefrenceContactNo') && !refrenceForm.get('firstRefrenceContactNo').valid  && refrenceForm.get('firstRefrenceContactNo').touched)">
+                                                        <span
+                                                            *ngIf="refrenceForm.get('firstRefrenceContactNo').errors.required">ContactNo
+                                                            is required</span>
+                                                        <span
+                                                            *ngIf="refrenceForm.get('firstRefrenceContactNo').errors.minlength">Enter
+                                                            Valid ContactNo</span>
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row w-100 mx-0">
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="name">Label <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" formControlName="firstLabel"
+                                                        name="firstLabel">
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('firstLabel') && !refrenceForm.get('firstLabel').valid && refrenceForm.get('firstLabel').touched)">
+                                                        Label is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="addressLine1">AddressLine1 <span
+                                                            style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text"
+                                                        formControlName="firstAddressLine1" name="firstAddressLine1"
+                                                        required>
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('firstAddressLine1') && !refrenceForm.get('firstAddressLine1').valid && refrenceForm.get('firstAddressLine1').touched)">
+                                                        Address is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="name">AddressLine2</label>
+                                                    <input class="form-control" type="text"
+                                                        formControlName="firstAddressLine2" name="firstAddressLine2">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row w-100 mx-0">
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="name">Pincode <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text"
+                                                        formControlName="firstPincode"
+                                                        (keyup)="onKeyUpEvent($event, 'firstReferenceAddress',true)"
+                                                        onlyNumbers maxlength="6" required>
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('firstPincode') && !refrenceForm.get('firstPincode').valid  && refrenceForm.get('firstPincode').touched)">
+                                                        <span
+                                                            *ngIf="refrenceForm.get('firstPincode').errors.required">Pincode
+                                                            is required</span>
+                                                        <span
+                                                            *ngIf="refrenceForm.get('firstPincode').errors.minlength">Enter
+                                                            Valid Pincode</span>
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <div class="col-form-label">Select City <span
+                                                            style="color: red;">*</span></div>
+                                                    <ng-select [items]="firstCities" class="js-example-basic-single p-0"
+                                                        placeholder="Select City" bindLabel="name" bindValue="id"
+                                                        name="cityName" required formControlName="firstCityId"
+                                                        (change)="selectedCityFirstReference()">
+                                                    </ng-select>
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('firstCityId') && !refrenceForm.get('firstCityId').valid && refrenceForm.get('firstCityId').touched)">
+                                                        City is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="name">District <span
+                                                            style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text"
+                                                        formControlName="firstDistrict" readonly required>
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('firstDistrict') && !refrenceForm.get('firstDistrict').valid && refrenceForm.get('firstDistrict').touched)">
+                                                        District is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="name">State <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" formControlName="firstState"
+                                                        readonly required>
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('firstState') && !refrenceForm.get('firstState').valid && refrenceForm.get('firstState').touched)">
+                                                        State is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <h4 class="mt-2" style="font-size:20px">Second Refrence</h4>
+                                        </div>
+                                        <div class="row mx-0 w-100">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="name">Name <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" name="secondRefrenceName"
+                                                        formControlName="secondRefrenceName" onlyAlphabets required>
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('secondRefrenceName') && !refrenceForm.get('secondRefrenceName').valid  && refrenceForm.get('secondRefrenceName').touched)">
+                                                        Name is required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="name">Phone Number <span
+                                                            style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" name="spouseContactNo"
+                                                        formControlName="secondRefrenceContactNo" ContactNo requried>
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('secondRefrenceContactNo') && !refrenceForm.get('secondRefrenceContactNo').valid  && refrenceForm.get('secondRefrenceContactNo').touched)">
+                                                        <span
+                                                            *ngIf="refrenceForm.get('secondRefrenceContactNo').errors.required">ContactNo
+                                                            is required</span>
+                                                        <span
+                                                            *ngIf="refrenceForm.get('secondRefrenceContactNo').errors.minlength">Enter
+                                                            Valid ContacNo</span>
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row w-100 mx-0">
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="name">Label <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text"
+                                                        formControlName="secondLabel" name="secondLabel">
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('secondLabel') && !refrenceForm.get('secondLabel').valid && refrenceForm.get('secondLabel').touched)">
+                                                        Label is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="addressLine1">AddressLine1 <span
+                                                            style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text"
+                                                        formControlName="secondAddressLine1" name="secondAddressLine1"
+                                                        required>
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('secondAddressLine1') && !refrenceForm.get('secondAddressLine1').valid && refrenceForm.get('secondAddressLine1').touched)">
+                                                        Address is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="name">AddressLine2</label>
+                                                    <input class="form-control" type="text"
+                                                        formControlName="secondAddressLine2" name="secondAddressLine2">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row w-100 mx-0">
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="name">Pincode <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text"
+                                                        formControlName="secondPincode"
+                                                        (keyup)="onKeyUpEvent($event, 'secondReferenceAddress',true)"
+                                                        onlyNumbers maxlength="6" required>
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('secondPincode') && !refrenceForm.get('secondPincode').valid  && refrenceForm.get('secondPincode').touched)">
+                                                        <span
+                                                            *ngIf="refrenceForm.get('secondPincode').errors.required">Pincode
+                                                            is required</span>
+                                                        <span
+                                                            *ngIf="refrenceForm.get('secondPincode').errors.minlength">Enter
+                                                            Valid Pincode</span>
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <div class="col-form-label">Select City <span
+                                                            style="color: red;">*</span></div>
+                                                    <ng-select [items]="secondCities"
+                                                        class="js-example-basic-single p-0" placeholder="Select City"
+                                                        bindLabel="name" bindValue="id" name="cityName" required
+                                                        formControlName="secondCityId"
+                                                        (change)="selectedCitySecondReference()">
+                                                    </ng-select>
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('secondCityId') && !refrenceForm.get('secondCityId').valid && refrenceForm.get('secondCityId').touched)">
+                                                        City is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="name">District <span
+                                                            style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text"
+                                                        formControlName="secondDistrict" readonly required>
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('secondDistrict') && !refrenceForm.get('secondDistrict').valid && refrenceForm.get('secondDistrict').touched)">
+                                                        District is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="name">State <span style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text"
+                                                        formControlName="secondState" readonly required>
+                                                    <mat-error
+                                                        *ngIf="(refrenceForm.get('secondState') && !refrenceForm.get('secondState').valid && refrenceForm.get('secondState').touched)">
+                                                        State is Required
+                                                    </mat-error>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <div class="form-check" style="font-size: 16px; padding-top: 20px;">
+                                            <input id="checkbox-info-1" type="checkbox" value="isDone" name="isDone"
+                                                [formControl]="isDone" [checked]="isSelect"> I hereby declare that the
+                                            information/documents submitted by me are true to the best of my
+                                            knowledge.<span style="color: red;">*</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modalButton">
+                            <button class="btn btn-info pull-right "
+                                style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit" awNextStep
+                                (click)="addPersonalLoanDocumentAndRefrences(refrenceForm)">Save</button>
+                        </div>
+                    </aw-wizard-step>
+                </aw-wizard> -->
+            </div>
+        </div>
+    </div>

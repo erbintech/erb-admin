@@ -1,0 +1,107 @@
+<title>Service Employment Type</title>
+<app-breadcrumb [title]="'Service Employment Type'" [active_item]="'Service Employment Type'">
+</app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-drawer-container class="example-container" autosize>
+                <div class="card">
+                    <div class="card-header p-1">
+                        <div class="d-flex justify-content-between">
+                            <div class="main-header-left ">
+                            </div>
+                            <div ngbDropdown class="btn-group">
+                                <div class="ml-2">
+                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="services && services.length > 0 else NoEmploymentTypes">
+                        <div class="table-responsive border-top userlist-table">
+                            <table mat-table [dataSource]="services"
+                                class=" employmentTable mat-elevation-z8 table-striped table-vcenter" aria-label="">
+                                <ng-container matColumnDef="id">
+                                    <th mat-header-cell *matHeaderCellDef style="width:75px">#</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:75px">
+                                        {{i+1}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="serviceName">
+                                    <th mat-header-cell *matHeaderCellDef>Service Name</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.name else NoValue">
+                                            {{element.name}}
+                                          </div>
+                                          <ng-template #NoValue>
+                                            --
+                                          </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="action">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">Action</th>
+                                    <td mat-cell *matCellDef="let element" class="text-right">
+                                        <a *ngIf="isWritePermission" title="Add/Edit EmploymentType" href="javascript:;"
+                                            class="btn btn-sm btn-info"
+                                            style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                            (click)="modalOpen(element,basicmodal,false)">
+                                            <i class="icon-plus"></i>
+                                        </a>
+                                        <a *ngIf="isReadPermission" title="View EmploymentType" href="javascript:;" class="btn btn-sm btn-info"
+                                            style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                            (click)="modalOpen(element,basicmodal,true)">
+                                            <i class="icon-eye"></i>
+                                        </a>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayColumns;" class="student-element-row"
+                                    style="cursor: pointer;"></tr>
+                            </table>
+                        </div>
+                    </ng-container>
+                    <ng-template #NoEmploymentTypes>
+                        <div class="d-flex vertical-center nodata" style="height:calc(100vh - 260px)">
+                          </div>
+                    </ng-template>
+                </div>
+            </mat-drawer-container>
+        </div>
+    </div>
+</div>
+<ng-template #basicmodal let-modal>
+    <div>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body pd-20">
+            <input id="checkbox-info-1" type="checkbox" (change)="selectAll()" [checked]="isSelectAll" [disabled]="isView"> Select All
+            <ul>
+                <li class="main" *ngFor="let type of employmentTypes;let i =index">
+                    <input id="checkbox-info-1" type="checkbox" [checked]="type.isSelected"
+                        (change)="selectEmploymentType(type.id)" [disabled]="isView"> 
+                    <span class="pl-2">{{type.name}}</span>
+                    <ul *ngIf="type.childEmploymentType && type.childEmploymentType.length > 0">
+                        <li *ngFor="let child of type.childEmploymentType" class="sub pl-2">
+                            <input id="checkbox-info-1" type="checkbox" [checked]="child.isSelected"
+                                (change)="selectEmploymentType(child.id)" [disabled]="isView">
+                            <span class="pl-1"> {{child.name}}</span>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+         
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="!isView" class="btn btn-sm btn-info" (click)="insertServiceEmploymetType()"  style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                Save
+            </button>
+            <button class="btn btn-sm btn-info" (click)="closeDialog()"  style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                Cancel
+            </button>
+        </div>
+    </div>
+</ng-template>

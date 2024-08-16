@@ -1,0 +1,151 @@
+tr.student-element-row:not(.student-expanded-row):hover {
+    background: whitesmoke;
+}
+
+tr.student-element-row:not(.student-expanded-row):active {
+    background: #efefef;
+}
+
+.student-element-row td {
+    border-bottom-width: 0;
+}
+
+.card {
+    height    : calc(100vh - 200px);
+    overflow-x: auto;
+}
+
+.card-footer {
+    padding: 10px !important;
+}
+
+::ng-deep .maintable tbody {
+    display : block;
+    height  : calc(100vh - 365px);
+    overflow: auto;
+}
+
+
+
+::ng-deep .maintable thead {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+::ng-deep .maintable tr {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+::ng-deep .mat-drawer-inner-container {
+    overflow: auto !important;
+}
+
+
+.modal-title {
+    font-weight  : 500 !important;
+    font-size    : 18px !important;
+    margin-bottom: 0 !important;
+    line-height  : 1.2 !important;
+}
+
+.input-icons mat-icon {
+    position  : absolute;
+    text-align: end;
+    float     : right;
+    right     : 15px;
+    padding   : 7px !important;
+}
+
+.input-icons {
+    width        : 100%;
+    margin-bottom: 10px;
+}
+
+.icon {
+    padding  : 10px;
+    min-width: 50px;
+}
+
+.input-field {
+    width  : 100%;
+    padding: 10px;
+}
+
+::ng-deep .modal-backdrop.show {
+    z-index: 1050 !important;
+}
+
+::ng-deep {
+
+    .cdk-global-overlay-wrapper,
+    .cdk-overlay-container {
+        z-index: 9999 !important;
+    }
+}
+
+@media screen and (max-width: 776px) {
+  
+    ::ng-deep.mat-table tbody {
+        width   : 1200px !important;
+        overflow: auto;
+    }
+
+    ::ng-deep.mat-table thead {
+        width   : 1200px !important;
+        overflow: auto;
+    }
+}
+
+::ng-deep.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+    color: #fff;
+}
+
+.uploadDocument {
+    border       : 1px dashed #7366ff;
+    align-items  : center;
+    display      : flex;
+    height       : 130px;
+    margin-top   : 10px;
+    border-radius: 10px;
+}
+
+.uploadDocument i {
+    margin   : auto;
+    font-size: 50px;
+}
+
+video img {
+    margin-top: 10px;
+    height    : 150px;
+}
+
+.fileName {
+    height: 40px;
+}
+
+.title {
+    font-size: 20px
+}
+
+.listContent {
+    overflow: auto
+}
+
+@media screen and (min-width:1366px) {
+    .file-content .files .file-box {
+        width: calc(25% - 8px);
+    }
+}
+
+.data {
+    height: calc(100vh - 310px);
+}
+
+.center {
+    position    : absolute;
+    top         : 70%;
+    padding-left: 250px;
+}

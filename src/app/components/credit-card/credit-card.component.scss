@@ -1,0 +1,161 @@
+tr.student-element-row:not(.student-expanded-row):hover {
+    background: whitesmoke;
+}
+
+tr.student-element-row:not(.student-expanded-row):active {
+    background: #efefef;
+}
+
+.student-element-row td {
+    border-bottom-width: 0;
+}
+
+.card {
+    height    : calc(100vh - 200px);
+    overflow-x: auto;
+}
+
+.card-footer {
+    padding: 10px !important;
+}
+
+::ng-deep .mat-drawer-inner-container {
+    overflow: auto !important;
+}
+
+
+.modal-title {
+    font-weight  : 500 !important;
+    font-size    : 18px !important;
+    margin-bottom: 0 !important;
+    line-height  : 1.2 !important;
+}
+
+.input-icons mat-icon {
+    position  : absolute;
+    text-align: end;
+    float     : right;
+    right     : 15px;
+    padding   : 7px !important;
+}
+
+.input-icons {
+    width        : 100%;
+    margin-bottom: 10px;
+}
+
+.icon {
+    padding  : 10px;
+    min-width: 50px;
+}
+
+.input-field {
+    width  : 100%;
+    padding: 10px;
+}
+
+::ng-deep .modal-backdrop.show {
+    z-index: 1050 !important;
+}
+
+::ng-deep {
+
+    .cdk-global-overlay-wrapper,
+    .cdk-overlay-container {
+        z-index: 9999 !important;
+    }
+}
+
+.center {
+    position    : absolute;
+    top         : 37%;
+    padding-left: 93px;
+}
+
+.creditCard {
+    height    : 110px;
+    width     : 150px;
+    object-fit: contain;
+}
+
+::ng-deep .maintable tbody {
+    display : block;
+    height  : calc(100vh - 362px);
+    overflow: auto;
+}
+
+::ng-deep .maintable thead {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+::ng-deep .maintable tr {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+.position {
+    height    : calc(100vh - 310px);
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+@media screen and (max-width: 2100px) {
+    ::ng-deep .creditcard tbody {
+        width: 1500px !important;
+    }
+}
+
+.creditcard {
+    height: calc(100vh - 200px);
+}
+
+@media screen and (max-width: 776px) {
+    ::ng-deep.mat-table tbody {
+        display     : table;
+        width       : 100%;
+        table-layout: fixed;
+        overflow    : auto;
+    }
+
+    ::ng-deep.mat-table thead {
+        display     : table;
+        width       : 100%;
+        table-layout: fixed;
+        // position: absolute;
+    }
+
+    ::ng-deep.mat-table tr {
+        display     : table;
+        width       : 100%;
+        table-layout: fixed;
+    }
+
+    ::ng-deep.mat-table thead {
+        width   : 1200px !important;
+        overflow: auto;
+    }
+
+
+}
+
+::ng-deep.mat-form-field-wrapper {
+    padding-bottom: 0px !important
+}
+
+::ng-deep.mat-form-field-infix {
+    border-top: 0px !important;
+    padding   : 0.7em !important;
+}
+
+::ng-deep.mat-form-field-flex {
+    padding: 0px !important;
+}
+
+
+.documentModal {
+    height  : calc(100vh - 200px);
+    overflow: auto;
+}

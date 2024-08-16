@@ -1,0 +1,294 @@
+<title>Admin User</title>
+<div *ngIf="userId else Add">
+    <app-breadcrumb [title]="'Admin User'" [items]="[{'name':'Admin User', 'route':'/adminUser'}]" [active_item]="'Edit'">
+    </app-breadcrumb>
+</div>
+<ng-template #Add>
+    <app-breadcrumb [title]="'Admin User'" [items]="[{'name':'Admin User', 'route':'/adminUser'}]" [active_item]="'Add'">
+    </app-breadcrumb>
+</ng-template>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-drawer-container class="example-container" autosize>
+                <div class="card">
+                    <div class="p-4">
+                        <div class="addCard">
+                            <form #userForm="ngForm">
+                                <div class="form-row">
+                                    <div class="col-lg-2 col-sm-12">
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <div class="main-contact-info-header pt-3">
+                                                    <div *ngIf="!profilePic else upload">
+                                                        <img src="../../../assets/images/userprofile.png"
+                                                            class="rounded-pill" width="150px" height="150px" alt=""
+                                                            (click)="fileInput.click()" />
+                                                    </div>
+                                                    <ng-template #upload>
+                                                        <img [src]="profilePic" class="rounded-pill" width="150px"
+                                                            height="150px" alt="" (click)="fileInput.click()" />
+                                                    </ng-template>
+                                                </div>
+                                                <a>
+                                                    <input type="file" #fileInput id="uploadFile"
+                                                        (change)="selectedImage($event)" name="profilePicUrl"
+                                                        accept="image/*" style="display:none;" />
+                                                </a>
+                                                <div class="center">
+                                                    <button class="p-2 text-black" *ngIf="profilePic"
+                                                        (click)="removeImage()"
+                                                        style="text-align:center; border: none; border-radius:40%; font-size: 20px;">
+                                                        <i class="icon-trash"></i>
+                                                    </button>
+                                                    <button class="p-2 text-black" *ngIf="!profilePic"
+                                                        (click)="fileInput.click()"
+                                                        style="text-align:center; border: none; border-radius:40%; font-size: 20px;">
+                                                        <i class="icon-gallery"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="email">Gender</label>
+                                                <div
+                                                    class="form-group m-t-15 m-checkbox-inline mb-0 custom-radio-ml ml-2">
+                                                    <div class="radio radio-primary">
+                                                        <input id="radioinline1" type="radio" name="radio1" value="Male"
+                                                            [checked]="user.gender=='Male'" [(ngModel)]="user.gender">
+                                                        <label class="mb-0" for="radioinline1">Male</label>
+                                                    </div>
+                                                    <div class="radio radio-primary">
+                                                        <input id="radioinline2" type="radio" name="radio1"
+                                                            value="Female" [checked]="user.gender=='Female'"
+                                                            [(ngModel)]="user.gender">
+                                                        <label class="mb-0" for="radioinline2">Female</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-10 col-sm-12">
+                                        <div class="form-row">
+                                            <div class="form-group col-lg-4 col-md-6">
+                                                <label for="name">Name <span *ngIf="isRequired == true"
+                                                        style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" name="name"
+                                                    [(ngModel)]="user.fullName" #FullName="ngModel" required>
+                                                <mat-error *ngIf="(FullName.touched) && (FullName.errors?.required)">
+                                                    Name is required
+                                                </mat-error>
+                                            </div>
+                                            <div class="form-group col-lg-4 col-md-6">
+                                                <label for="email">Contact No <span *ngIf="isRequired == true"
+                                                        style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" name="mobile"
+                                                    [(ngModel)]="user.contactNo" #Contact="ngModel" ContactNo>
+                                                <mat-error *ngIf="(Contact.touched) && (Contact.errors?.required)">
+                                                    Name is required
+                                                </mat-error>
+                                            </div>
+                                            <div class="form-group col-lg-4 col-md-6">
+                                                <label for="email">Designation <span *ngIf="isRequired == true"
+                                                        style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" name="designation"
+                                                    [(ngModel)]="user.designation" #Designation="ngModel">
+                                                <mat-error
+                                                    *ngIf="(Designation.touched) && (Designation.errors?.required)">
+                                                    Designation is required
+                                                </mat-error>
+                                            </div>
+                                            <div class="form-group col-lg-4 col-md-6">
+                                                <label for="role">Select Role <span style="color: red;">*</span></label>
+                                                <ng-select [items]="roles" class="js-example-basic-single p-0"
+                                                    placeholder="Select role" bindLabel="name" bindValue="id"
+                                                    [(ngModel)]="user.roleId" name="roleId" required #RoleIds="ngModel">
+                                                </ng-select>
+                                                <mat-error *ngIf="(RoleIds.touched) && (RoleIds.errors?.required)">
+                                                    User Role is required
+                                                </mat-error>
+                                            </div>
+                                            <div class="form-group col-lg-4 col-md-6">
+                                                <label for="email">Email <span *ngIf="isRequired == true"
+                                                        style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" name="email"
+                                                    [(ngModel)]="user.email" #Email="ngModel"
+                                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+                                                <mat-error *ngIf="(Email.touched) && (Email.errors?.required)">
+                                                    Email is required!
+                                                </mat-error>
+                                                <mat-error *ngIf="Email.errors?.pattern">
+                                                    Enter a valid mail id
+                                                </mat-error>
+                                            </div>
+                                            <div class="form-group col-lg-4 col-md-6">
+                                                <label for="pass">Password <span *ngIf="isRequired == true"
+                                                        style="color: red;">*</span></label>
+                                                <div class="input-icons">
+                                                    <mat-icon matSuffix class="icon" (click)="hide = !hide">{{hide ?
+                                                        'visibility'
+                                                        :'visibility_off'}}</mat-icon>
+                                                    <input class="form-control input-field" autocomplete="off"
+                                                        placeholder="password" [type]="hide ? 'text' : 'password'"
+                                                        [(ngModel)]="user.password" #Password="ngModel" required
+                                                        name="pass">
+                                                </div>
+                                                <mat-error
+                                                    *ngIf="Password.invalid && (Password.dirty ||Password.touched)">
+                                                    Password is Required
+                                                </mat-error>
+                                            </div>
+                                            <div class="form-group col-lg-4 col-md-6">
+                                                <label for="permissionGroup">Select Permission Group <span style="color: red;">*</span></label>
+                                                <ng-select [items]="permissionGroup" class="js-example-basic-single p-0"
+                                                    placeholder="Select Permission Group" bindLabel="name" bindValue="id"
+                                                    [(ngModel)]="user.permissionGroupId" name="permissionGroup" (change)="changePermissionGroup($event)">
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div>
+                                    <form>
+                                        <div class="row mx-0">
+                                            <div class="col-sm-4"></div>
+                                            <div class="col-sm-8">
+                                                <div class="row">
+                                                    <div class="col-sm-2">Select All</div>
+                                                    <div class="col-sm-2">AdminPermission</div>
+                                                    <div class="col-sm-2">Read</div>
+                                                    <div class="col-sm-2">Write</div>
+                                                    <div class="col-sm-2">Edit</div>
+                                                    <div class="col-sm-2">Delete</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mx-0">
+                                            <ul style="width: 100%;">
+                                                <li class="main" *ngFor="let page of pageList"
+                                                    style="margin: 0 0 5px 0;border-bottom: 1px solid #ddd;">
+                                                    <div class="row">
+                                                        <div
+                                                            [ngClass]="!(page.children && page.children.length > 0) ? 'col-lg-4' : 'col-sm-12'">
+                                                            <input id="checkbox-info-1" type="checkbox"
+                                                                [checked]="page.isChecked"
+                                                                (click)="onCheckTreeview(page)">
+                                                            <span class="pl-2">{{page.title}}</span>
+                                                            <ul *ngIf="page.children && page.children.length > 0"
+                                                                style="margin: 0 0 0 20px;">
+                                                                <li *ngFor="let child of page.children"
+                                                                    class="sub pl-2">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-4">
+                                                                            <input id="checkbox-info-1" type="checkbox"
+                                                                                [checked]="child.isChecked"
+                                                                                (click)="onCheckTreeview(child)">
+                                                                            <span class="pl-1"> {{child.title}}</span>
+                                                                        </div>
+                                                                        <div class="col-sm-8">
+                                                                            <div class="row" *ngIf="child.isChecked">
+                                                                                <span class="col-sm-2">
+                                                                                    <input id="checkbox-info-2"
+                                                                                        type="checkbox"
+                                                                                        [checked]="child.isSelectAll"
+                                                                                        (click)="onSelectAll(child)">
+                                                                                </span>
+                                                                                <span class="col-sm-2">
+                                                                                    <input id="checkbox-info-2"
+                                                                                        type="checkbox"
+                                                                                        [checked]="child.isAdminVerificationRequired"
+                                                                                        (click)="onCheckAdminVerifiedPermission(child)">
+                                                                                </span>
+                                                                                <span class="col-sm-2">
+                                                                                    <input id="checkbox-info-2"
+                                                                                        type="checkbox"
+                                                                                        [checked]="child.readPermission"
+                                                                                        (click)="onCheckReadPermission(child)">
+                                                                                </span>
+                                                                                <span class="col-sm-2">
+                                                                                    <input id="checkbox-info-2"
+                                                                                        type="checkbox"
+                                                                                        [checked]="child.writePermission"
+                                                                                        (click)="onCheckWritePermission(child)">
+                                                                                </span>
+                                                                                <span class="col-sm-2">
+                                                                                    <input id="checkbox-info-2"
+                                                                                        type="checkbox"
+                                                                                        [checked]="child.editPermission"
+                                                                                        (click)="onCheckEditPermission(child)">
+                                                                                </span>
+                                                                                <span class="col-sm-2">
+                                                                                    <input id="checkbox-info-2"
+                                                                                        type="checkbox"
+                                                                                        [checked]="child.deletePermission"
+                                                                                        (click)="onCheckDeletePermission(child)">
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="col-lg-8">
+                                                            <ng-container
+                                                                *ngIf="!(page.children && page.children.length > 0)">
+                                                                <div class="row" *ngIf="page.isChecked">
+                                                                    <span class="col-sm-2">
+                                                                        <input id="checkbox-info-2" type="checkbox"
+                                                                            [checked]="page.isSelectAll"
+                                                                            (click)="onSelectAll(page)">
+                                                                    </span>
+                                                                    <span class="col-sm-2">
+                                                                        <input id="checkbox-info-2" type="checkbox"
+                                                                            [checked]="page.isAdminVerificationRequired"
+                                                                            (click)="onCheckAdminVerifiedPermission(page)">
+                                                                    </span>
+                                                                    <span class="col-sm-2">
+                                                                        <input id="checkbox-info-2" type="checkbox"
+                                                                            [checked]="page.readPermission"
+                                                                            (click)="onCheckReadPermission(page)">
+                                                                    </span>
+                                                                    <span class="col-sm-2">
+                                                                        <input id="checkbox-info-2" type="checkbox"
+                                                                            [checked]="page.writePermission"
+                                                                            (click)="onCheckWritePermission(page)"></span>
+                                                                    <span class="col-sm-2">
+                                                                        <input id="checkbox-info-2" type="checkbox"
+                                                                            [checked]="page.editPermission"
+                                                                            (click)="onCheckEditPermission(page)"></span>
+                                                                    <span class="col-sm-2">
+                                                                        <input id="checkbox-info-2" type="checkbox"
+                                                                            [checked]="page.deletePermission"
+                                                                            (click)="onCheckDeletePermission(page)"></span>
+
+                                                                </div>
+                                                            </ng-container>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button (click)="insertUser(userForm)" class="btn btn-sm btn-info"
+                                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                                Save
+                            </button>
+                            <button (click)="cancelUser()" class="btn btn-sm btn-info"
+                                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </mat-drawer-container>
+        </div>
+    </div>
+</div>

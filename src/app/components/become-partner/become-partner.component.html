@@ -1,0 +1,223 @@
+<title>Become Partner Request</title>
+<app-breadcrumb [title]="'Become Partner Request'" [active_item]="'Become Partner Request'">
+</app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-drawer-container class="example-container" autosize>
+                <div class="card">
+                    <div class="card-header p-1">
+                        <div class="d-flex justify-content-between">
+                            <div class="main-header-left "></div>
+                            <div ngbDropdown class="btn-group">
+                                <div class="ml-2">
+                                    <button type="button" class="btn btn-info" style="margin-right: 5px;border-radius: 10px;padding:8px 14px" title="Filter Become Parter" (click)="drawer.toggle();">
+                                        <i class="icon-filter p-0"></i>
+                                        <span>Filter</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="partnerRequest && isFlag else NoPartnerRequest">
+                        <div class="partnertable table-responsive border-top userlist-table">
+                            <table mat-table [dataSource]="partnerRequest" class="mat-elevation-z8 table-striped table-vcenter" style="min-width: 1500px; box-shadow: none;" aria-label="">
+                                <ng-container matColumnDef="id">
+                                    <th mat-header-cell *matHeaderCellDef style="width:6%">#</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:6%">
+                                        {{(paginate.currentPage - 1) * paginate.pageSize + i + 1}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="name">
+                                    <th mat-header-cell *matHeaderCellDef col>Name</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.fullName else NoValue">
+                                            {{element.fullName}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="contactNo">
+                                    <th mat-header-cell *matHeaderCellDef>Contact No</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.contactNo else NoValue">
+                                            {{element.contactNo}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="panCardNo">
+                                    <th mat-header-cell *matHeaderCellDef>PanCardNo</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.panCardNo else NoValue">
+                                            {{element.panCardNo}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="aadharCardNo">
+                                    <th mat-header-cell *matHeaderCellDef>AAdharCard No</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.aadharCardNo else NoValue">
+                                            {{element.aadharCardNo}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="city">
+                                    <th mat-header-cell *matHeaderCellDef>City</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.city else NoValue">
+                                            {{element.city}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="businessCommitement">
+                                    <th mat-header-cell *matHeaderCellDef>Business Commitement</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.businessCommitement else NoValue">
+                                            ₹{{element.businessCommitement}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="jobType">
+                                    <th mat-header-cell *matHeaderCellDef>Job Type</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.jobType else NoValue">
+                                            {{element.jobType}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="requestDate">
+                                    <th mat-header-cell *matHeaderCellDef>Request Date</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.createdDate | date:'medium'}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Action" stickyEnd>
+                                    <th mat-header-cell *matHeaderCellDef translate class="text-right">Action</th>
+                                    <td mat-cell *matCellDef="let element" class="text-right">
+                                        <a *ngIf="isEditPermission" title="Assign Role" href="javascript:;" class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                            (click)="modalOpen(element,basicmodal)">
+                                            <i class="icon-user"></i>
+                                        </a>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayColumns;" class="student-element-row" style="cursor: pointer;"></tr>
+
+                            </table>
+                        </div>
+                    </ng-container>
+
+                    <ng-template #NoPartnerRequest>
+                        <div class="d-flex vertical-center nodata" style="height:calc(100vh - 260px)">
+                        </div>
+                    </ng-template>
+
+                    <div class="card-footer" *ngIf="partnerRequest && partnerRequest.length > 0">
+                        <ul class="pagination mb-0 float-right">
+                            <li [ngClass]="{ disabled: paginate.currentPage == 1 }" class="page-item page-prev">
+                                <a class="page-link" href="javascript:;" tabindex="-1" (click)="setPage(paginate.currentPage - 1)">
+                                    <span>Prev</span>
+                                </a>
+                            </li>
+                            <li *ngFor="let page of paginate.pages" class="page-item active" [ngClass]="{ active: paginate.currentPage == page }"><a [ngClass]="{current:paginate.currentPage == page}"
+                                    class="page-link" href="javascript:;" (click)="setPage(page)">{{page}}</a></li>
+                            <li [ngClass]="{ disabled: paginate.currentPage === paginate.totalPages}" (click)="setPage(paginate.currentPage + 1)" class="page-item page-next">
+                                <a class="page-link" href="javascript:;"><span>Next</span></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+                <mat-drawer #drawer class="example-sidenav" mode="over" position="end">
+                    <div class="col-lg-12 px-3 pt-3">
+                        <div class="d-inline" style="width: 100%;"><i class="fa fa-filter"> <span class="ml-1">Filter</span> </i>
+                            <button v class="close" aria-label="Close" (click)="drawer.toggle();">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="px-3" style="height: calc(100vh - 310px);">
+                        <div class="form-group">
+                            <label for="fullName">Search</label>
+                            <input class="form-control" type="text" name="search" [(ngModel)]="searchString" />
+                        </div>
+                    </div>
+
+                    <div class="modal-footer p-0" style="margin-bottom: 20px; justify-content: center;">
+                        <div class="float-right d-inline">
+                            <button type="button" class="btn btn-info" style="margin-right: 5px;border-radius: 10px;padding:8px 14px; margin-top: 3px;" title="Clear Filter"
+                                (click)="drawer.toggle();clearSearch();">
+                                <span>Clear</span>
+                            </button>
+                            <button type="button" class="btn btn-info" style="margin-right: 5px;border-radius: 10px;padding:8px 14px; margin-top: 3px;" title="Filter Loans"
+                                (click)="drawer.toggle();setPage(1);">
+                                <span>Search</span>
+                            </button>
+                        </div>
+                    </div>
+                </mat-drawer>
+            </mat-drawer-container>
+        </div>
+    </div>
+</div>
+
+<ng-template #basicmodal let-modal>
+    <div>
+
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Assign Role To Customer</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body pd-20">
+            <form [formGroup]="assignRoleForm">
+                <div class="form-group mb-2">
+                    <div class="col-form-label">Select Role</div>
+                    <ng-select [items]="roles" class="js-example-basic-single p-0 from-control" placeholder="Select Role" bindLabel="name" bindValue="id" name="rols" formControlName="roleId" required>
+                    </ng-select>
+                    <mat-error *ngIf="(assignRoleForm.get('roleId') && !assignRoleForm.get('roleId')?.valid && assignRoleForm.get('roleId')?.touched)">
+                        Role is required
+                    </mat-error>
+                </div>
+                <div class="form-group">
+                    <label for="name">Partner Code</label>
+                    <input class="form-control" type="text" id="name" formControlName="partnerCode" [required]="assignRoleForm.get('roleId').value && assignRoleForm.get('roleId').value == 4">
+                    <mat-error *ngIf="(assignRoleForm.get('partnerCode') && !assignRoleForm.get('partnerCode')?.valid && assignRoleForm.get('partnerCode')?.touched)">
+                        Partner Code is required
+                    </mat-error>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" (click)="assignRoleToCustomer()">
+                Assign
+            </button>
+            <button class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" (click)="closeDialog()">
+                Cancel
+            </button>
+        </div>
+    </div>
+</ng-template>

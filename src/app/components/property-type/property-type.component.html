@@ -1,0 +1,144 @@
+<title>Property Type</title>
+<app-breadcrumb [title]="'Property Type'" [active_item]="'Property Type'">
+</app-breadcrumb>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <mat-drawer-container class="example-container" autosize>
+        <div class="card">
+          <div class="card-header p-1">
+            <div class="d-flex justify-content-between">
+              <div class="main-header-left "></div>
+              <div ngbDropdown class="btn-group">
+                <div class="ml-2">
+                  <a *ngIf="isWritePermission" title="Add Property Type" href="javascript:;" class="btn btn-sm btn-info"
+                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" (click)="modalOpen(basicmodal)">
+                    <i class="icon-plus"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-container *ngIf="propertyTypes && propertyTypes.length > 0 else NoPropertyTypes">
+            <div class="table-responsive border-top userlist-table">
+              <table mat-table [dataSource]="propertyTypes"
+                class=" maintable mat-elevation-z8 table-striped table-vcenter" aria-label="">
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef style="width:75px">#</th>
+                  <td mat-cell *matCellDef="let element; let i = index;" style="width:75px">
+                    {{(paginate.currentPage - 1) * paginate.pageSize + i + 1}}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef>Name</th>
+                  <td mat-cell *matCellDef="let element">
+                    <div *ngIf="element.name else NoValue">
+                      {{element.name}}
+                    </div>
+                    <ng-template #NoValue>
+                      --
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="Status">
+                  <th mat-header-cell *matHeaderCellDef translate>Status</th>
+                  <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.isActive else InActive">
+                      <span class="label text-success d-flex">
+                        <div class="dot-label bg-success mr-1"></div>
+                        <span>Active</span>
+                      </span>
+                    </ng-container>
+                    <ng-template #InActive>
+                      <span class="label text-warning d-flex">
+                        <div class="dot-label bg-warning mr-1"></div>
+                        <span>InActive</span>
+                      </span>
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef translate>Action</th>
+                  <td mat-cell *matCellDef="let element" class="text-right" style="align-items: center;display: flex;">
+                    <div class="media-body text-right icon-state">
+                      <label class="switch" title="Change Status" style="top:7px" *ngIf="isEditPermission">
+                        <input type="checkbox" (click)="changeStatus(element)" [(ngModel)]="element.isActive"><span
+                          class="switch-state" [ngClass]="element.isActive ? 'bg-success' : 'bg-warning'"></span>
+                      </label>
+                    </div>
+                    <a *ngIf="isEditPermission" title="Edit Property Type" href="javascript:;" class="btn btn-sm btn-info"
+                      style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                      (click)="editDialog(element,basicmodal)">
+                      <i class="icon-pencil"></i>
+                    </a>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayColumns;" class="student-element-row"
+                  style="cursor: pointer;"></tr>
+              </table>
+            </div>
+          </ng-container>
+
+          <ng-template #NoPropertyTypes>
+            <div class="d-flex vertical-center nodata" style="height:calc(100vh - 260px)">
+            </div>
+          </ng-template>
+
+          <div class="card-footer" *ngIf="propertyTypes && propertyTypes.length > 0">
+            <ul class="pagination mb-0 float-right">
+              <li [ngClass]="{ disabled: paginate.currentPage == 1 }" class="page-item page-prev">
+                <a class="page-link" href="javascript:;" tabindex="-1" (click)="setPage(paginate.currentPage - 1)">
+                  <span>Prev</span>
+                </a>
+              </li>
+              <li *ngFor="let page of paginate.pages" class="page-item active"
+                [ngClass]="{ active: paginate.currentPage == page }"><a
+                  [ngClass]="{current:paginate.currentPage == page}" class="page-link" href="javascript:;"
+                  (click)="setPage(page)">{{page}}</a></li>
+              <li [ngClass]="{ disabled: paginate.currentPage === paginate.totalPages}"
+                (click)="setPage(paginate.currentPage + 1)" class="page-item page-next">
+                <a class="page-link" href="javascript:;"><span>Next</span></a>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+      </mat-drawer-container>
+    </div>
+  </div>
+</div>
+
+<ng-template #basicmodal let-modal>
+  <div>
+    <form [formGroup]="propertyTypeform">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body pd-20">
+
+        <div class="form-group">
+          <label for="name">Name <span style="color: red;">*</span></label>
+          <input class="form-control" type="text" id="name" formControlName="name" required onlyAlphabets>
+          <mat-error
+            *ngIf="(propertyTypeform.get('name') && !propertyTypeform.get('name')?.valid && propertyTypeform.get('name')?.touched)">
+            Name is required
+          </mat-error>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-info"  style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" (click)="insertPropertyType()">
+          Save
+        </button>
+        <button class="btn btn-sm btn-info"  style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" (click)="cancelUser()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

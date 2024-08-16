@@ -1,0 +1,230 @@
+<title>Setting</title>
+<app-breadcrumb [title]="'Setting'" [active_item]="'Setting'">
+</app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header p-1">
+                    <div class="d-flex justify-content-between">
+                        <div class="main-header-left "></div>
+                        <div ngbDropdown class="btn-group">
+                            <div class="ml-2">
+                                <button type="button" class="btn btn-info"
+                                    style="margin-right: 5px;border-radius: 10px;padding:8px 14px" title="Save"
+                                    (click)="getConfirmation()">
+                                    <i class="icon-save p-0"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body custom-datatable" style="height:calc(100vh - 255px);overflow-y: auto;">
+                    <div class="text-wrap">
+                        <div class="example">
+                            <div class="panel panel-primary tabs-style-2">
+                                <div class=" tab-menu-heading">
+                                    <ul ngbNav #nav1="ngbNav" class="nav-tabs profile navtab-custom panel-tabs mb-0"
+                                        [activeId]="activeFlagId" (navChange)="navChanged1($event)">
+                                        <li [ngbNavItem]="flag.flagGroupId"
+                                            *ngFor="let flag of sysFlagsGroup;let i =index">
+                                            <a ngbNavLink>
+                                                <span class="hidden-xs">{{flag.flagGroupName}}</span>
+                                            </a>
+                                            <ng-template ngbNavContent>
+                                                <ng-container *ngFor="let sys of flag.systemFlags">
+                                                    <div class="grid-conatiner-systemflag-value" style="padding:5px">
+                                                        <div class="item1" style="display: flex;align-items: center;">
+                                                            {{sys.displayName}}
+                                                        </div>
+                                                        <div class="item1" *ngIf="sys.valueTypeId == 1">
+                                                            <input class="form-control" type="text" name="{{sys.value}}"
+                                                                [(ngModel)]="sys.value"
+                                                                style="width: 100%;margin-bottom: 0px;color:#000">
+                                                        </div>
+                                                        <div class="item1" *ngIf="sys.valueTypeId == 2">
+                                                            <input class="form-control" type="text" name="{{sys.value}}"
+                                                                [(ngModel)]="sys.value"
+                                                                style="width: 100%;margin-bottom: 0px;color:#000"
+                                                                onlyNumbers>
+                                                        </div>
+                                                        <div class="item1" *ngIf="sys.valueTypeId == 3">
+                                                            <select name="role" class="form-control"
+                                                                name="{{sys.value}}" [(ngModel)]="sys.value">
+                                                                <option *ngFor="let role of sys.displayValueList"
+                                                                    [ngValue]="role">
+                                                                    {{role}}
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="item1" *ngIf="sys.valueTypeId == 4">
+                                                            <quill-editor name="{{sys.valueTypeId}}1"
+                                                                [(ngModel)]="sys.value" trackChanges="all"
+                                                                (onEditorCreated)="addBindingCreated($event)"
+                                                                >
+                                                            </quill-editor>
+                                                        </div>
+                                                        <div class="item1" *ngIf="sys.valueTypeId == 5">
+                                                            <input class="input-focus" type="text" name="{{sys.value}}"
+                                                                [(ngModel)]="sys.value"
+                                                                style="width: 100%;margin-bottom: 0px;color:#000"
+                                                                disabled>
+                                                        </div>
+                                                        <div class="item1" *ngIf="sys.valueTypeId == 6">
+                                                            <input class="input-focus" type="text" name="{{sys.value}}"
+                                                                [(ngModel)]="sys.value"
+                                                                pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                                                                #EmailID="ngModel"
+                                                                style="width: 100%;margin-bottom: 0px;color:#000">
+                                                            <div *ngIf="EmailID.touched && EmailID.hasError('pattern')"
+                                                                class="text text-danger mt-1">
+                                                                Invalid Email
+                                                            </div>
+                                                        </div>
+                                                        <div class="item1" *ngIf="sys.valueTypeId == 7">
+                                                            <label class="switch" style="top:7px">
+                                                                <input type="checkbox" [(ngModel)]="sys.checked">
+                                                                <span class="switch-state"
+                                                                    [ngClass]="sys.checked ? 'bg-success' : 'bg-warning'"></span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="item1" *ngIf="sys.valueTypeId == 8">
+                                                            <input class="input-focus" type="{{sys.inputType}}"
+                                                                name="{{sys.value}}" [(ngModel)]="sys.value"
+                                                                style="margin-bottom: 0px;color: #000;margin-right: 5px;"
+                                                                [disabled]="sys.inputType=='password'">
+                                                            <button class="btn btn-primary action-btn" type="button"
+                                                                placement="top" title="Show/Hide"
+                                                                (click)="changeType(sys)" style="height: 38px;">
+                                                                <i *ngIf="sys.inputType == 'password'"
+                                                                    class="fa fa-eye p-0"></i>
+                                                                <i *ngIf="sys.inputType != 'password'"
+                                                                    class="fa fa-eye-slash p-0"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+                                                <ng-container *ngIf="flag.group && flag.group.length > 0">
+                                                    <ng-container *ngFor="let group of flag.group">
+                                                        <h2 class="my-2 ml-2">{{group.flagGroupName}}</h2>
+                                                        <div class="border p-2 m-2">
+                                                            <ng-container *ngFor="let groupSys of group.systemFlags">
+
+                                                                <div class="grid-conatiner-systemflag-value"
+                                                                    style="padding:5px">
+                                                                    <div class="item1"
+                                                                        style="display: flex;align-items: center;">
+                                                                        {{groupSys.displayName}}
+                                                                    </div>
+                                                                    <div class="item1"
+                                                                        *ngIf="groupSys.valueTypeId == 1">
+                                                                        <input class="form-control" type="text"
+                                                                            name="{{groupSys.value}}"
+                                                                            [(ngModel)]="groupSys.value"
+                                                                            style="width: 100%;margin-bottom: 0px;color:#000">
+                                                                    </div>
+                                                                    <div class="item1"
+                                                                        *ngIf="groupSys.valueTypeId == 2">
+                                                                        <input class="form-control" type="text"
+                                                                            name="{{groupSys.value}}"
+                                                                            [(ngModel)]="groupSys.value"
+                                                                            style="width: 100%;margin-bottom: 0px;color:#000"
+                                                                            OnlyInteger="true">
+                                                                    </div>
+                                                                    <div class="item1"
+                                                                        *ngIf="groupSys.valueTypeId == 3">
+                                                                        <select name="role" class="form-control"
+                                                                            name="{{groupSys.value}}"
+                                                                            [(ngModel)]="groupSys.value">
+                                                                            <option
+                                                                                *ngFor="let role of groupSys.displayValueList"
+                                                                                [ngValue]="role">
+                                                                                {{role}}
+                                                                            </option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="item1"
+                                                                        *ngIf="groupSys.valueTypeId == 4">
+                                                                        <quill-editor 
+                                                                        
+                                                                            [(ngModel)]="groupSys.value"
+                                                                            (onEditorCreated)="addBindingCreated($event)">
+                                                                        </quill-editor>
+
+                                                                    </div>
+                                                                    <div class="item1"
+                                                                        *ngIf="groupSys.valueTypeId == 5">
+                                                                        <input class="input-focus" type="text"
+                                                                            name="{{groupSys.value}}"
+                                                                            [(ngModel)]="groupSys.value"
+                                                                            style="width: 100%;margin-bottom: 0px;color:#000"
+                                                                            disabled>
+                                                                    </div>
+                                                                    <div class="item1"
+                                                                        *ngIf="groupSys.valueTypeId == 6">
+                                                                        <input class="input-focus" type="text"
+                                                                            name="{{groupSys.value}}"
+                                                                            [(ngModel)]="groupSys.value"
+                                                                            pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                                                                            #EmailID="ngModel"
+                                                                            style="width: 100%;margin-bottom: 0px;color:#000">
+                                                                        <div *ngIf="EmailID.touched && EmailID.hasError('pattern')"
+                                                                            class="text text-danger mt-1">
+                                                                            Invalid Email
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="item1"
+                                                                        *ngIf="groupSys.valueTypeId == 7">
+                                                                        <label class="switch" style="top:7px">
+                                                                            <input type="checkbox"
+                                                                                [(ngModel)]="groupSys.checked">
+                                                                            <span class="switch-state"
+                                                                                [ngClass]="groupSys.checked ? 'bg-success' : 'bg-warning'"></span>
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="item1"
+                                                                        *ngIf="groupSys.valueTypeId == 8">
+                                                                        <input class="input-focus"
+                                                                            type="{{groupSys.inputType}}"
+                                                                            name="{{groupSys.value}}"
+                                                                            [(ngModel)]="groupSys.value"
+                                                                            style="margin-bottom: 0px;color: #000;margin-right: 5px;"
+                                                                            [disabled]="groupSys.inputType=='password'">
+                                                                        <button class="btn btn-primary action-btn"
+                                                                            type="button" placement="top"
+                                                                            title="Show/Hide"
+                                                                            (click)="changeType(groupSys)"
+                                                                            style="height: 38px;">
+                                                                            <i *ngIf="groupSys.inputType == 'password'"
+                                                                                class="fa fa-eye p-0"></i>
+                                                                            <i *ngIf="groupSys.inputType != 'password'"
+                                                                                class="fa fa-eye-slash p-0"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+
+                                                            </ng-container>
+                                                        </div>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </ng-template>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                                <div class="panel-body tabs-menu-body main-content-body-right border">
+                                    <div [ngbNavOutlet]="nav1" class="tab-pane"></div>
+                                    <div class="tab-content">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

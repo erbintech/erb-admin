@@ -1,0 +1,429 @@
+<title>Commission Templates</title>
+<app-breadcrumb [title]="'Commission Template'" [active_item]="'Commssion Template'">
+</app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-drawer-container autosize>
+                <div class="card">
+                    <div class="card-header p-1">
+                        <div class="d-flex justify-content-between">
+                            <div class="main-header-left "></div>
+                            <div ngbDropdown class="btn-group">
+                                <div class="ml-2">
+
+                                    <a title="Add Commission Template" href="javascript:;" class="btn btn-sm btn-info"
+                                        style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                        *ngIf="isWritePermission" (click)="modalOpen(basicmodal)">
+                                        <i class="icon-plus"></i>
+                                    </a>
+                                    <a title="Filter Commission Template" href="javascript:;"
+                                        class="btn btn-sm btn-info"
+                                        style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                        (click)="drawer.toggle();">
+                                        <i class="icon-filter p-0"></i> Filter
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-container
+                        *ngIf="commissionTemplates && commissionTemplates.length > 0 else NoCommssionTemplates">
+                        <div class="table-responsive border-top userlist-table">
+                            <table mat-table [dataSource]="commissionTemplates"
+                                class=" maintable mat-elevation-z8 table-striped table-vcenter" aria-label="">
+                                <ng-container matColumnDef="id">
+                                    <th mat-header-cell *matHeaderCellDef style="width:75px">#</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:75px">
+                                        {{(paginate.currentPage - 1) * paginate.pageSize + i + 1}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="name">
+                                    <th mat-header-cell *matHeaderCellDef>Name</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.name else NoValue">
+                                            {{element.name}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="Action">
+                                    <th mat-header-cell *matHeaderCellDef translate class="text-right">Action</th>
+                                    <td mat-cell *matCellDef="let element" class="text-right">
+                                        <a title="View Commission Template" href="javascript:;"
+                                            class="btn btn-sm btn-info"
+                                            style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                            *ngIf="isReadPermission" (click)="getTemplate(element,basicmodal)">
+                                            <i class="icon-eye"></i>
+                                        </a>
+                                        <a title="Edit Commission Template" href="javascript:;"
+                                            class="btn btn-sm btn-info"
+                                            style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                            *ngIf="isEditPermission" (click)="editDialog(element,basicmodal)">
+                                            <i class="icon-pencil"></i>
+                                        </a>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayColumns;" class="student-element-row"
+                                    style="cursor: pointer;"></tr>
+                            </table>
+                        </div>
+                    </ng-container>
+
+                    <ng-template #NoCommssionTemplates>
+                        <div class="d-flex vertical-center nodata" style="height:calc(100vh - 260px)">
+                        </div>
+                    </ng-template>
+
+                    <div class="card-footer" *ngIf="commissionTemplates && commissionTemplates.length > 0">
+                        <ul class="pagination mb-0 float-right">
+                            <li [ngClass]="{ disabled: paginate.currentPage == 1 }" class="page-item page-prev">
+                                <a class="page-link" href="javascript:;" tabindex="-1"
+                                    (click)="setPage(paginate.currentPage - 1)">
+                                    <span>Prev</span>
+                                </a>
+                            </li>
+                            <li *ngFor="let page of paginate.pages" class="page-item active"
+                                [ngClass]="{ active: paginate.currentPage == page }"><a
+                                    [ngClass]="{current:paginate.currentPage == page}" class="page-link"
+                                    href="javascript:;" (click)="setPage(page)">{{page}}</a></li>
+                            <li [ngClass]="{ disabled: paginate.currentPage === paginate.totalPages}"
+                                (click)="setPage(paginate.currentPage + 1)" class="page-item page-next">
+                                <a class="page-link" href="javascript:;"><span>Next</span></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+                <mat-drawer #drawer class="example-sidenav" mode="over" position="end">
+                    <div class="col-lg-12 px-3 pt-3">
+                        <div class="d-inline" style="width: 100%;"><i class="fa fa-filter"><span class="ml-1">
+                                    Filter</span></i>
+                            <button v class="close" aria-label="Close" (click)="drawer.toggle();">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="position px-3">
+                        <div class="form-group">
+                            <div class="col-form-label">Select Bank</div>
+                            <ng-select [items]="banks" class="js-example-basic-single p-0" placeholder="Select Banks"
+                                bindLabel="name" bindValue="id" name="Type" name="selectedBank"
+                                [(ngModel)]="filterBankIds" [multiple]="true">
+                            </ng-select>
+
+                        </div>
+                        <div class="form-group">
+                            <div class="col-form-label">Select Service</div>
+                            <ng-select [items]="services" class="js-example-basic-single p-0"
+                                placeholder="Select Services" bindLabel="name" bindValue="id" name="Type"
+                                name="selectedServices" [(ngModel)]="filterServiceIds" [multiple]="true">
+                            </ng-select>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer px-3" style="padding-bottom: 35px;justify-content: center;">
+                        <div class="float-right d-inline">
+                            <button type="button" class="btn btn-info"
+                                style="margin-right: 5px;border-radius: 10px;padding:8px 14px" title="Clear Filter"
+                                (click)="drawer.toggle();clearFilter();">
+                                <span>Clear</span>
+                            </button>
+                            <button type="button" class="btn btn-info"
+                                style="margin-right: 5px;border-radius: 10px;padding:8px 14px" title="Filter Template"
+                                (click)="drawer.toggle();setPage(1);">
+                                <span>Search</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="px-3">
+                    </div>
+                </mat-drawer>
+            </mat-drawer-container>
+        </div>
+    </div>
+</div>
+
+<ng-template #basicmodal let-modal>
+    <div>
+        <ng-container *ngIf="isCommissionTemplateForm">
+            <form [formGroup]="commissionTemplateForm">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group p-1">
+                                <label for="name">Name <span style="color: red;">*</span></label>
+                                <input class="form-control" type="text" id="name" formControlName="name" required
+                                    onlyAlphabets [readonly]="title == 'Edit Commission Template'">
+                                <mat-error
+                                    *ngIf="(commissionTemplateForm.get('name') && !commissionTemplateForm.get('name')?.valid && commissionTemplateForm.get('name')?.touched)">
+                                    Name is required
+                                </mat-error>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="col-form-label">Select Bank <span style="color: red;">*</span></div>
+                                <ng-select [items]="banks" class="js-example-basic-single p-0"
+                                    placeholder="Select Banks" bindLabel="name" bindValue="id" name="Type" required
+                                    onlyAlphabets name="selectedBank" formControlName="bankId"
+                                    (change)="getBankLoanCommission()">
+                                </ng-select>
+                                <mat-error
+                                    *ngIf="(commissionTemplateForm.get('bankId') && !commissionTemplateForm.get('bankId').valid && commissionTemplateForm.get('bankId').touched)">
+                                    Bank is Required
+                                </mat-error>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="col-form-label">Select Service <span style="color: red;">*</span></div>
+                                <ng-select [items]="services" class="js-example-basic-single p-0"
+                                    placeholder="Select Services" bindLabel="name" bindValue="id" name="Type" required
+                                    onlyAlphabets name="selectedServices" formControlName="serviceId"
+                                    (change)="getBankLoanCommission()">
+                                </ng-select>
+                                <mat-error
+                                    *ngIf="(commissionTemplateForm.get('serviceId') && !commissionTemplateForm.get('serviceId').valid && commissionTemplateForm.get('serviceId').touched)">
+                                    Service is Required
+                                </mat-error>
+                            </div>
+                        </div>
+                        <div class="col-md-2" *ngIf="bankGetCommission || isBankGetCommission">
+                            <p>You Get:{{bankGetCommission}}%</p>
+                        </div>
+                        <div class="col-md-2" *ngIf="showCommission || isShowCommission">
+                            <p>You Give:{{showCommission}}%</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="col-form-label">Commission Type <span style="color: red;">*</span></div>
+                                <ng-select [items]="commissionTypes" class="js-example-basic-single p-0"
+                                    placeholder="Select Commission Type" bindLabel="name" bindValue="id" name="Type"
+                                    onlyAlphabets required name="selectStatus" formControlName="commissionTypeId">
+                                </ng-select>
+                                <mat-error
+                                    *ngIf="(commissionTemplateForm.get('commissionTypeId') && !commissionTemplateForm.get('commissionTypeId').valid && commissionTemplateForm.get('commissionTypeId').touched)">
+                                    Commission Type is Required
+                                </mat-error>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group p-1">
+                                <label for="name">Commssion(IN %) <span style="color: red;">*</span></label>
+                                <input class="form-control" type="text" id="name" formControlName="commission" required
+                                    NumberWithDecimal (keyup)="calculateCommission()">
+                                <mat-error
+                                    *ngIf="(commissionTemplateForm.get('commission') && !commissionTemplateForm.get('commission')?.valid && commissionTemplateForm.get('commission')?.touched)">
+                                    Commission is required
+                                </mat-error>
+                                <mat-error *ngIf="isCommissionError">
+                                    Commission is not greater than admin can get
+                                </mat-error>
+                            </div>
+                        </div>
+                        <div class="col-md-4" style="padding-top: 26px; display: inline;">
+                            <button class="btn btn-info" (click)="addCommissionTemplate()"
+                                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                                Add
+                            </button>
+                            <button class="btn btn-info" (click)="resetCommissionTemplate()"
+                                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                                <i class="icon-close"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <ng-container *ngIf="templates && templates.length > 0 else NoTemplates">
+                        <div class="example-container table-responsive border-top userlist-table">
+                            <table mat-table [dataSource]="templates"
+                                class="mat-elevation-z8 table-striped table-vcenter"
+                                style="min-width: 100%;  box-shadow: none;" aria-label="">
+                                <ng-container matColumnDef="id">
+                                    <th mat-header-cell *matHeaderCellDef style="width:75px">#</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:75px">
+                                        {{(paginate.currentPage - 1) * paginate.pageSize + i + 1}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="bankName">
+                                    <th mat-header-cell *matHeaderCellDef>Bank</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.bankName else NoValue">
+                                            {{element.bankName}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="serviceName">
+                                    <th mat-header-cell *matHeaderCellDef>Service</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.serviceName else NoValue">
+                                            {{element.serviceName}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="commissionType">
+                                    <th mat-header-cell *matHeaderCellDef>commssionType</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.commissiontype else NoValue">
+                                            {{element.commissiontype}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="commission">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">Commission</th>
+                                    <td mat-cell *matCellDef="let element" class="text-center">
+                                        <div *ngIf="element.commission else NoValue">
+                                            {{element.commission}}%
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Action">
+                                    <th mat-header-cell *matHeaderCellDef translate>Action</th>
+                                    <td mat-cell *matCellDef="let element;let i =index" class="text-right">
+                                        <a title="Edit Commission" href="javascript:;" class="btn btn-sm btn-info"
+                                            style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                            *ngIf="isEditPermission" (click)="editCommissionTemplate(element,i)">
+                                            <i class="icon-pencil"></i>
+                                        </a>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="commissionDisplayColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: commissionDisplayColumns;"
+                                    class="student-element-row" style="cursor: pointer;"></tr>
+                            </table>
+                        </div>
+                    </ng-container>
+                    <ng-template #NoTemplates>
+
+                    </ng-template>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-info" (click)="insertUpdateCommissionTemplate()"
+                        style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                        Save
+                    </button>
+                    <button class="btn btn-info" (click)="closeDialog()"
+                        style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </ng-container>
+
+        <ng-container *ngIf="isViewCommissionTemplate">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            <div class="modal-body pd-20">
+                <h4>Name: <span>{{name}}</span> </h4>
+                <div class="table-responsive border-top userlist-table">
+                    <table mat-table [dataSource]="templates"
+                        class="morecommissiontable mat-elevation-z8 table-striped table-vcenter" aria-label="">
+                        <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef style="width:75px">#</th>
+                            <td mat-cell *matCellDef="let element; let i = index;" style="width:75px">
+                                {{i + 1}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="bankName">
+                            <th mat-header-cell *matHeaderCellDef>Bank</th>
+                            <td mat-cell *matCellDef="let element">
+                                <div *ngIf="element.bankName else NoValue">
+                                    {{element.bankName}}
+                                </div>
+                                <ng-template #NoValue>
+                                    --
+                                </ng-template>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="serviceName">
+                            <th mat-header-cell *matHeaderCellDef>Service</th>
+                            <td mat-cell *matCellDef="let element">
+                                <div *ngIf="element.serviceName else NoValue">
+                                    {{element.serviceName}}
+                                </div>
+                                <ng-template #NoValue>
+                                    --
+                                </ng-template>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="commissionType">
+                            <th mat-header-cell *matHeaderCellDef>commssionType</th>
+                            <td mat-cell *matCellDef="let element">
+                                <div *ngIf="element.commissiontype else NoValue">
+                                    {{element.commissiontype}}
+                                </div>
+                                <ng-template #NoValue>
+                                    --
+                                </ng-template>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="commission">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">Commission</th>
+                            <td mat-cell *matCellDef="let element" class="text-center">
+                                <div *ngIf="element.commission else NoValue">
+                                    {{element.commission}}%
+                                </div>
+                                <ng-template #NoValue>
+                                    --
+                                </ng-template>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="createdDate">
+                            <th mat-header-cell *matHeaderCellDef>Created Date</th>
+                            <td mat-cell *matCellDef="let element; let i = index;" style="text-align: right;">
+                                <ng-container *ngIf="element.createdDate else NoValue">
+                                    {{element.createdDate | date:'medium'}}
+                                </ng-container>
+                                <ng-template #NoValue>
+                                    <span class="text-center">--</span>
+                                </ng-template>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="viewCommissionTemplateColumns; sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: viewCommissionTemplateColumns;"
+                            class="student-element-row" style="cursor: pointer;"></tr>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info"
+                    style="margin-right: 5px;border-radius: 10px;padding:8px 14px" title="Close Dialog"
+                    (click)="modal.dismiss('Cross click')">
+                    <span>Cancel</span>
+                </button>
+            </div>
+        </ng-container>
+    </div>
+</ng-template>

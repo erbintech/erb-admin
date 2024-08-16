@@ -1,0 +1,263 @@
+<title>Credit-Card Detail</title>
+<app-breadcrumb [title]="'Credit Card'" [items]="[{'name':'CreditCard', 'route':'/creditCard'}]" [active_item]="'View'">
+</app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-lg-4 col-md-6 col-sm-12 px-1">
+            <div class="card">
+                <div class="card-body" style="height:calc(100vh - 200px);overflow: auto;">
+                    <table class="table" style="margin-bottom: 5px; margin-top: 10px;" aria-label="customer-detail">
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: 550;">Full Name (As per PAN)</td>
+                                <td>{{creditCard?.customerDetail?.fullName}}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 550;">Contact No</td>
+                                <td>{{creditCard?.customerDetail?.contactNo}}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 550;">Gender</td>
+                                <td>{{creditCard?.customerDetail?.gender}}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 550;">Date of birth</td>
+                                <td>{{creditCard?.customerDetail?.birthDate | date:'dd-MMM-yyyy'}}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 550;">PAN Card No</td>
+                                <td>{{creditCard?.customerDetail?.panCardNo}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8 col-md-6 col-sm-12 px-1">
+            <div class="card">
+                <div class="card-body" style="height:calc(100vh - 200px);overflow: auto;">
+                    <div class="tabs-menu">
+                        <ul ngbNav #nav="ngbNav" class=" nav-tabs profile navtab-custom panel-tabs mb-0">
+                            <li [ngbNavItem]="1">
+                                <a ngbNavLink>
+                                    <span class="visible-xs">
+                                        <i class="fa fa-sm fa-user tx-16 mr-1"></i>
+                                    </span>
+                                    <span class="hidden-xs">Basic Detail</span>
+                                </a>
+                                <ng-template ngbNavContent>
+                                    <div class="p-1 creditCard">
+                                        <h6 class="sub-title">Profile Detail</h6>
+                                        <dl>
+                                            <dt>Email - <span
+                                                    style="font-weight:lighter;">{{creditCard?.customerDetail?.email}}</span>
+                                            </dt>
+                                            <dt>Marital Status - <span
+                                                    style="font-weight:lighter;">{{creditCard?.customerDetail?.maritalStatus}}</span>
+                                            </dt>
+                                            <dt>Permanent Address -
+                                                <span style="font-weight:lighter;">
+                                                    {{creditCard?.customerDetail?.label}},
+                                                    {{creditCard?.customerDetail?.addressLine1}},
+                                                    <span *ngIf="creditCard?.customerDetail?.addressLine2 != ''">
+                                                        {{creditCard?.customerDetail?.addressLine2}},
+                                                    </span>
+                                                </span>
+                                                <span style="font-weight:lighter;">
+                                                    {{creditCard?.customerDetail?.district}},
+                                                    {{creditCard?.customerDetail?.state}}
+                                                    {{creditCard?.customerDetail?.city}} -
+                                                    {{creditCard?.customerDetail?.pincode}}
+                                                </span>
+                                            </dt>
+                                            <dt>correspondence Address -
+                                                <span style="font-weight:lighter;">
+                                                    {{creditCard?.correspondenceAddressDetail?.label}},
+                                                    {{creditCard?.correspondenceAddressDetail?.addressLine1}},
+                                                    <span
+                                                        *ngIf="creditCard?.correspondenceAddressDetail?.addressLine2 != ''">
+                                                        {{creditCard?.correspondenceAddressDetail?.addressLine2}},
+                                                    </span>
+                                                </span>
+                                                <span style="font-weight:lighter;">
+                                                    {{creditCard?.correspondenceAddressDetail?.district}},
+                                                    {{creditCard?.correspondenceAddressDetail?.state}}
+                                                    {{creditCard?.correspondenceAddressDetail?.city}} -
+                                                    {{creditCard?.correspondenceAddressDetail?.pincode}}
+                                                </span>
+                                            </dt>
+                                        </dl>
+                                    </div>
+                                   
+                                </ng-template>
+                            </li>
+
+                            <li [ngbNavItem]="2">
+                                <a ngbNavLink>
+                                    <span class="visible-xs">
+                                        <i class="fa fa-sm fa-info tx-16 mr-1"></i>
+                                    </span>
+                                    <span class="hidden-xs">Employment & Income Detail</span>
+                                </a>
+                                <ng-template ngbNavContent>
+                                        <div class="p-1 creditCard">
+                                            <dl>
+                                                <dt>Employment Type - <span
+                                                        style="font-weight:lighter;">{{creditCard?.employmentDetail?.employmentType}}</span>
+                                                </dt>
+                                                <dt>Bank Name - <span
+                                                        style="font-weight:lighter;">{{creditCard?.employmentDetail?.bankName}}</span>
+                                                </dt>
+                                                <dt>Bank Account Number - <span
+                                                        style="font-weight:lighter;">{{creditCard?.employmentDetail?.bankAccountNo}}</span>
+                                                </dt>
+                                                <dt>Highest Education - <span
+                                                        style="font-weight:lighter;">{{creditCard?.employmentDetail?.educationType}}</span>
+                                                </dt>
+                                                <dt>Office Contact Number - <span
+                                                        style="font-weight:lighter;">{{creditCard?.employmentDetail?.officeContactNo}}</span>
+                                                </dt>
+                                                <dt>Company Name - <span
+                                                        style="font-weight:lighter;">{{creditCard?.employmentDetail?.companyName}}</span>
+                                                </dt>
+                                                <dt>Work Address -
+                                                    <span style="font-weight:lighter;">
+                                                        {{creditCard?.workAddressDetail?.label}},
+                                                        {{creditCard?.workAddressDetail?.addressLine1}},
+                                                        <span *ngIf="creditCard?.workAddressDetail?.addressLine2 != ''">
+                                                            {{creditCard?.workAddressDetail?.addressLine2}},
+                                                        </span>
+                                                    </span>
+                                                    <span style="font-weight:lighter;">
+                                                        {{creditCard?.workAddressDetail?.district}},
+                                                        {{creditCard?.workAddressDetail?.state}}
+                                                        {{creditCard?.workAddressDetail?.city}} -
+                                                        {{creditCard?.workAddressDetail?.pincode}}
+                                                    </span>
+                                                </dt>
+                                            </dl>
+                                        <div class="p-1" *ngIf="creditCard?.employmentDetail?.lastItr">
+                                            <h6 class="sub-title">Last ITR</h6>
+                                            <dl>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="file-content">
+                                                            <div class="p-1 file-manager data">
+                                                                <ul class="files">
+                                                                    <li class="file-box p-2 w-100"
+                                                                        style="text-align: center;">
+                                                                        <div class="file-top" style="width: 100%;">
+                                                                            <dd><a href="{{creditCard?.employmentDetail?.lastItr}}"
+                                                                                    target="_blank"
+                                                                                    class="fa fa-file-text-o  txt-info"></a>
+                                                                            </dd>
+                                                                        </div>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </li>
+
+                            <li [ngbNavItem]="3">
+                                <a ngbNavLink>
+                                    <span class="visible-xs">
+                                        <i class="fa fa-sm fa-percent tx-16 mr-1"></i>
+                                    </span>
+                                    <span class="hidden-xs">Credit Card Offer</span>
+                                </a>
+                                <ng-template ngbNavContent>
+                                    <div class="p-1 creditCard" *ngIf="creditCard?.creditCardOffer">
+                                        <div class="row">
+                                            <div class="col" style="text-align: center;">
+                                                <img [src]="creditCard?.creditCardOffer?.creditCardUrl" alt="creditCardUrl">
+                                            </div>
+                                            <div class="col" style="padding-right: 35px;">
+                                                <table class="table table-border border mt-4" style="min-width: 267px;" aria-label="creditCard">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="border-right">CreditCard Name</td>
+                                                            <td>{{creditCard?.creditCardOffer?.creditCardName}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="border-right">Bank Name</td>
+                                                            <td>{{creditCard?.creditCardOffer?.bankName}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="border-right">Joining Fee</td>
+                                                            <td>{{creditCard?.creditCardOffer?.joiningfee |
+                                                                currency:"INR"}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="border-right">Renual Fee</td>
+                                                            <td>{{creditCard?.creditCardOffer?.renualfee |
+                                                                currency:"INR"}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <h2>Key Feature</h2>
+                                                <p [innerHtml]="creditCard?.creditCardOffer?.keyFeatures | safeHtml">
+                                                </p>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <h2>Benifits</h2>
+                                                <p
+                                                    [innerHtml]="creditCard?.creditCardOffer?.benifitDescription | safeHtml">
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </li>
+
+                            <li [ngbNavItem]="4" *ngIf="creditCard.rejectionReason">
+                                <a ngbNavLink>
+                                    <span class="visible-xs">
+                                        <i class="fa fa-sm fa-info tx-16 mr-1"></i>
+                                    </span>
+                                    <span class="hidden-xs">Rejection Reason</span>
+                                </a>
+                                <ng-template ngbNavContent>
+                                    <div class="col-lg-12 creditCard">
+                                        <div class="form-group pt-3">
+                                            <textarea class="form-control" type="text" id="reasons"
+                                                [(ngModel)]="creditCard.rejectionReason.reason" rows="4"
+                                                readonly></textarea>
+                                        </div>
+                                        <h2>More Reasons</h2>
+                                        <mat-expansion-panel class="my-2"
+                                            *ngFor="let reason of creditCard?.rejectionReason?.reasons;let i = index"
+                                            hideToggle [expanded]="i == 0">
+                                            <mat-expansion-panel-header>
+                                                <mat-panel-description
+                                                    [ngStyle]="{'color':(reason.isCollapsed == false) ? '#fff':'#221668'}">
+                                                    {{reason.reason}}
+                                                </mat-panel-description>
+                                                <mat-icon style="text-align: right;"> <i class='icon-angle-down'></i>
+                                                </mat-icon>
+                                            </mat-expansion-panel-header>
+                                            <p style="text-align: justify;" class="mt-2">
+                                                {{reason.description}}
+                                        </mat-expansion-panel>
+                                    </div>
+                                </ng-template>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-3 border-left border-bottom border-right border-top">
+                        <div [ngbNavOutlet]="nav" class="mt-1 mb-1 tab-content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

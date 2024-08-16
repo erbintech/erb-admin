@@ -1,0 +1,171 @@
+<title>Visiting Cards</title>
+<app-breadcrumb [title]="'Visiting Card'" [active_item]="'Visiting Card'">
+</app-breadcrumb>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <mat-drawer-container class="example-container" autosize>
+        <div class="card">
+          <div class="card-header p-1">
+            <div class="d-flex justify-content-between">
+              <div class="main-header-left "></div>
+              <div ngbDropdown class="btn-group">
+                <div class="ml-2">
+                  <a title="Add Visiting Card" href="javascript:;" class="btn btn-sm btn-info" *ngIf="isWritePermission"
+                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" (click)="modalOpen(basicmodal)">
+                    <i class="icon-plus"></i>
+                  </a>
+                  <button type="button" class="btn btn-info"
+                    style="margin-right: 5px;border-radius: 0.25rem;padding:8px 14px" title="Filter Visiting Card"
+                    (click)="drawer.toggle();">
+                    <i class="icon-filter p-0"></i>
+                    <span>Filter</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="listContent">
+            <ng-container *ngIf="visitingCards && visitingCards.length > 0 else NoVisitingCards">
+              <div class="file-content border-top">
+                <div class="p-1 file-manager data">
+                  <div class="files">
+                    <ng-container>
+                      <div class="row mx-0">
+                        <div class="col-lg-4 col-md-6 col-sm-12" *ngFor="let visitingCard of visitingCards"
+                          style="padding-top: 20px;">
+                          <div class="card">
+                            <div class="card-body visit">
+                              <img [src]="visitingCard.location" alt="">
+                              <div class="file-bottom">
+                                <span *ngIf="visitingCard.roleName?.length > 0">
+                                  <h6 style="font-size: 18px; padding-top: 8px;">{{visitingCard.roleName.toString()}}
+                                  </h6>
+                                </span>
+                              </div>
+                              <div class="d-inline">
+                                <a title="Edit visiting Card" href="javascript:;" class="btn btn-sm btn-info"
+                                  style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" *ngIf="isEditPermission"
+                                  (click)="editDialog(visitingCard,basicmodal)">
+                                  <i class="icon-pencil"></i>
+                                </a>
+                              </div>
+                              <div class="media-body icon-state d-inline">
+                                <label title="Active Inactive visiting Card" class="switch" style="top:22px;margin-left:4px" *ngIf="isEditPermission">
+                                  <input type="checkbox" (click)="changeStatus(visitingCard)"
+                                    [(ngModel)]="visitingCard.isActive"><span class="switch-state"
+                                    [ngClass]="visitingCard.isActive ? 'bg-success' : 'bg-warning'"></span>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-template #NoVisitingCards>
+              <div class="d-flex vertical-center nodata" style="height:calc(100vh - 260px)">
+              </div>
+            </ng-template>
+
+          </div>
+          <div class="card-footer" *ngIf="visitingCards && visitingCards.length > 0">
+            <ul class="pagination mb-0 float-right">
+              <li [ngClass]="{ disabled: paginate.currentPage == 1 }" class="page-item page-prev">
+                <a class="page-link" href="javascript:;" tabindex="-1" (click)="setPage(paginate.currentPage - 1)">
+                  <span>Prev</span>
+                </a>
+              </li>
+              <li *ngFor="let page of paginate.pages" class="page-item active"
+                [ngClass]="{ active: paginate.currentPage == page }"><a
+                  [ngClass]="{current:paginate.currentPage == page}" class="page-link" href="javascript:;"
+                  (click)="setPage(page)">{{page}}</a></li>
+              <li [ngClass]="{ disabled: paginate.currentPage === paginate.totalPages}"
+                (click)="setPage(paginate.currentPage + 1)" class="page-item page-next">
+                <a class="page-link" href="javascript:;"><span>Next</span></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <mat-drawer #drawer class="example-sidenav" mode="over" position="end">
+          <div class="col-lg-12 px-3 pt-3">
+            <div class="d-inline" style="width: 100%;"><i class="fa fa-filter"><span>Filter</span></i>
+              <button v class="close" aria-label="Close" (click)="drawer.toggle();">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+          <hr>
+          <div class="position px-3">
+            <div class="form-group">
+              <label for="roles">Search</label>
+              <ng-select [items]="roles" class="js-example-basic-single p-0" placeholder="Select Roles" bindLabel="name"
+                bindValue="id" name="search" [multiple]="true" [(ngModel)]="selectedRoleIds"></ng-select>
+            </div> 
+          </div>
+          <div class="modal-footer px-3" style="padding-bottom: 35px;justify-content: center;">
+            <div class="float-right d-inline">
+              <button type="button" class="btn btn-sm btn-info"
+                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" title="Clear Filter"
+                (click)="drawer.toggle();clearSearch();">
+                <span>Clear</span>
+              </button>
+              <button type="button" class="btn btn-sm btn-info"
+                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" title="Filter Visiting Card"
+                (click)="drawer.toggle();setPage(1);">
+                <span>Search</span>
+              </button>
+            </div>
+         </div>
+          <div class="px-3">
+          </div>
+        </mat-drawer>
+
+      </mat-drawer-container>
+
+    </div>
+  </div>
+</div>
+
+<ng-template #basicmodal let-modal>
+  <div>
+    <form [formGroup]="visitingCardform">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body pd-20">
+
+        <div class="form-group">
+          <label for="template">Template <span style="color: red;">*</span></label>
+          <textarea class="form-control" type="text" id="template" formControlName="template" rows="15"
+            cols="10"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="roles">Select Roles <span style="color: red;">*</span></label>
+          <ng-select [items]="roles" class="js-example-basic-single p-0" placeholder="Select Roles" bindLabel="name"
+            bindValue="id" name="role" formControlName="roleIds" [multiple]=true></ng-select>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-info" (click)="insertVisitingCard()"
+          style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+          Save
+        </button>
+        <button class="btn btn-sm btn-info" (click)="cancelUser()"
+          style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

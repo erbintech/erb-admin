@@ -1,0 +1,516 @@
+<app-breadcrumb [title]="'Dashboard'" [active_item]="'Dashboard'"></app-breadcrumb>
+<div class="container-fluid">
+    <h2>Loan Applications</h2>
+    <div class="row">
+
+        <div class="col-xl col-lg col-md-6 col-sm-6 firstcount">
+            <div class="card o-hidden">
+                <div class="bg-primary b-r-4 card-body" style="padding: 16px;">
+                    <div class="media static-top-widget">
+                        <div class="align-self-center text-center">
+                            <app-feather-icons [icon]="'database'"></app-feather-icons>
+                        </div>
+
+                        <div class="media-body" style="padding-left: 18px;"><span class="m-0">Today</span>
+                            <ng-container *ngIf="dashboardData && dashboardData.length > 0 && dashboardData[0][0].todayCount > 0 else zero">
+                                <!-- <h4 class="mb-0 counter"
+                                    [CountTo]="dashboardData && dashboardData.length > 0 ? dashboardData[0][0].todayCount :0"
+                                    [from]="0" [duration]="1"></h4><i class="icon-bg" data-feather="database"></i> -->
+                                <h4 class="mb-0 counter">{{dashboardData[0][0].todayCount}}</h4><i class="icon-bg" data-feather="database"></i>
+                            </ng-container>
+                            <ng-template #zero>
+                                <h4 class="mb-0 counter">0</h4><i class="icon-bg" data-feather="database"></i>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl col-lg col-md-6 col-sm-6 count">
+            <div class="card o-hidden">
+                <div class="bg-primary b-r-4 card-body" style="padding: 16px;">
+                    <div class="media static-top-widget">
+                        <div class="align-self-center text-center">
+                            <app-feather-icons [icon]="'database'"></app-feather-icons>
+                        </div>
+                        <div class="media-body" style="padding-left: 18px;"><span class="m-0">This Week</span>
+                            <ng-container *ngIf="dashboardData && dashboardData.length > 0 && dashboardData[1][0].weekCount > 0 else weekZero">
+                                <!-- <h4 class="mb-0 counter" [CountTo]="dashboardData && dashboardData.length > 0 ? dashboardData[1][0].weekCount :0" [from]="0" [duration]="1"></h4><i class="icon-bg"
+                                    data-feather="database"></i> -->
+                                <h4 class="mb-0 counter">{{dashboardData[1][0].weekCount}}</h4><i class="icon-bg" data-feather="database"></i>
+                            </ng-container>
+                            <ng-template #weekZero>
+                                <h4 class="mb-0 counter">0</h4><i class="icon-bg" data-feather="database"></i>
+                            </ng-template>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl col-lg col-md-6 col-sm-6 count">
+            <div class="card o-hidden">
+                <div class="bg-primary b-r-4 card-body" style="padding: 16px;">
+                    <div class="media static-top-widget">
+                        <div class="align-self-center text-center">
+                            <app-feather-icons [icon]="'database'"></app-feather-icons>
+                        </div>
+                        <div class="media-body" style="padding-left: 18px;"><span class="m-0">This Month</span>
+                            <ng-container *ngIf="dashboardData && dashboardData.length > 0 && dashboardData[2][0].monthCount > 0 else monthZero">
+                                <!-- <h4 class="mb-0 counter" [CountTo]="dashboardData && dashboardData.length > 0 ? dashboardData[2][0].monthCount :0" [from]="0" [duration]="1"></h4><i class="icon-bg"
+                                    data-feather="database"></i> -->
+                                    <h4 class="mb-0 counter">{{dashboardData[2][0].monthCount}}</h4><i class="icon-bg" data-feather="database"></i>
+                            </ng-container>
+                            <ng-template #monthZero>
+                                <h4 class="mb-0 counter">0</h4><i class="icon-bg" data-feather="database"></i>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl col-lg col-md-6 col-sm-6 count">
+            <div class="card o-hidden">
+                <div class="bg-primary b-r-4 card-body" style="padding: 16px;">
+                    <div class="media static-top-widget">
+                        <div class="align-self-center text-center">
+                            <app-feather-icons [icon]="'database'"></app-feather-icons>
+                        </div>
+                        <div class="media-body" style="padding-left: 18px;"><span class="m-0">Previous Month</span>
+                            <ng-container *ngIf="dashboardData && dashboardData.length > 0 && dashboardData[3][0].previousMonthCount > 0 else previousZero">
+                                <!-- <h4 class="mb-0 counter" [CountTo]="dashboardData && dashboardData.length > 0 ? dashboardData[3][0].previousMonthCount :0" [from]="0" [duration]="1"></h4><i
+                                    class="icon-bg" data-feather="database"></i> -->
+                                    <h4 class="mb-0 counter">{{dashboardData[3][0].previousMonthCount}}</h4><i class="icon-bg" data-feather="database"></i>
+                            </ng-container>
+                            <ng-template #previousZero>
+                                <h4 class="mb-0 counter">0</h4><i class="icon-bg" data-feather="database"></i>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl col-lg col-md-6 col-sm-6 lastcount">
+            <div class="card o-hidden">
+                <div class="bg-primary b-r-4 card-body" style="padding: 16px;">
+                    <div class="media static-top-widget">
+                        <div class="align-self-center text-center">
+                            <app-feather-icons [icon]="'database'"></app-feather-icons>
+                        </div>
+                        <div class="media-body" style="padding-left: 18px;"><span class="m-0">Total Count</span>
+                            <ng-container *ngIf="dashboardData && dashboardData.length > 0 && dashboardData[11][0].totalCount > 0 else totalZero">
+                                <!-- <h4 class="mb-0 counter" [CountTo]="dashboardData && dashboardData.length > 0 ? dashboardData[11][0].totalCount :0" [from]="0" [duration]="1"></h4><i class="icon-bg"
+                                    data-feather="database"></i> -->
+                                    <h4 class="mb-0 counter">{{dashboardData[11][0].totalCount}}</h4><i class="icon-bg" data-feather="database"></i>
+                            </ng-container>
+                            <ng-template #totalZero>
+                                <h4 class="mb-0 counter">0</h4><i class="icon-bg" data-feather="database"></i>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-12 xl-100 chart_data_left box-col-12">
+            <div class="card">
+
+                <div class="card-body p-0">
+
+                    <div class="row m-0 chart-main">
+                        <div class="col-lg col-md col-sm-6 col-xs-12">
+                            <div class="media align-items-center">
+
+                                <div class="media-body" style="cursor: pointer;">
+                                    <div class="right-chart-content" routerLink="/dsa">
+                                        <h4 *ngIf="dashboardData && dashboardData.length > 0">
+                                            {{dashboardData[5][0]?.dsaCount}}</h4>
+                                        <h2>DSA </h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg col-md col-sm-6 col-xs-12">
+                            <div class="media align-items-center">
+
+                                <div class="media-body" style="cursor: pointer;">
+                                    <div class="right-chart-content" routerLink="/subdsa">
+                                        <h4 *ngIf="dashboardData && dashboardData.length > 0">
+                                            {{dashboardData[6][0]?.subDsaCount}}</h4>
+                                        <h2>SUB DSA</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg col-md col-sm-6 col-xs-12">
+                            <div class="media  align-items-center">
+
+                                <div class="media-body" style="cursor: pointer;">
+                                    <div class="right-chart-content" routerLink="/connector">
+                                        <h4 *ngIf="dashboardData && dashboardData.length > 0">
+                                            {{dashboardData[7][0]?.connectorCount}}</h4>
+                                        <h2>CONNECTOR</h2>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-lg col-md col-sm-6 col-xs-12">
+                            <div class="media  align-items-center">
+
+                                <div class="media-body" style="cursor: pointer;">
+                                    <div class="right-chart-content" routerLink="/employee">
+                                        <h4 *ngIf="dashboardData && dashboardData.length > 0">
+                                            {{dashboardData[8][0]?.employeeCount}}</h4>
+                                        <h2>EMPLOYEE</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg col-md col-sm-6 col-xs-12">
+                            <div class="media border-none align-items-center">
+
+                                <div class="media-body" style="cursor: pointer;">
+                                    <div class="right-chart-content" routerLink="/customers">
+                                        <h4 *ngIf="dashboardData && dashboardData.length > 0">
+                                            {{dashboardData[9][0]?.totalCustomer}}</h4>
+                                        <h2>CUSTOMER</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row col-sm-12 mx-0">
+
+            <div class="col-lg-12 col-md-12 col-sm-12 px-0">
+                <div class="card">
+                    <div class="card-body" style="padding:1.25rem">
+                        <h2>Pending Application</h2>
+                        <div class="table-responsive  border-top userlist-table">
+                            <table mat-table [dataSource]="pendingApplication" class=" tableData mat-elevation-z8 table-striped table-vcenter" style="box-shadow: none;" aria-label="">
+                                <ng-container matColumnDef="id">
+                                    <th mat-header-cell *matHeaderCellDef style="width:75px">#</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:75px">
+                                        {{(pendingPaginate.currentPage - 1) * pendingPaginate.pageSize + i + 1}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="user">
+                                    <th mat-header-cell *matHeaderCellDef>Customer</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <a (click)="navigateCustomerDetail(element)">
+                                            {{element.fullName}}</a>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="contact">
+                                    <th mat-header-cell *matHeaderCellDef>Contact</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <a (click)="navigateCustomerDetail(element)">
+                                            {{element.contactNo}}
+                                        </a>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="service">
+                                    <th mat-header-cell *matHeaderCellDef>Service</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.serviceName}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="loanAmount">
+                                    <th mat-header-cell *matHeaderCellDef>Loan Amount</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <ng-container *ngIf="element.loanAmount else NoValue">
+                                            ₹{{element.loanAmount | number:'0.2-2'}}
+                                        </ng-container>
+                                        <ng-template #NoValue>
+                                            ₹<span class="text-center">0</span>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="isDelete">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">Delete</th>
+                                    <td mat-cell *matCellDef="let element" class="text-center">
+                                        <span *ngIf="element.basicDetail.isDelete == '1' else NoDelete" style="color: #ff0000;">
+                                            yes
+                                        </span>
+                                        <ng-template #NoDelete>
+                                            <span style="color: #0b9d0b;">No</span>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="applyDate">
+                                    <th mat-header-cell *matHeaderCellDef>ApplyDate</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.createdDate | date:'medium'}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="action">
+                                    <th mat-header-cell *matHeaderCellDef style="text-align:right">Action</th>
+                                    <td mat-cell *matCellDef="let element" style="text-align:right">
+                                        <a (click)="getDetail(element)" href="javascript:;" class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                            title="View Detail">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="pendingApplicationColumn; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: pendingApplicationColumn;" class="student-element-row" style="cursor: pointer;"></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer p-3" *ngIf="pendingApplication && pendingApplication.length > 0">
+                        <ul class="pagination mb-0 float-right">
+                            <li [ngClass]="{ disabled: pendingPaginate.currentPage == 1 }" class="page-item page-prev">
+                                <a class="page-link" href="javascript:;" tabindex="-1" (click)="getPendingApplication(pendingPaginate.currentPage - 1)">
+                                    <span>Prev</span>
+                                </a>
+                            </li>
+                            <li *ngFor="let page of pendingPaginate.pages" class="page-item active" [ngClass]="{ active: pendingPaginate.currentPage == page }"><a
+                                    [ngClass]="{current:pendingPaginate.currentPage == page}" class="page-link" href="javascript:;" (click)="getPendingApplication(page)">{{page}}</a></li>
+                            <li [ngClass]="{ disabled: pendingPaginate.currentPage === pendingPaginate.totalPages}" (click)="getPendingApplication(pendingPaginate.currentPage + 1)"
+                                class="page-item page-next">
+                                <a class="page-link" href="javascript:;"><span>Next</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 px-0">
+                <div class="card">
+                    <div class="card-body" style="padding:1.25rem">
+                        <h2>Disbursed Application</h2>
+                        <div class="table-responsive border-top userlist-table">
+                            <table mat-table [dataSource]="disbursedApplication" class=" tableData mat-elevation-z8 table-striped table-vcenter" style="box-shadow: none;" aria-label="">
+                                <ng-container matColumnDef="id">
+                                    <th mat-header-cell *matHeaderCellDef style="width:50px">#</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:50px">
+                                        {{(disbursedPaginate.currentPage - 1) * disbursedPaginate.pageSize + i + 1}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="user">
+                                    <th mat-header-cell *matHeaderCellDef>Customer</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <a (click)="navigateCustomerDetail(element)">
+                                            {{element.fullName}}-{{element.contactNo}}
+                                        </a>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="service">
+                                    <th mat-header-cell *matHeaderCellDef>Service</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.serviceName}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="amountRequest">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">LoanAmount</th>
+                                    <td mat-cell *matCellDef="let element" class="text-center">
+                                        ₹{{element.loanAmount}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="amountDisbursed">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">Amount Disbursed</th>
+                                    <td mat-cell *matCellDef="let element" class="text-center">
+                                        ₹{{element.amountDisbursed}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="emi">
+                                    <th mat-header-cell *matHeaderCellDef>EMI</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        ₹{{element.emi}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="bankName">
+                                    <th mat-header-cell *matHeaderCellDef>Bank</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.bankName}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="applyDate">
+                                    <th mat-header-cell *matHeaderCellDef>ApplyDate</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.createdDate | date:'medium'}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="action">
+                                    <th mat-header-cell *matHeaderCellDef style="text-align:right">Action</th>
+                                    <td mat-cell *matCellDef="let element" style="text-align:right">
+                                        <a (click)="getDetail(element)" href="javascript:;" class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                            title="View Detail">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="disbursedApplicationColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: disbursedApplicationColumns;" class="student-element-row" style="cursor: pointer;"></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer p-3" *ngIf="disbursedApplication && disbursedApplication.length > 0">
+                        <ul class="pagination mb-0 float-right">
+                            <li [ngClass]="{ disabled: disbursedPaginate.currentPage == 1 }" class="page-item page-prev">
+                                <a class="page-link" href="javascript:;" tabindex="-1" (click)="getDisbursedApplication(disbursedPaginate.currentPage - 1)">
+                                    <span>Prev</span>
+                                </a>
+                            </li>
+                            <li *ngFor="let page of disbursedPaginate.pages" class="page-item active" [ngClass]="{ active: disbursedPaginate.currentPage == page }"><a
+                                    [ngClass]="{current:disbursedPaginate.currentPage == page}" class="page-link" href="javascript:;" (click)="getDisbursedApplication(page)">{{page}}</a></li>
+                            <li [ngClass]="{ disabled: disbursedPaginate.currentPage === disbursedPaginate.totalPages}" (click)="getDisbursedApplication(disbursedPaginate.currentPage + 1)"
+                                class="page-item page-next">
+                                <a class="page-link" href="javascript:;"><span>Next</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row col-sm-12 mx-0">
+            <div class="col-lg-12 col-md-12 col-sm-12 px-0">
+                <div class="card">
+                    <div class="card-body" style="padding:1.25rem">
+                        <h2>Top 10 Performer</h2>
+                        <div class="table-responsive border-top userlist-table">
+                            <table mat-table [dataSource]="top10Performer" class=" tableData mat-elevation-z8 table-striped table-vcenter" style="box-shadow: none;" aria-label="">
+                                <ng-container matColumnDef="id">
+                                    <th mat-header-cell *matHeaderCellDef style="width:50px">#</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:50px">
+                                        {{i + 1}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="partner">
+                                    <th mat-header-cell *matHeaderCellDef colspan="2">Partner</th>
+                                    <td mat-cell *matCellDef="let element" colspan="2">
+                                        <a (click)="navigateDetail(element)">{{element.fullName}} -
+                                            {{element.contactNo}}</a>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="subDsa">
+                                    <th mat-header-cell *matHeaderCellDef>SubDSA</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.subDsaCount}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="connector">
+                                    <th mat-header-cell *matHeaderCellDef>Connector </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.connectorCount}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="employee">
+                                    <th mat-header-cell *matHeaderCellDef>Employee</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.employeeCount}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="loanApplication">
+                                    <th mat-header-cell *matHeaderCellDef>Pending/Sucess Application</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.pendingApplicationCount}} / {{element.totalCompleteTraining}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="training">
+                                    <th mat-header-cell *matHeaderCellDef>Assign/Completed Training</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.totalAssignTraining}} / {{element.totalCompleteTraining}}
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="top10PerformerColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: top10PerformerColumns;" class="student-element-row" style="cursor: pointer;"></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 px-0">
+                <div class="card">
+                    <div class="card-body" style="padding:1.25rem">
+                        <h2>Top Performer</h2>
+                        <div class="tabs-menu">
+                            <ul ngbNav #nav="ngbNav" class=" nav-tabs profile navtab-custom panel-tabs mb-0">
+                                <ng-container *ngFor="let tableInterval of interval;let i = index">
+                                    <li [ngbNavItem]="i">
+                                        <a ngbNavLink (click)="getTopPerformer(1,tableInterval)">
+                                            <span class="visible-xs">
+                                                <i class="fa fa-sm fa-info tx-16 mr-1"></i>
+                                            </span>
+                                            <span class="hidden-xs">{{tableInterval}}</span>
+                                        </a>
+                                        <ng-template ngbNavContent>
+                                            <div class="table-responsive border-top userlist-table">
+                                                <table mat-table [dataSource]="topPerformer" class=" tableData topTable mat-elevation-z8 table-striped table-vcenter" style="box-shadow: none; "
+                                                    aria-label="">
+                                                    <ng-container matColumnDef="id">
+                                                        <th mat-header-cell *matHeaderCellDef style="width:50px">#</th>
+                                                        <td mat-cell *matCellDef="let element; let i = index;" style="width:50px">
+                                                            {{(performerPaginate.currentPage - 1) *
+                                                            performerPaginate.pageSize +
+                                                            i +
+                                                            1}}
+                                                        </td>
+                                                    </ng-container>
+
+                                                    <ng-container matColumnDef="partner">
+                                                        <th mat-header-cell *matHeaderCellDef>Partner</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <a (click)="navigateDetail(element)">{{element.fullName}}</a>
+                                                        </td>
+                                                    </ng-container>
+
+                                                    <ng-container matColumnDef="contactNo">
+                                                        <th mat-header-cell *matHeaderCellDef>ContactNo</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <a>{{element.contactNo}}</a>
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="role">
+                                                        <th mat-header-cell *matHeaderCellDef>Role</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            <a>{{element.roleName}}</a>
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="totalLoanAmount">
+                                                        <th mat-header-cell *matHeaderCellDef>Total Loan Amount</th>
+                                                        <td mat-cell *matCellDef="let element">
+                                                            ₹{{element.totalLoanAmount}}
+                                                        </td>
+                                                    </ng-container>
+                                                    <tr mat-header-row *matHeaderRowDef="topPerformerColumn; sticky: true">
+                                                    </tr>
+                                                    <tr mat-row *matRowDef="let row; columns: topPerformerColumn;" class="student-element-row" style="cursor: pointer;"></tr>
+                                                </table>
+                                            </div>
+                                        </ng-template>
+                                    </li>
+                                </ng-container>
+                            </ul>
+                        </div>
+                        <div class=" border-left border-bottom border-right border-top-0">
+                            <div [ngbNavOutlet]="nav" class="mt-0 tab-content"></div>
+                        </div>
+                    </div>
+                    <div class="card-footer p-3" *ngIf="topPerformer && topPerformer.length > 0">
+                        <ul class="pagination mb-0 float-right">
+                            <li [ngClass]="{ disabled: performerPaginate.currentPage == 1 }" class="page-item page-prev">
+                                <a class="page-link" href="javascript:;" tabindex="-1" (click)="getTopPerformer(performerPaginate.currentPage - 1)">
+                                    <span>Prev</span>
+                                </a>
+                            </li>
+                            <li *ngFor="let page of performerPaginate.pages" class="page-item active" [ngClass]="{ active: performerPaginate.currentPage == page }"><a
+                                    [ngClass]="{current:performerPaginate.currentPage == page}" class="page-link" href="javascript:;" (click)="getTopPerformer(page)">{{page}}</a></li>
+                            <li [ngClass]="{ disabled: performerPaginate.currentPage === pendingPaginate.totalPages}" (click)="getTopPerformer(performerPaginate.currentPage + 1)"
+                                class="page-item page-next">
+                                <a class="page-link" href="javascript:;"><span>Next</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

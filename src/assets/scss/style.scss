@@ -1,0 +1,155 @@
+/*! -----------------------------------------------------------------------------------
+
+    Template Name: Cuba Admin
+    Template URI: http://angular.pixelstrap.com/cuba
+    Description: This is Admin theme
+    Author: Pixelstrap
+    Author URI: https://themeforest.net/user/pixelstrap
+
+-----------------------------------------------------------------------------------
+*/
+
+/* ---------------------
+	*** Utils ***
+-----------------------*/
+
+
+@import "utils/variables";
+
+:root {
+    --theme-deafult  : #7366ff;
+    --theme-secondary: #f73164;
+}
+
+/* ---------------------
+	*** Icons Scss ***
+-----------------------*/
+@import "vendors/whether-icon";
+@import "vendors/flag-icon";
+@import "vendors/icofont";
+@import "vendors/themify";
+
+/* ---------------------
+	*** Base ***
+-----------------------*/
+
+@import "base/reset";
+@import "base/typography";
+
+
+/* ---------------------
+	*** Components ***
+-----------------------*/
+
+@import "components/_according.scss";
+@import "components/_alert.scss";
+@import "components/_avatars.scss";
+@import "components/_badge.scss";
+@import "components/_breadcrumb.scss";
+@import "components/_buttons.scss";
+@import "components/_card.scss";
+@import "components/_dropdown.scss";
+@import "components/_form-input.scss";
+@import "components/_form-wizard.scss";
+@import "components/_forms.scss";
+@import "components/_icons.scss";
+@import "components/_list.scss";
+@import "components/_loader.scss";
+@import "components/_popover.scss";
+@import "components/_print.scss";
+@import "components/_radio.scss";
+@import "components/_ribbon.scss";
+@import "components/_switch.scss";
+@import "components/_tab.scss";
+@import "components/_table.scss";
+@import "components/_touchspin.scss";
+
+@import "components/_angular-plugin.scss";
+@import "components/_calendar.scss";
+@import "components/_datatable.scss";
+@import "components/_datepicker.scss";
+
+@import "components/_typeahead-search";
+@import "components/_rating";
+
+
+/* ---------------------
+	*** Pages ***
+-----------------------*/
+
+@import "pages/blog.scss";
+@import "pages/bookmark-app.scss";
+@import "pages/cart.scss";
+@import "pages/chart.scss";
+@import "pages/chat.scss";
+@import "pages/checkout.scss";
+@import "pages/comingsoon.scss";
+@import "pages/contacts.scss";
+@import "pages/dashboard_2.scss";
+@import "pages/dashboard_default.scss";
+@import "pages/ecommerce.scss";
+@import "pages/email-application.scss";
+@import "pages/errorpage.scss";
+@import "pages/faq.scss";
+@import "pages/file.scss";
+@import "pages/gallery.scss";
+@import "pages/job-search.scss";
+@import "pages/knowledgebase.scss";
+@import "pages/language.scss";
+@import "pages/learning.scss";
+@import "pages/login.scss";
+@import "pages/megaoption.scss";
+@import "pages/order-history.scss";
+@import "pages/page.scss";
+@import "pages/pricing.scss";
+@import "pages/progress.scss";
+@import "pages/projectlist.scss";
+@import "pages/social-app.scss";
+@import "pages/task.scss";
+@import "pages/user-profile.scss";
+@import "pages/wishlist.scss";
+
+
+/* ---------------------
+	*** Themes ***
+-----------------------*/
+
+@import "themes/dark.scss";
+@import "themes/dark-sidebar.scss";
+@import "themes/theme-customizer.scss";
+
+
+/* ---------------------
+	*** Layout ***
+-----------------------*/
+
+@import "layout/footer.scss";
+@import "layout/grid.scss";
+@import "layout/header.scss";
+@import "layout/navs.scss";
+@import "layout/search.scss";
+@import "layout/select2.scss";
+@import "layout/sidebar.scss";
+@import "layout/rtl.scss";
+@import "layout/box-layout.scss";
+
+.disabled {
+    pointer-events: none;
+    touch-action  : none;
+}
+
+.bg-success {
+    background-color: #a927f9 !important;
+}
+
+th {
+    text-transform: uppercase;
+
+}
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+    color:#fff!important
+}
+// th.mat-header-cell {
+//     font-size: 16px;
+//     font-weight:600
+// }

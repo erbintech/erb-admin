@@ -1,0 +1,230 @@
+<title>Service Types</title>
+<app-breadcrumb [title]="'Service Types'" [active_item]="'Service Types'">
+</app-breadcrumb>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <mat-drawer-container class="example-container" autosize>
+        <div class="card">
+          <div class="card-header p-1">
+            <div class="d-flex justify-content-between">
+              <div class="main-header-left ">
+              </div>
+              <div ngbDropdown class="btn-group">
+                <div class="ml-2">
+                  <a *ngIf="isWritePermission" title="Add Service Type" href="javascript:;"
+                    class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                    (click)="modalOpen(basicmodal)">
+                    <i class="icon-plus"></i>
+                  </a>
+               
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-container *ngIf="serviceTypes && serviceTypes.length > 0 else NoServiceTypes">
+            <div class="table-responsive border-top userlist-table">
+              <table mat-table [dataSource]="serviceTypes"
+                class=" maintable mat-elevation-z8 table-striped table-vcenter" aria-label="">
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef style="width:7%">#</th>
+                  <td mat-cell *matCellDef="let element; let i = index;" style="width:7%">
+                    {{(paginate.currentPage - 1) * paginate.pageSize + i + 1}}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="Image">
+                  <th mat-header-cell *matHeaderCellDef style="width:9%">Image</th>
+                  <td mat-cell *matCellDef="let element" style="padding: 5px; width:9%">
+                    <div *ngIf="element.iconUrl else defaultServicePic">
+                      <img [src]="element.iconUrl | safe" class="rounded-circle" width="50px" height="50px" alt="" />
+                    </div>
+                    <ng-template #defaultServicePic>
+                      <div style="width:50px; height:50px" class="rounded-circle border d-flex vertical-center ">
+                        <i class="fa fa-file-image-o m-auto" style="color:#a927f9"></i>
+                      </div>
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="Name">
+                  <th mat-header-cell *matHeaderCellDef>Name</th>
+                  <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.name else NoValue">
+                      {{element.name}}
+                    </ng-container>
+                    <ng-template #NoValue>
+                      <span class="text-center">--</span>
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="ColorCode">
+                  <th mat-header-cell *matHeaderCellDef>ColorCode</th>
+                  <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.colorCode else NoValue">
+                      {{element.colorCode}}
+                    </ng-container>
+                    <ng-template #NoValue>
+                      <span class="text-center">--</span>
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="Description">
+                  <th mat-header-cell *matHeaderCellDef colspan="2">Description</th>
+                  <td mat-cell *matCellDef="let element" colspan="2">
+                    <ng-container *ngIf="element.description else NoValue">
+                      {{element.description}}
+                    </ng-container>
+                    <ng-template #NoValue>
+                      <span class="text-center">--</span>
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="status">
+                  <th mat-header-cell *matHeaderCellDef translate>Status</th>
+                  <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.isActive else InActive">
+                      <span class="label text-success d-flex">
+                        <div class="dot-label bg-success mr-1"></div>
+                        <span>Active</span>
+                      </span>
+                    </ng-container>
+                    <ng-template #InActive>
+                      <span class="label text-warning d-flex">
+                        <div class="dot-label bg-warning mr-1"></div>
+                        <span>InActive</span>
+                      </span>
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef translate class="text-right">Action</th>
+                  <td mat-cell *matCellDef="let element" class="text-right" style="align-items: center;display: flex;">
+                    <div class="media-body text-right icon-state">
+                      <label title="Change Status" class="switch" style="top:7px" *ngIf="isEditPermission">
+                        <input type="checkbox" (click)="changeStatus(element)" [(ngModel)]="element.isActive"><span
+                          class="switch-state" [ngClass]="element.isActive ? 'bg-success' : 'bg-warning'"></span>
+                      </label>
+                    </div>
+                    <a *ngIf="element.childServiceType && element.childServiceType.length > 0" title="Child Service"
+                      href="javascript:;" class="btn btn-sm btn-info"
+                      style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                      (click)="element.isExpanded = !element.isExpanded;">
+                      <i [ngClass]="element.isExpanded ? 'icon-angle-up' : 'icon-angle-down'"></i>
+                    </a>
+                    <a *ngIf="isEditPermission" title="Edit Service Type" href="javascript:;" class="btn btn-sm btn-info"
+                      style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                      (click)="editDialog(element,basicmodal)">
+                      <i class="icon-pencil"></i>
+                    </a>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayColumns;" class="student-element-row"
+                  style="cursor: pointer;"></tr>
+              </table>
+            </div>
+          </ng-container>
+          <ng-template #NoServiceTypes>
+            <div class="d-flex vertical-center nodata" style="height:calc(100vh - 260px)">
+            </div>
+          </ng-template>
+
+          <div class="card-footer" *ngIf="serviceTypes && serviceTypes.length > 0">
+            <ul class="pagination mb-0 float-right">
+              <li [ngClass]="{ disabled: paginate.currentPage == 1 }" class="page-item page-prev">
+                <a class="page-link" href="javascript:;" tabindex="-1" (click)="setPage(paginate.currentPage - 1)">
+                  <span>Prev</span>
+                </a>
+              </li>
+              <li *ngFor="let page of paginate.pages" class="page-item active"
+                [ngClass]="{ active: paginate.currentPage == page }"><a
+                  [ngClass]="{current:paginate.currentPage == page}" class="page-link" href="javascript:;"
+                  (click)="setPage(page)">{{page}}</a></li>
+              <li [ngClass]="{ disabled: paginate.currentPage === paginate.totalPages}"
+                (click)="setPage(paginate.currentPage + 1)" class="page-item page-next">
+                <a class="page-link" href="javascript:;"><span>Next</span></a>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+       
+      </mat-drawer-container>
+    </div>
+  </div>
+</div>
+<ng-template #basicmodal let-modal>
+  <div>
+    <form #ServiceTypeForm="ngForm">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body pd-20" style="height:calc(100vh - 200px);overflow: auto;">
+        <div class="form-group">
+          <label for="name">Name <span style="color: red;">*</span></label>
+          <input class="form-control" type="text" name="name" [(ngModel)]="serviceType.name" #ServiceName="ngModel" onlyAlphabets
+            required [readOnly]="serviceType.id">
+          <mat-error *ngIf="(ServiceName?.touched) && (ServiceName.errors && ServiceName.errors['required'] )">
+            Name is required
+          </mat-error>
+        </div>
+        <div class="form-group">
+          <label for="name">Display Name <span style="color: red;">*</span></label>
+          <input class="form-control" type="text" name="displayName" [(ngModel)]="serviceType.displayName" onlyAlphabets
+            #ServicedisplayName="ngModel" required>
+          <mat-error *ngIf="(ServicedisplayName?.touched) && (ServicedisplayName.errors && ServicedisplayName.errors['required'])">
+            Display Name is required
+          </mat-error>
+        </div>
+        <div class="form-group">
+          <label for="colorcode">Color Code</label>
+          <input class="form-control" type="text" [value]="serviceType.colorCode" name="colorCode"
+            [(ngModel)]="serviceType.colorCode" [(colorPicker)]="serviceType.colorCode"
+            [style.background]="serviceType.colorCode" #ServicecolorCode="ngModel">
+        </div>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea class="form-control" type="text" name="description" [(ngModel)]="serviceType.description"
+            #Servicedescription="ngModel" rows="3" cols="10"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="ico">Image <span style="color: red;">*</span></label>
+          <div *ngIf="!url else Image">
+            <a class="form-control" type="upload" id="iconUrl"
+              style="height: 140px; width: 100%; text-align: center; border-style: dashed; border-color: rgb(63, 105, 223);display: flex;align-items: center;"
+              (click)="fileUpload.click()" required>
+              <div class="absolute text-center m-auto">
+                <i class="icon-plus" style="font-size:30px"></i>
+                <h4>Tap to upload image</h4>
+              </div>
+            </a>
+          </div>
+          <ng-template #Image>
+            <div>
+              <a type="upload" id="iconUrl" required (click)="fileUpload.click()">
+                <img [src]="url" style=" height: 200px; width: 280px;object-fit: contain; " alt="">
+              </a>
+            </div>
+          </ng-template>
+
+          <input type="file" #fileUpload id="iconUrl" (change)="selectedImage($event)" name="iconUrl"
+            style="display:none;" accept="image/*" />
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+          (click)="insertServiceType(ServiceTypeForm)">
+          Save
+        </button>
+        <button class="btn btn-em btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+          (click)="cancelUser()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

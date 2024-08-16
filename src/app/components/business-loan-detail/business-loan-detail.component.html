@@ -1,0 +1,1010 @@
+<app-breadcrumb [title]="'Business Loan'" [items]="[{'name':'Business Loan', 'route':'/business-loan'}]" [active_item]="'View'">
+</app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12 px-1">
+            <div class="card">
+                <div class="card-body" style="height:calc(100vh - 200px);overflow: auto;">
+                    <table class="table" style="margin-bottom: 5px; margin-top: 10px;" aria-label="businessLoan">
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: 550;">Name</td>
+                                <td>{{businessLoan?.basicDetail?.fullName}}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 550;">Contact</td>
+                                <td>{{businessLoan?.basicDetail?.contactNo}}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 550;">Email</td>
+                                <td>{{businessLoan?.basicDetail?.email}}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 550;">Birth Date</td>
+                                <td>{{businessLoan?.basicDetail?.birthdate | date}}</td>
+                            </tr>
+
+                            <tr>
+                                <td style="font-weight: 550;">PanCard No</td>
+                                <td>{{businessLoan?.basicDetail?.panCardNo}}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 550;">Application Date</td>
+                                <td>{{businessLoan?.basicDetail?.createdDate| date:'medium'}}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 550;">Loan Amount</td>
+                                <td>₹{{businessLoan?.basicDetail?.loanAmount}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h1 class="mt-5 text-center" style="color:red">Current Status:<ng-container *ngIf="businessLoan?.basicDetail?.status else Default">
+                            {{businessLoan?.basicDetail?.status}}
+                        </ng-container>
+                        <ng-template #Default>
+                            PENDING
+                        </ng-template>
+                    </h1>
+                    <div class="mt-3" style="border:1px dashed #ddd;padding:20px;background-color: #dad6ff;border-radius:5px"
+                        *ngIf="(businessLoan?.basicDetail?.status != 'REJECTED'  && businessLoan?.basicDetail?.status != 'COMPLETED') && isEditPermission && !businessLoan.basicDetail?.isDelete">
+                        <div class="form-group">
+                            <h4 class="mb-0 changeStatus">Change Status</h4>
+                            <ng-select [items]="loanStatuses" class="js-example-basic-single p-0" placeholder="Search by Status" bindLabel="status" bindValue="id" name="selectedStatus"
+                                [(ngModel)]="selectedStatus" (change)="changeStatus(basicmodal)">
+                            </ng-select>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="businessLoan?.groupDetail">
+                        <h4 class="mt-5">Group Detail</h4>
+                        <table class="table" style="margin-bottom: 5px;" aria-label="groupDetail">
+                            <tbody>
+                                <tr>
+                                    <td style="font-weight: 550;">Partner Code</td>
+                                    <td>{{businessLoan?.groupDetail?.permanentCode}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 550;">Partner Name</td>
+                                    <td>{{businessLoan?.groupDetail?.fullName}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: 550;">Partner Contact</td>
+                                    <td>{{businessLoan?.groupDetail?.contactNo}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td style="font-weight: 550;">Role</td>
+                                    <td>{{businessLoan?.groupDetail?.roleName}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 col-md-6 col-sm-12 px-1">
+            <div class="card">
+                <div class="card-body p-3" style="height:calc(100vh - 200px);overflow: auto;">
+                    <div class="tabs-menu">
+                        <ul ngbNav #nav="ngbNav" class=" nav-tabs profile navtab-custom panel-tabs mb-0">
+                            <li [ngbNavItem]="1">
+                                <a ngbNavLink>
+                                    <span class="visible-xs">
+                                        <i class="fa fa-sm fa-info tx-16 mr-1"></i>
+                                    </span>
+                                    <span class="hidden-xs">Basic Detail</span>
+                                </a>
+                                <ng-template ngbNavContent>
+                                    <div class="p-1">
+                                        <h6 class="sub-title">More Detail</h6>
+                                        <dl>
+                                            <dt>AlterNate Phone Number - <span style="font-weight:lighter;">{{businessLoan?.basicDetail?.alternativeContactNo}}</span>
+                                            </dt>
+                                            <dt>Gender - <span style="font-weight:lighter;">{{businessLoan?.basicDetail?.gender}}</span>
+                                            </dt>
+                                            <dt>Marital Status - <span style="font-weight:lighter;">{{businessLoan?.basicDetail?.maritalStatus}}</span>
+                                            </dt>
+                                            <dt>Residence Type - <span style="font-weight:lighter;">{{businessLoan?.basicDetail?.residentType}}</span>
+                                            </dt>
+                                            <dt>Current Pay EMI- <span style="font-weight:lighter;">{{businessLoan?.businessDetail?.currentlyPayEmi}}</span>
+                                            </dt>
+                                            <dt>Current Address - <span *ngIf="businessLoan?.moreBasicDetail?.addressLine1"
+                                                    style="font-weight:lighter;">{{businessLoan?.moreBasicDetail?.label}},{{businessLoan?.moreBasicDetail?.addressLine1}},{{businessLoan?.moreBasicDetail?.addressLine2}},{{businessLoan?.moreBasicDetail?.city}},{{businessLoan?.moreBasicDetail?.district}},{{businessLoan?.moreBasicDetail?.state}}
+                                                    - {{businessLoan?.moreBasicDetail?.pincode}}</span>
+                                            </dt>
+                                            <dt>Loan Type - <span style="font-weight:lighter;">{{businessLoan?.basicDetail?.loanType}}</span>
+                                            </dt>
+                                            <dt>Cibil Score -
+                                                <span style="font-weight:lighter;">{{businessLoan?.basicDetail?.cibilScore}}</span>
+                                            </dt>
+                                        </dl>
+                                    </div>
+                                    <div class="p-1 border-top" *ngIf="businessLoan?.basicDetail?.loanType == 'Bank Transfer'">
+                                        <h6 class="sub-title">Loan Transfer Detail</h6>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <dl>
+                                                    <dt>Loan Amount Taken Existing - <span style="font-weight:lighter;">{{businessLoan?.basicDetail?.loanAmountTakenExisting}}</span>
+                                                    </dt>
+                                                    <dt>Approx Current EMI - <span style="font-weight:lighter;">{{businessLoan?.basicDetail?.approxCurrentEMI}}</span>
+                                                    </dt>
+                                                    <dt>Approx Date - <span style="font-weight:lighter;">{{businessLoan?.basicDetail?.approxDate
+                                                            | date}}</span>
+                                                    </dt>
+                                                    <dt>Bank - <span style="font-weight:lighter;">{{businessLoan?.basicDetail?.bank}}</span>
+                                                    </dt>
+                                                    <dt>Topup Amount -
+                                                        <span style="font-weight:lighter;">{{businessLoan?.basicDetail?.topupAmount}}
+                                                        </span>
+                                                    </dt>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-1 border-top">
+                                        <h6 class="sub-title">Employment Detail</h6>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <dl>
+                                                    <dt>Employment - <span style="font-weight:lighter;">{{businessLoan?.basicDetail?.employmentType}}</span>
+                                                    </dt>
+                                                    <dt>Gross Annual Sales - <span style="font-weight:lighter;">{{businessLoan?.businessDetail?.businessAnnualSale}}</span>
+                                                    </dt>
+                                                    <dt>Name of Business - <span style="font-weight:lighter;">{{businessLoan?.businessDetail?.businessName}}</span>
+                                                    </dt>
+                                                    <dt>Year IN Current Business - <span style="font-weight:lighter;">{{businessLoan?.businessDetail?.businessExperience}}</span>
+                                                    </dt>
+
+                                                </dl>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <dl>
+                                                    <div *ngIf="businessLoan.basicDetail?.employmentTypeId != 6">
+                                                        <dt>Company Category -
+                                                            <span style="font-weight:lighter;">{{businessLoan?.businessDetail?.companyType}}</span>
+                                                        </dt>
+                                                    </div>
+                                                    <dt>Nature Of Business -
+                                                        <span style="font-weight:lighter;">{{businessLoan?.businessDetail?.businessNatures}}
+                                                        </span>
+                                                    </dt>
+                                                    <dt>BusinessAnnual Profit -
+                                                        <span style="font-weight:lighter;">{{businessLoan?.businessDetail?.businessAnnualProfits}}
+                                                        </span>
+                                                    </dt>
+                                                    <dt>Business GSTNo -
+                                                        <span style="font-weight:lighter;">{{businessLoan?.businessDetail?.businessGstNo}}
+                                                        </span>
+                                                    </dt>
+                                                    <dt>Industry Type -
+                                                        <span style="font-weight:lighter;">{{businessLoan?.businessDetail?.industryTypes}}
+                                                        </span>
+                                                    </dt>
+                                                    <dt>Primary Bank -
+                                                        <span style="font-weight:lighter;">{{businessLoan?.businessDetail?.banks}}
+                                                        </span>
+                                                    </dt>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-1 border-top">
+                                        <h6 class="sub-title">Loan Amount</h6>
+                                        <dl>
+                                            <dt>Loan Amount - <span style="font-weight:lighter;">{{businessLoan?.basicDetail?.loanAmount
+                                                    | currency:'INR':'symbol'}}</span>
+                                            </dt>
+
+                                        </dl>
+                                    </div>
+                                    <div class="text-center">
+                                        <button
+                                            *ngIf="(businessLoan?.basicDetail?.status != 'REJECTED'  && businessLoan?.basicDetail?.status != 'COMPLETED') && isEditPermission && !businessLoan.basicDetail?.isDelete"
+                                            type="button" class="btn btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" title="Accept"
+                                            (click)="acceptApplication('ACCEPT',basicmodal)" [disabled]="businessLoan?.basicDetail?.status === 'ACCEPT APPLICATION'">
+                                            <span>Accept</span>
+                                        </button>
+                                        <button
+                                            *ngIf="isEditPermission && businessLoan?.basicDetail?.status != 'COMPLETED'&& businessLoan?.basicDetail?.status != 'DISBURSED' &&  !businessLoan.basicDetail?.isDelete"
+                                            type="button" class="btn btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" title="Reject"
+                                            (click)="acceptApplication('REJECT',basicmodal)" [disabled]="businessLoan?.basicDetail?.status === 'REJECTED'">
+                                            <span>Reject</span>
+                                        </button>
+                                    </div>
+                                </ng-template>
+
+                            </li>
+                            <li [ngbNavItem]="2">
+                                <a ngbNavLink>
+                                    <span class="visible-xs">
+                                        <i class="icofont icofont-file-document tx-16 mr-1"></i>
+                                    </span>
+                                    <span class="hidden-xs">Uploaded Documents</span>
+                                </a>
+                                <ng-template ngbNavContent>
+                                    <div class="file-content">
+                                        <div class="p-1 file-manager">
+                                            <div class="row mx-0" *ngIf="businessLoan?.loanDocuments?.length>0 else NoDocument">
+                                                <div class="col-lg-4 col-md-6 col-sm-12 mt-2" *ngFor="let doc of businessLoan?.loanDocuments">
+                                                    <div>
+                                                        <a href="{{doc.documentUrl}}" target="_blank" *ngIf="!doc.isPdf" class="form-control document" type="upload" id="resume">
+                                                            <div>
+                                                                <div class="fileUpload text-center">
+                                                                    <i class="fa fa-file-pdf-o txt-info" style="font-size:30px"></i>
+                                                                    <h4 class="px-2 pb-2">{{doc.documentName}}</h4>
+                                                                </div>
+                                                                <div class="form-group m-t-15 m-checkbox-inline mb-0 custom-radio-ml ml-2">
+                                                                    <div class="radio radio-primary">
+                                                                        <input [id]="doc.loanDocumentId + '_7'" type="radio" [name]="doc.loanDocumentId" value="PENDING"
+                                                                            [checked]="doc.documentStatus =='PENDING'" (click)="getStatus($event,doc)">
+                                                                        <label class="mb-0" [for]="doc.loanDocumentId + '_7'">PENDING</label>
+                                                                    </div>
+                                                                    <div class="radio radio-primary">
+                                                                        <input [id]="doc.loanDocumentId + '_4'" type="radio" [name]="doc.loanDocumentId" value="REVIEW"
+                                                                            [checked]="doc.documentStatus=='REVIEW'" (click)="getStatus($event,doc)">
+                                                                        <label class="mb-0" [for]="doc.loanDocumentId + '_4'">REVIEW</label>
+                                                                    </div>
+                                                                    <div class="radio radio-primary">
+                                                                        <input [id]="doc.loanDocumentId + '_5'" type="radio" [name]="doc.loanDocumentId" value="APPROVED"
+                                                                            [checked]="doc.documentStatus=='APPROVED'" (click)="getStatus($event,doc)">
+                                                                        <label class="mb-0" [for]="doc.loanDocumentId + '_5'">APPROVED</label>
+                                                                    </div>
+                                                                    <div class="radio radio-primary">
+                                                                        <input [id]="doc.loanDocumentId + '_6'" type="radio" [name]="doc.loanDocumentId" value="REJECTED"
+                                                                            [checked]="doc.documentStatus=='REJECTED'" (click)="getStatus($event,doc)">
+                                                                        <label class="mb-0" [for]="doc.loanDocumentId + '_6'">REJECTED</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+
+                                                        <a href="{{doc.documentUrl}}" target="_blank" *ngIf="doc.isPdf" class="form-control document" type="upload" id="resume">
+                                                            <div>
+                                                                <div class="fileUpload">
+                                                                    <i class="fa fa-file-pdf-o txt-info" style="font-size:30px"></i>
+                                                                    <h4 class="px-2 pb-2">{{doc.documentName}}</h4>
+                                                                </div>
+                                                                <div class="form-group m-t-15 m-checkbox-inline mb-0 custom-radio-ml ml-2">
+                                                                    <div class="radio radio-primary">
+                                                                        <input [id]="doc.loanDocumentId + '_8'" type="radio" [name]="doc.loanDocumentId" value="PENDING"
+                                                                            [checked]="doc.documentStatus =='PENDING'" (click)="getStatus($event,doc)">
+                                                                        <label class="mb-0" [for]="doc.loanDocumentId + '_8'">PENDING</label>
+                                                                    </div>
+                                                                    <div class="radio radio-primary">
+                                                                        <input [id]="doc.loanDocumentId + '_4'" type="radio" [name]="doc.loanDocumentId" value="REVIEW"
+                                                                            [checked]="doc.documentStatus=='REVIEW'" (click)="getStatus($event,doc)">
+                                                                        <label class="mb-0" [for]="doc.loanDocumentId + '_4'">REVIEW</label>
+                                                                    </div>
+                                                                    <div class="radio radio-primary">
+                                                                        <input [id]="doc.loanDocumentId + '_5'" type="radio" [name]="doc.loanDocumentId" value="APPROVED"
+                                                                            [checked]="doc.documentStatus=='APPROVED'" (click)="getStatus($event,doc)">
+                                                                        <label class="mb-0" [for]="doc.loanDocumentId + '_5'">APPROVED</label>
+                                                                    </div>
+                                                                    <div class="radio radio-primary">
+                                                                        <input [id]="doc.loanDocumentId + '_6'" type="radio" [name]="doc.loanDocumentId" value="REJECTED"
+                                                                            [checked]="doc.documentStatus=='REJECTED'" (click)="getStatus($event,doc)">
+                                                                        <label class="mb-0" [for]="doc.loanDocumentId + '_6'">REJECTED</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+
+                                                    </div>
+                                                </div>
+                                                <div class="my-2  col-lg-12 text-center">
+                                                    <button
+                                                        *ngIf="(businessLoan?.basicDetail?.status != 'REJECTED'  && businessLoan?.basicDetail?.status != 'COMPLETED') && isEditPermission && !businessLoan.basicDetail?.isDelete"
+                                                        type="button" class="btn btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" title="Verify" (click)="approvedDocument()"
+                                                        [disabled]="businessLoan?.basicDetail?.status === 'DOCUMENT VERIFIED'">
+                                                        <span>Verify</span>
+                                                    </button>
+                                                    <button
+                                                        *ngIf="(businessLoan?.basicDetail?.status != 'REJECTED'  && businessLoan?.basicDetail?.status != 'COMPLETED') && isEditPermission && !businessLoan.basicDetail?.isDelete"
+                                                        type="button" class="btn btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" title="Generate Pendancy"
+                                                        (click)="approvedDocument('pendency')" [disabled]="businessLoan?.basicDetail?.status === 'DOCUMENT VERIFIED'">
+                                                        <span>Generate Pendancy</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <ng-template #NoDocument>
+                                                <div class="d-flex vertical-center nodata" style="height:calc(100vh - 420px)">
+                                                </div>
+                                            </ng-template>
+                                        </div>
+                                    </div>
+                                    <div class="p-1 border-top">
+                                        <div class="file-content border-top">
+                                            <div class="p-1 file-manager">
+                                                <h6 class="sub-title" style="opacity: 1;">References</h6>
+                                                <ul class="files" *ngIf="businessLoan?.loanReferences?.length>0">
+                                                    <ng-container *ngFor="let reference of businessLoan?.loanReferences; let i = index">
+                                                        <li class="file-box m-1">
+                                                            <div class="file-bottom">
+                                                                <h6><span style="font-weight: 600;">Name:</span>
+                                                                    {{reference.fullName}}
+                                                                </h6>
+                                                                <h6><span style="font-weight: 600;">Contact No:</span>
+                                                                    {{reference.contactNo}}
+                                                                </h6>
+                                                            </div>
+                                                        </li>
+                                                    </ng-container>
+
+                                                </ul>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </ng-template>
+                            </li>
+                            <li [ngbNavItem]="3">
+                                <a ngbNavLink (click)="getGeneratedOffer()">
+                                    <span class="visible-xs">
+                                        <i class="fa fa-sm fa-info tx-16 mr-1"></i>
+                                    </span>
+                                    <span class="hidden-xs">Eligible Banks</span>
+                                </a>
+                                <ng-template ngbNavContent>
+                                    <ng-container *ngIf="this.businessLoan.offers && this.businessLoan.offers.length > 0 else NoOffer">
+                                        <div class="table-responsive userlist-table" style="height: calc(100vh - 340px); overflow-y: hidden;">
+                                            <table mat-table [dataSource]="this.businessLoan.offers" class="mat-elevation-z8 table-striped table-vcenter" style="min-width: 1200px; box-shadow: none;"
+                                                aria-label="offers">
+                                                <ng-container matColumnDef="id">
+                                                    <th mat-header-cell *matHeaderCellDef style="width:7%">#</th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:7%">
+                                                        <input id="checkbox-info-1" type="checkbox" class="mr-2" [checked]="element.status == 'ACCEPT'"
+                                                            [disabled]="element.fileStatus || (businessLoan?.basicDetail?.status == 'REJECTED') && !isEditPermission && businessLoan.basicDetail?.isDelete"
+                                                            (change)="selectBank($event,element)">{{i
+                                                        + 1}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="bankName">
+                                                    <th mat-header-cell *matHeaderCellDef style="width:10%">Bank</th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:10%">
+                                                        {{element.bankName}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="cibilScore">
+                                                    <th mat-header-cell *matHeaderCellDef style="width:8%">
+                                                        CibilScore
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:8%">
+                                                        {{element.cibilScore}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="age">
+                                                    <th mat-header-cell *matHeaderCellDef>Age</th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                                        {{element.minAge}} - {{element.maxAge}} Years
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="roi">
+                                                    <th mat-header-cell *matHeaderCellDef>ROI</th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                                        {{element.ROI}}%
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="tenure">
+                                                    <th mat-header-cell *matHeaderCellDef>Tenure</th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                                        {{element.tenure}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="loanAmount">
+                                                    <th mat-header-cell *matHeaderCellDef style="width:15%">
+                                                        Loan Amount
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:15%">
+                                                        ₹{{element.minLoanAmount}} - ₹{{element.maxLoanAmount}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="minimumIncome">
+                                                    <th mat-header-cell *matHeaderCellDef>Min.Income
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                                        ₹{{element.minIncome}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="fileStatus">
+                                                    <th mat-header-cell *matHeaderCellDef>Status</th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                                        {{element.fileStatus}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="action" stickyEnd>
+                                                    <th mat-header-cell *matHeaderCellDef class="text-center" style="width:8%">Action
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;" class="text-right" style="width:8%">
+                                                        <button
+                                                            *ngIf="element.status == 'ACCEPT' && (businessLoan?.basicDetail?.status != 'REJECTED'  && businessLoan?.basicDetail?.status != 'COMPLETED') && isEditPermission && !businessLoan.basicDetail?.isDelete && element.offerStatus != 'SANCTIONED'"
+                                                            mat-button [matMenuTriggerFor]="menu" (click)="toggleMenuService.toggleMenuStyles()"> <a href="javascript:;" class="btn btn-sm btn-info" title="Change Status"
+                                                                style="padding: 10px 12px;border-radius: 10px;margin: 0 5px;">
+                                                                <i class="fa fa-forward"></i>
+                                                            </a></button>
+                                                        <mat-menu #menu="matMenu">
+                                                            <div mat-menu-item class="p-0 mx-2 h-100">
+                                                                <div *ngIf="element.fileStatus != 'FileApproved'" (click)="changeFileStatus(element,'FileApproved')">
+                                                                    <a title="" href="javascript:;">File Approved
+                                                                    </a>
+                                                                </div>
+                                                                <div *ngIf="element.fileStatus != 'FileREJECT'" (click)="changeFileStatus(element,'FileREJECT')">
+                                                                    <a title="" href="javascript:;">File Rejected
+                                                                    </a>
+                                                                </div>
+                                                                <div *ngIf="element.fileStatus != 'DOCUMENTPENDENCY'" (click)="changeFileStatus(element,'DOCUMENTPENDENCY')">
+                                                                    <a title="" href="javascript:;">Generate Document
+                                                                        Pendency
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </mat-menu>
+
+                                                    </td>
+                                                </ng-container>
+                                                <tr mat-header-row *matHeaderRowDef="offerColumn; sticky: true"></tr>
+                                                <tr mat-row *matRowDef="let row; columns:offerColumn ;" class="student-element-row" style="cursor: pointer;"
+                                                    [ngStyle]="{background:row.status =='ACCEPT'?'#dad6ff':'#fff'}">
+                                                </tr>
+                                            </table>
+
+                                            <div *ngIf="!businessLoan.basicDetail?.isDelete && (businessLoan.basicDetail?.status != 'REJECTED')" class="my-2  col-lg-12 text-center">
+                                                <button type="button" class="btn btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px; position: fixed;" title="Save"
+                                                    (click)="addBankForFileUpload()">
+                                                    <span>Save</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                    <ng-template #NoOffer>
+                                        <div class="d-flex vertical-center nodata" style="height:calc(100vh - 420px)">
+                                        </div>
+                                    </ng-template>
+                                </ng-template>
+                            </li>
+                            <li [ngbNavItem]="4">
+                                <a ngbNavLink (click)="getBank()">
+                                    <span class="visible-xs">
+                                        <i class="fa fa-sm fa-info tx-16 mr-1"></i>
+                                    </span>
+                                    <span class="hidden-xs">Bank Offer</span>
+                                </a>
+                                <ng-template ngbNavContent>
+                                    <ng-container>
+                                        <div class="col-lg-12">
+                                            <form [formGroup]="loanDetailForm"
+                                                *ngIf="(businessLoan?.basicDetail?.status != 'REJECTED'  && businessLoan?.basicDetail?.status != 'COMPLETED') && isEditPermission && !businessLoan.basicDetail?.isDelete">
+                                                <div class="row mt-2">
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label for="name">Select Bank</label>
+                                                            <ng-select [items]="banks" class="js-example-basic-single p-0" formControlName="bankId" placeholder="Select Bank" bindLabel="namedata"
+                                                                bindValue="id" name="bank" (change)="changeSelecedBank($event)" required>
+                                                            </ng-select>
+                                                            <mat-error *ngIf="(loanDetailForm.get('bankId') && !loanDetailForm.get('bankId').valid && loanDetailForm.get('bankId').touched)">
+                                                                Bank is required
+                                                            </mat-error>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label for="name">ReferenceNo</label>
+                                                            <input class="form-control" type="text" name="refernce" formControlName="refrenceNo" required>
+                                                            <mat-error
+                                                                *ngIf="(loanDetailForm.get('refrenceNo') && !loanDetailForm.get('refrenceNo').valid && loanDetailForm.get('refrenceNo').touched)">
+                                                                ReferenceNo is Required is required
+                                                            </mat-error>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label for="name">Amount Disbursed</label>
+                                                            <input class="form-control" type="text" name="refernce" formControlName="amountDisbursed" required onlyNumbers (keyup)="calculateEMI()">
+                                                            <mat-error
+                                                                *ngIf="(loanDetailForm.get('amountDisbursed') && !loanDetailForm.get('amountDisbursed').valid && loanDetailForm.get('amountDisbursed').touched)">
+                                                                Disbursed Amount is required
+                                                            </mat-error>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label for="name">Interest Rate(%)</label>
+                                                            <input class="form-control" type="text" name="refernce" formControlName="ROI" required NumberWithDecimal maxlength="5"
+                                                                (keyup)="calculateEMI()">
+                                                            <mat-error *ngIf="(loanDetailForm.get('ROI') && !loanDetailForm.get('ROI').valid && loanDetailForm.get('ROI').touched)">
+                                                                ROI is required
+                                                            </mat-error>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label for="name">Tenure(Month)</label>
+                                                            <input class="form-control" type="text" name="refernce" formControlName="tenure" required onlyNumbers (keyup)="calculateEMI()">
+                                                            <mat-error *ngIf="(loanDetailForm.get('tenure') && !loanDetailForm.get('tenure').valid && loanDetailForm.get('tenure').touched)">
+                                                                Tenure is required
+                                                            </mat-error>
+                                                        </div>
+                                                    </div>
+                                                    <div *ngIf="!(loanDetailForm.get('termsCondition')&& loanDetailForm.get('termsCondition').value)" class="col-lg-12">
+                                                        <a class="form-control" type="upload" id="resume"
+                                                            style="height: 100px; width: 100%; text-align: center; border-style: dashed; border-color: rgb(63, 105, 223);display: flex;align-items: center;"
+                                                            (click)="fileInput.click()">
+                                                            <div class="absolute text-center m-auto">
+
+                                                                <i class="fa fa-file-text-o txt-info" style="font-size:30px"></i>
+                                                                <h4 class="mb-0">Tap to upload termsCondition</h4>
+
+                                                            </div>
+                                                        </a>
+                                                        <input type="file" #fileInput id="uploadFile" (change)="selectedImage($event)" name="photo" accept="application/pdf" style="display:none;" />
+                                                    </div>
+                                                    <ng-container *ngIf="(loanDetailForm.get('termsCondition') && loanDetailForm.get('termsCondition').value)">
+                                                        <div class="col-lg-12">
+
+                                                            <a class="form-control" type="upload" id="resume"
+                                                                style="height: 125px; width: 100%; text-align: center; border: 1px solid #f1f1f1;align-items: center;background-color: #f6f7fb">
+                                                                <div class="fileUpload text-center">
+                                                                    <div>
+                                                                        <i class="fa fa-file-pdf-o txt-info" style="font-size:30px"></i>
+                                                                    </div>
+                                                                    <div>
+                                                                        <a class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" (click)="fileInput.click()">
+                                                                            Change
+                                                                        </a>
+                                                                        <a class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                                                            (click)="debugBase64(loanDetailForm.get('termsCondition').value)" target="_blank">
+                                                                            View
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                        <input type="file" #fileInput id="uploadFile" (change)="selectedImage($event)" name="photo" accept="application/pdf" style="display:none;" />
+                                                    </ng-container>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-lg-12 mt-2">
+                                            <button type="button" class="btn btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" title="Save" (click)="addBankOfferInList()"
+                                                *ngIf="(businessLoan?.basicDetail?.status != 'REJECTED'  && businessLoan?.basicDetail?.status != 'COMPLETED') && isEditPermission && !businessLoan.basicDetail?.isDelete">
+                                                <span>Add More</span>
+                                            </button>
+                                            <button type="button" class="btn btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" title="Save" (click)="addBankOfferInList()"
+                                                *ngIf="(businessLoan?.basicDetail?.status != 'REJECTED'  && businessLoan?.basicDetail?.status != 'COMPLETED') && isEditPermission && !businessLoan.basicDetail?.isDelete">
+                                                <span>Save</span>
+                                            </button>
+                                            <button type="button" class="btn btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" title="Share & Save"
+                                                (click)="addBankOfferInList('share')"
+                                                *ngIf="(businessLoan?.basicDetail?.status != 'REJECTED'  && businessLoan?.basicDetail?.status != 'COMPLETED') && isEditPermission && !businessLoan.basicDetail?.isDelete">
+                                                <span>Share & Save</span>
+                                            </button>
+                                        </div>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="businessLoan.bankOffers && businessLoan.bankOffers.length > 0">
+                                        <div class="table-responsive userlist-table" style="height: calc(100vh - 340px); overflow-y: hidden;">
+                                            <table mat-table [dataSource]="this.businessLoan.bankOffers" class="mat-elevation-z8 table-striped table-vcenter"
+                                                style="min-width: 1100px; box-shadow: none;" aria-label="BankOffers">
+                                                <ng-container matColumnDef="id">
+                                                    <th mat-header-cell *matHeaderCellDef style="width:5%">#</th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:5%">
+                                                        {{i + 1}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="bankName">
+                                                    <th mat-header-cell *matHeaderCellDef style="width: 12%;">Bank</th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;" style="width: 12%;">
+                                                        {{element.bankName}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="referenceNo">
+                                                    <th mat-header-cell *matHeaderCellDef>
+                                                        ReferenceNo
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                                        {{element.refrenceNo}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="amountDisbursed">
+                                                    <th mat-header-cell *matHeaderCellDef>Amount
+                                                        Disbursed</th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                                        {{element.amountDisbursed}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="roi">
+                                                    <th mat-header-cell *matHeaderCellDef>ROI</th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                                        {{element.ROI}}%
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="tenure">
+                                                    <th mat-header-cell *matHeaderCellDef>Tenure</th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                                        {{element.tenure}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="EMI">
+                                                    <th mat-header-cell *matHeaderCellDef>
+                                                        EMI
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                                        ₹{{element.emi}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="totalInterest">
+                                                    <th mat-header-cell *matHeaderCellDef style="width: 10%;">Interest
+                                                        Payable
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;" style="width: 10%;">
+                                                        ₹{{element.totalInterest}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="totalAmount">
+                                                    <th mat-header-cell *matHeaderCellDef>Total Amount
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                                        ₹{{element.totalPayment}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="action" stickyEnd>
+                                                    <th colspan="2" mat-header-cell *matHeaderCellDef class="text-right" style="width: 5%;">Action
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;" colspan="2" class="text-right" style="width: 5%;">
+                                                        <button *ngIf="element.isAccept || element.isAccept == null" mat-button [matMenuTriggerFor]="beforeMenu" (click)="toggleMenuService.toggleMenuStyles()"> <a href="javascript:;"
+                                                                class="btn btn-sm btn-info" title="Action" style="padding: 10px 12px;border-radius: 10px;margin: 0 5px;">
+                                                                <i class="fa fa-angle-down"></i>
+                                                            </a></button>
+                                                        <mat-menu #beforeMenu="matMenu" xPosition="before" >
+                                                            <div (click)="editBankOffer(element)" mat-menu-item class="p-0 mx-2">
+                                                                <a title="Edit Offer" href="javascript:;" class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 2px;">
+                                                                    <i class="fa fa-pencil"></i>
+                                                                </a>Edit Offer
+                                                            </div>
+                                                            <div (click)="acceptOffer(element,true,'SANCTIONED')" mat-menu-item class="p-0 mx-2">
+                                                                <a title="Accept Offer" href="javascript:;" class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 2px;">
+                                                                    <i class="fa fa-check"></i>
+                                                                </a>Accept Offer
+                                                            </div>
+                                                            <div mat-menu-item (click)="acceptOffer(element,false)" class="p-0 mx-2">
+                                                                <a title="Reject Offer" href="javascript:;" class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 2px;">
+                                                                    <i class="fa fa-close"></i>
+                                                                </a>Reject Offer
+                                                            </div>
+                                                            <div (click)="showChart(element,chartmodal)" mat-menu-item class="p-0 mx-2">
+                                                                <a title="Show Chart" href="javascript:;" class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 2px;">
+                                                                    <i class="fa fa-bar-chart "></i>
+                                                                </a>Show Chart
+                                                            </div>
+                                                        </mat-menu>
+                                                    </td>
+                                                </ng-container>
+                                                <tr mat-header-row *matHeaderRowDef="bankOfferColumn; sticky: true">
+                                                </tr>
+                                                <tr mat-row *matRowDef="let row; columns:bankOfferColumn ;" class="student-element-row" style="cursor: pointer;"
+                                                    [ngStyle]="{background:row.status =='ACCEPT'?'#dad6ff':'#fff'}">
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </ng-container>
+                                </ng-template>
+                            </li>
+                            <li [ngbNavItem]="5">
+                                <a ngbNavLink (click)="getSanctionedApplication()">
+                                    <span class="visible-xs">
+                                        <i class="fa fa-sm fa-info tx-16 mr-1"></i>
+                                    </span>
+                                    <span class="hidden-xs">Sanctioned Bank Offer</span>
+                                </a>
+                                <ng-template ngbNavContent>
+                                    <ng-container *ngIf="businessLoan.sanctionedApplication && businessLoan.sanctionedApplication.length > 0 else NoData">
+                                        <div class="table-responsive userlist-table" style="height: calc(100vh - 340px); overflow-y: hidden;">
+                                            <table mat-table [dataSource]="this.businessLoan.sanctionedApplication" class="mat-elevation-z8 table-striped table-vcenter"
+                                                style="min-width: 1100px; box-shadow: none;" aria-label="sanctioned">
+                                                <ng-container matColumnDef="id">
+                                                    <th mat-header-cell *matHeaderCellDef style="width:50px">#</th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:50px">
+                                                        {{i + 1}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="bankName">
+                                                    <th mat-header-cell *matHeaderCellDef>Bank</th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                                        {{element.bankName}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="referenceNo">
+                                                    <th mat-header-cell *matHeaderCellDef>
+                                                        ReferenceNo
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                                        {{element.refrenceNo}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="amountDisbursed">
+                                                    <th mat-header-cell *matHeaderCellDef>Amount
+                                                        Disbursed</th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                                        {{element.amountDisbursed}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="roi">
+                                                    <th mat-header-cell *matHeaderCellDef>ROI</th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                                        {{element.ROI}}%
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="tenure">
+                                                    <th mat-header-cell *matHeaderCellDef>Tenure</th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                                        {{element.tenure}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="EMI">
+                                                    <th mat-header-cell *matHeaderCellDef>
+                                                        EMI
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                                        ₹{{element.emi}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="totalInterest">
+                                                    <th mat-header-cell *matHeaderCellDef>Interest
+                                                        Payable
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                                        ₹{{element.totalInterestPayable}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="totalAmount">
+                                                    <th mat-header-cell *matHeaderCellDef>Total Amount
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                                        ₹{{element.totalPayment}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="action" stickyEnd>
+                                                    <th mat-header-cell *matHeaderCellDef class="text-right">Action
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element; let i = index;" class="text-right">
+                                                        <a title="Show Chart" href="javascript:;" class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 2px;"
+                                                            (click)="showChart(element,chartmodal)">
+                                                            <i class="fa fa-bar-chart "></i>
+                                                        </a>
+                                                        <a *ngIf="(businessLoan?.basicDetail?.status != 'REJECTED'  && businessLoan?.basicDetail?.status != 'COMPLETED') && isEditPermission && !businessLoan.basicDetail?.isDelete"
+                                                            title="Disbursed Application" href="javascript:;" class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 2px;"
+                                                            (click)="disbursedApplication(element)">
+                                                            <i class="fa fa-forward "></i>
+                                                        </a>
+                                                    </td>
+                                                </ng-container>
+                                                <tr mat-header-row *matHeaderRowDef="bankOfferColumn; sticky: true">
+                                                </tr>
+                                                <tr mat-row *matRowDef="let row; columns:bankOfferColumn ;" class="student-element-row" style="cursor: pointer;">
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </ng-container>
+                                    <ng-template #NoData>
+                                        <div class="d-flex vertical-center nodata" style="height:calc(100vh - 420px)">
+                                        </div>
+                                    </ng-template>
+                                </ng-template>
+                            </li>
+                            <li [ngbNavItem]="6">
+                                <a ngbNavLink (click)="getDisbursedApplication()">
+                                    <span class="visible-xs">
+                                        <i class="fa fa-sm fa-info tx-16 mr-1"></i>
+                                    </span>
+                                    <span class="hidden-xs">Disbursed Bank Offer</span>
+                                </a>
+                                <ng-template ngbNavContent>
+                                    <ng-container *ngIf="businessLoan.disbursedApplication && businessLoan.disbursedApplication.length > 0 else NoData">
+                                        <table mat-table [dataSource]="this.businessLoan.disbursedApplication" class=" detailTable mat-elevation-z8 table-striped table-vcenter"
+                                            style="box-shadow: none; min-width: 1100px;" aria-label="disbursed">
+                                            <ng-container matColumnDef="id">
+                                                <th mat-header-cell *matHeaderCellDef style="width:50px">#</th>
+                                                <td mat-cell *matCellDef="let element; let i = index;" style="width:50px">
+                                                    {{i + 1}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="bankName">
+                                                <th mat-header-cell *matHeaderCellDef>Bank</th>
+                                                <td mat-cell *matCellDef="let element; let i = index;">
+                                                    {{element.bankName}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="referenceNo">
+                                                <th mat-header-cell *matHeaderCellDef>
+                                                    ReferenceNo
+                                                </th>
+                                                <td mat-cell *matCellDef="let element; let i = index;">
+                                                    {{element.refrenceNo}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="amountDisbursed">
+                                                <th mat-header-cell *matHeaderCellDef>Amount
+                                                    Disbursed</th>
+                                                <td mat-cell *matCellDef="let element; let i = index;">
+                                                    {{element.amountDisbursed}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="roi">
+                                                <th mat-header-cell *matHeaderCellDef>ROI</th>
+                                                <td mat-cell *matCellDef="let element; let i = index;">
+                                                    {{element.ROI}}%
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="tenure">
+                                                <th mat-header-cell *matHeaderCellDef>Tenure</th>
+                                                <td mat-cell *matCellDef="let element; let i = index;">
+                                                    {{element.tenure}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="EMI">
+                                                <th mat-header-cell *matHeaderCellDef>
+                                                    EMI
+                                                </th>
+                                                <td mat-cell *matCellDef="let element; let i = index;">
+                                                    ₹{{element.emi}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="totalInterest">
+                                                <th mat-header-cell *matHeaderCellDef>Interest
+                                                    Payable
+                                                </th>
+                                                <td mat-cell *matCellDef="let element; let i = index;">
+                                                    ₹{{element.totalInterestPayable}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="totalAmount">
+                                                <th mat-header-cell *matHeaderCellDef>Total Amount
+                                                </th>
+                                                <td mat-cell *matCellDef="let element; let i = index;">
+                                                    ₹{{element.totalPayment}}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="action">
+                                                <th mat-header-cell *matHeaderCellDef>Action
+                                                </th>
+                                                <td mat-cell *matCellDef="let element; let i = index;">
+                                                    <a title="Show Chart" href="javascript:;" class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 2px;"
+                                                        (click)="showChart(element,chartmodal)">
+                                                        <i class="fa fa-bar-chart "></i>
+                                                    </a>
+                                                </td>
+                                            </ng-container>
+                                            <tr mat-header-row *matHeaderRowDef="bankOfferColumn; sticky: true"></tr>
+                                            <tr mat-row *matRowDef="let row; columns:bankOfferColumn ;" class="student-element-row" style="cursor: pointer;">
+                                            </tr>
+                                        </table>
+                                    </ng-container>
+                                    <ng-template #NoData>
+                                        <div class="d-flex vertical-center nodata" style="height:calc(100vh - 420px)">
+                                        </div>
+                                    </ng-template>
+                                </ng-template>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-3 border-left border-bottom border-right border-top">
+                        <div [ngbNavOutlet]="nav" class="mt-1 mb-1 tab-content personalloantab"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #basicmodal let-modal>
+    <div>
+
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body mainmodal p-0">
+            <ng-container *ngIf="selectedStatus == 2">
+                <form>
+                    <div class="setup-content" id="step-1">
+                        <div class="col-xs-12">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="col-form-label">Select RM</div>
+                                    <ng-select [items]="rmUsers" class="js-example-basic-single p-0" [formControl]="myControl" placeholder="Select RM" bindLabel="fullName" bindValue="id" name="rm"
+                                        (change)="isRmSelect()">
+                                    </ng-select>
+                                    <mat-error *ngIf="rmError">
+                                        Rm selection is required
+                                    </mat-error>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </ng-container>
+            <ng-container *ngIf="selectedStatus == 14">
+                <div class="col-lg-12 mt-1">
+                    <div class="form-group">
+                        <label for="reasons">Reason</label>
+                        <textarea class="form-control" type="text" id="reasons" [formControl]="reason" rows="4" required></textarea>
+                        <mat-error *ngIf="(reasonError)">
+                            Reason is required
+                        </mat-error>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <button class="btn btn-info " style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit" (click)="addMoreReason()"><i class="fa fa-plus"></i> Add More
+                        Reason</button>
+                </div>
+                <div *ngIf="isAddMoreReason">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label>Reason</label>
+                            <input class="form-control" type="text" name="rejectReason" [formControl]="rejectReason">
+                        </div>
+                        <div class="form-group">
+                            <label for="reasons">Description</label>
+                            <textarea class="form-control" type="text" id="description" name="desc" [formControl]="reasonDescription" rows="4"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <mat-expansion-panel class="mt-2" *ngFor="let reason of reasons;let i = index" hideToggle [expanded]="i == 0">
+                        <mat-expansion-panel-header>
+                            <mat-panel-description [ngStyle]="{'color':(reason.isCollapsed == false) ? '#fff':'#221668'}">
+                                {{reason.reason}}
+                            </mat-panel-description>
+                            <mat-icon style="text-align: right;"> <i class='icon-trash' (click)="removeReason(reason,i)"></i>
+                            </mat-icon>
+                        </mat-expansion-panel-header>
+                        <p style="text-align: justify;" class="mt-2">
+                            {{reason.description}}
+                    </mat-expansion-panel>
+                </div>
+            </ng-container>
+
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="selectedStatus == 2" class="btn btn-info pull-right " style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit" (click)="assignRM()">Assign</button>
+            <button *ngIf="selectedStatus == 14" class="btn btn-info pull-right " style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit"
+                (click)="insertRejectionReason()">Reject</button>
+            <button class="btn btn-info pull-right " style="margin-right: 5px;border-radius:10px;padding:8px 14px" (click)="modal.dismiss('Cross click')">
+                Cancel
+            </button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #chartmodal let-modal>
+    <div>
+
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">EMI Chart</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body mainmodal p-0">
+            <ng-container>
+                <div class="col-lg-12 text-center">
+                    <div id="chart my-0">
+                        <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [labels]="chartOptions.labels" [responsive]="chartOptions.responsive"
+                            [colors]="chartOptions.colors"></apx-chart>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-info pull-right " style="margin-right: 5px;border-radius:10px;padding:8px 14px" (click)="modal.dismiss('Cross click')">
+                Cancel
+            </button>
+        </div>
+    </div>
+</ng-template>

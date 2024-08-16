@@ -1,0 +1,145 @@
+::ng-deep .modal-backdrop.show {
+    z-index: 1050 !important;
+}
+
+tr.student-element-row:not(.student-expanded-row):hover {
+    background: whitesmoke;
+}
+
+tr.student-element-row:not(.student-expanded-row):active {
+    background: #efefef;
+}
+
+.student-element-row td {
+    border-bottom-width: 0;
+    padding-right: 15px;
+}
+
+.card {
+    height    : calc(100vh - 200px);
+    overflow-x: auto;
+}
+
+.card-footer {
+    padding: 10px !important;
+}
+
+::ng-deep .maintable tbody {
+    display : block;
+    height  : calc(100vh - 330px);
+    overflow: auto;
+}
+
+::ng-deep .maintable thead {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+::ng-deep .maintable tr {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+::ng-deep .mat-drawer-inner-container {
+    overflow: auto !important;
+}
+
+.modal-title {
+    font-weight  : 500 !important;
+    font-size    : 18px !important;
+    margin-bottom: 0 !important;
+    line-height  : 1.2 !important;
+}
+
+.input-icons mat-icon {
+    position  : absolute;
+    text-align: end;
+    float     : right;
+    right     : 15px;
+    padding   : 7px !important;
+}
+
+.input-icons {
+    width        : 100%;
+    margin-bottom: 10px;
+}
+
+.icon {
+    padding  : 10px;
+    min-width: 50px;
+}
+
+.input-field {
+    width  : 100%;
+    padding: 10px;
+}
+
+@media screen and (max-width: 776px) {
+    ::ng-deep.mat-table tbody {
+        display     : table;
+        width       : 100%;
+        table-layout: fixed;
+        overflow    : auto;
+    }
+
+    ::ng-deep.mat-table thead {
+        display     : table;
+        width       : 100%;
+        table-layout: fixed;
+        // position: absolute;
+    }
+
+    ::ng-deep.mat-table tr {
+        display     : table;
+        width       : 100%;
+        table-layout: fixed;
+    }
+
+    ::ng-deep.mat-table tbody {
+        width   : 1200px !important;
+        overflow: auto;
+    }
+
+    ::ng-deep.mat-table thead {
+        width   : 1200px !important;
+        overflow: auto;
+    }
+}
+
+input.upload {
+    opacity : 0;
+    position: absolute;
+    cursor  : pointer;
+}
+
+.imagebtn {
+    padding: 5px 10px;
+}
+
+.card-body {
+    overflow: auto;
+}
+
+.treeviechild>div {
+    margin: 10px;
+}
+
+.treeview_child {
+    display       : block;
+    padding-bottom: 0px;
+    margin-left   : 50px;
+}
+
+
+.center {
+    position: absolute;
+    top: 70%;
+    padding-left: 258px;
+  }
+
+//   .modal-body {
+//     height: calc(100vh - 200px);
+//     overflow: auto;
+//   }

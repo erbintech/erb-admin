@@ -1,0 +1,999 @@
+<title>Business Loan</title>
+<div *ngIf="customerLoanId else Add">
+    <app-breadcrumb [title]="'Business Loan'" [items]="[{'name':'Business Loan', 'route':'/business-loan'}]" [active_item]="basicDetailForm.get('fullName').value">
+    </app-breadcrumb>
+</div>
+<ng-template #Add>
+    <app-breadcrumb [title]="'Business Loan'" [items]="[{'name':'Business Loan', 'route':'/business-loan'}]" [active_item]="'Add'">
+    </app-breadcrumb>
+</ng-template>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card drawercard">
+                <mat-stepper #stepper>
+                    <mat-step label="Select Type">
+                        <div class="setup-content">
+                            <div class="row mx-0">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="name" style="font-size: 20px;">Select Loan Type
+                                        </label>
+                                        <div class="form-group m-t-15 m-checkbox-inline mb-0 custom-radio-ml ml-2">
+                                            <div class="radio radio-primary">
+                                                <input type="radio" id="new" value="New" [formControl]="isTransfer" (change)="changeLoanType()">
+                                                <label class="mb-0" for="new">New</label>
+                                            </div>
+                                            <div class="radio radio-primary">
+                                                <input type="radio" id="transfer" value="Bank Transfer" [formControl]="isTransfer" (change)="changeLoanType()">
+                                                <label class="mb-0" for="transfer">Transfer</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modalButton">
+                            <button class="btn btn-info pull-right " style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit" matStepperNext>Next</button>
+                        </div>
+                    </mat-step>
+                    <mat-step [stepControl]="basicDetailForm" label="Basic Detail">
+
+                        <form [formGroup]="basicDetailForm">
+                            <div class="setup-content" id="step-1">
+                                <div class="row mx-0">
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label for="name">Your Desired Loan Amount <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="refernce" formControlName="loanAmount" required onlyNumbers>
+                                            <mat-error *ngIf="(basicDetailForm.get('loanAmount') && !basicDetailForm.get('loanAmount').valid && basicDetailForm.get('loanAmount').touched)">
+                                                LoanAmount is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-form-label">How are you currently employeed? <span style="color: red;">*</span></div>
+                                            <ng-select [items]="employmentTypes" class="js-example-basic-single p-0" bindLabel="employmentType" bindValue="employmentTypeId" name="Status" required
+                                                name="selectEmploymentType" formControlName="employmentTypeId" (change)="changeEmploymentType()">
+                                            </ng-select>
+                                            <mat-error *ngIf=" (basicDetailForm.get('employmentTypeId') &&
+                                                !basicDetailForm.get('employmentTypeId').valid &&
+                                                basicDetailForm.get('employmentTypeId').touched)">
+                                                EmploymentType is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-form-label">Your gross annual Sales/TurnOver <span style="color: red;">*</span></div>
+                                            <input class="form-control" type="text" name="turnOver" formControlName="businessAnnualSale" required onlyNumbers>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('businessAnnualSale') && !basicDetailForm.get('businessAnnualSale').valid  && basicDetailForm.get('businessAnnualSale').touched)">
+                                                Business Annual sales is required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-form-label">Years in current Business <span style="color: red;">*</span></div>
+                                            <ng-select [items]="businessExperiences" class="js-example-basic-single p-0" bindLabel="name" bindValue="id" name="Status" required
+                                                formControlName="businessExperienceId">
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('businessExperienceId') && !basicDetailForm.get('businessExperienceId').valid  && basicDetailForm.get('businessExperienceId').touched)">
+                                                Business Experience is required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label for="name">Full Name <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="refernce" formControlName="fullName" required onlyAlphabets>
+                                            <mat-error *ngIf="(basicDetailForm.get('fullName') && !basicDetailForm.get('fullName').valid && basicDetailForm.get('fullName').touched)">
+                                                FullName is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label for="name">Email <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="email" formControlName="email" required>
+                                            <mat-error *ngIf="(basicDetailForm.get('email') && !basicDetailForm.get('email').valid  && basicDetailForm.get('email').touched)">
+                                                <span *ngIf="basicDetailForm.get('email').errors.required">Email
+                                                    is Required</span>
+                                                <span *ngIf="basicDetailForm.get('email').errors.pattern">Enter
+                                                    Valid Email</span>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label for="name">PanCard No <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="refernce" formControlName="panCardNo" required oninput="this.value = this.value.toUpperCase()" maxlength="10"
+                                                (keypress)="keyPressAlphanumeric($event)">
+                                            <mat-error *ngIf="(basicDetailForm.get('panCardNo') && !basicDetailForm.get('panCardNo').valid  && basicDetailForm.get('panCardNo').touched)">
+                                                <span *ngIf="basicDetailForm.get('panCardNo').errors.required">PanCardNo
+                                                    is Required</span>
+                                                <span *ngIf="basicDetailForm.get('panCardNo').errors.pattern">Enter
+                                                    Valid PanCard</span>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label>BirthDate(Min.Age:21year) <span style="color: red;">*</span></label>
+                                            <mat-form-field appearance="outline" class="d-block w-100" (click)="toggleMenuService.togglePickerStyles()">
+                                                <input matInput [matDatepicker]="filterPickerFrom" formControlName="birthdate" placeholder="From Date" name="fromDate" [readonly]="true"
+                                                    (focus)="filterPickerFrom.open()" (dateChange)="getAge()" (click)="toggleMenuService.togglePickerStyles()">
+                                                <mat-datepicker-toggle matSuffix [for]="filterPickerFrom" (click)="toggleMenuService.togglePickerStyles()">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #filterPickerFrom></mat-datepicker>
+                                            </mat-form-field>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('birthdate') && !basicDetailForm.get('birthdate').valid && basicDetailForm.get('birthdate').touched) && !basicDetailForm.get('birthdate').hasError('minAge')">
+                                                BirthDate is Required
+                                            </mat-error>
+                                            <mat-error *ngIf="basicDetailForm.get('birthdate').hasError('minAge')">
+                                                minimum Age 21 year is required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-form-label">Select Marital Status <span style="color: red;">*</span></div>
+                                            <ng-select [items]="maritalStatuses" class="js-example-basic-single p-0" bindLabel="status" bindValue="id" name="Status" required name="selectStatus"
+                                                formControlName="maritalStatusId">
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('maritalStatusId') && !basicDetailForm.get('maritalStatusId').valid && basicDetailForm.get('maritalStatusId').touched)">
+                                                maritalStatus is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <div class="col-form-label">Select Resident Type <span style="color: red;">*</span></div>
+                                            <ng-select [items]="residenceTypes" class="js-example-basic-single p-0" bindLabel="name" bindValue="id" name="name" required
+                                                formControlName="residentTypeId">
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('residentTypeId') && !basicDetailForm.get('residentTypeId').valid  && basicDetailForm.get('residentTypeId').touched)">
+                                                Resident Type is required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-6 col-sm-12">
+                                        <label for="name">Gender <span style="color: red;">*</span></label>
+                                        <div class="form-group m-t-15 m-checkbox-inline mb-0 custom-radio-ml ml-2">
+                                            <div class="radio radio-primary">
+                                                <input type="radio" id="Male" value="Male" formControlName="gender">
+                                                <label class="mb-0" for="Male">Male</label>
+                                            </div>
+                                            <div class="radio radio-primary">
+                                                <input type="radio" id="Female" value="Female" formControlName="gender">
+                                                <label class="mb-0" for="Female">Female</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mx-0 border mb-3 mx-3">
+                                    <div class="col-lg-12">
+                                        <h3 class="mt-2" style="font-size:25px">Address Detail <span style="color: red;">*</span></h3>
+                                    </div>
+                                    <div class="row mx-0 w-100">
+                                        <div class="col-md-6 ">
+                                            <div class="form-group">
+                                                <label for="name">Current Residence Pincode <span style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" name="refernce" formControlName="pincode" required maxlength="6" onlyNumbers
+                                                    (keyup)="onKeyUpEvent($event,true)">
+                                                <mat-error *ngIf="(basicDetailForm.get('pincode') && !basicDetailForm.get('pincode').valid  && basicDetailForm.get('pincode').touched)">
+                                                    Pincode is required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="name">AddressLine1 <span style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" name="refernce" formControlName="addressLine1" required>
+                                                <mat-error *ngIf="(basicDetailForm.get('addressLine1') && !basicDetailForm.get('addressLine1').valid  && basicDetailForm.get('addressLine1').touched)">
+                                                    AddressLine1 is required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="name">AddressLine 2</label>
+                                                <input class="form-control" type="text" name="refernce" formControlName="addressLine2">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <div class="col-form-label">Where do you currently reside?<span style="color: red;">*</span></div>
+                                                <ng-select [items]="cities" class="js-example-basic-single p-0" placeholder="Select City" bindLabel="name" bindValue="id" name="name"
+                                                    formControlName="cityId" required>
+                                                </ng-select>
+                                                <mat-error *ngIf="(basicDetailForm.get('cityId') && !basicDetailForm.get('cityId').valid  && basicDetailForm.get('cityId').touched)">
+                                                    City is required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mx-0 border mb-3 mx-3" *ngIf="isTransfer.value=='Bank Transfer'">
+                                    <div class="col-lg-12">
+                                        <h3 class="mt-2" style="font-size:25px">Transfer</h3>
+                                    </div>
+                                    <div class="col-lg-12 mx-0">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="name">Loan Amount Taken Existing</label>
+                                                    <input class="form-control" type="text" name="loanAmountTakenExisting" formControlName="loanAmountTakenExisting" onlyNumbers>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="name">Approx Date</label>
+                                                    <mat-form-field appearance="outline" class="d-block w-100" (click)="toggleMenuService.togglePickerStyles()">
+                                                        <input matInput [matDatepicker]="filterPickerFrom" formControlName="approxDate" placeholder="From Date" name="fromDate" [readonly]="true"
+                                                            (focus)="filterPickerFrom.open()" (dateChange)="getAge()" (click)="toggleMenuService.togglePickerStyles()">
+                                                        <mat-datepicker-toggle matSuffix [for]="filterPickerFrom" (click)="toggleMenuService.togglePickerStyles()">
+                                                        </mat-datepicker-toggle>
+                                                        <mat-datepicker #filterPickerFrom></mat-datepicker>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="name">Aprox Current EMI</label>
+                                                    <input class="form-control" type="text" name="approxCurrentEMI" formControlName="approxCurrentEMI" onlyNumbers>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="name">Bank</label>
+                                                    <ng-select [items]="banks" class="js-example-basic-single p-0" placeholder="Select Bank" bindLabel="name" bindValue="id" name="bankId"
+                                                        formControlName="bankId"></ng-select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="name">Top Up Amount</label>
+                                                    <input class="form-control" type="text" name="topupAmount" formControlName="topupAmount" onlyNumbers>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modalButton">
+                                <button class="btn btn-info pull-right " style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit" matStepperNext
+                                    (click)="addBasicDetail(basicDetailForm)">Next</button>
+                                <button class="btn btn-info pull-right " style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit" matStepperPrevious>Previous</button>
+                            </div>
+                        </form>
+                    </mat-step>
+                    <mat-step [stepControl]="companyDetailForm" label="Company Detail">
+                        <form [formGroup]="companyDetailForm">
+                            <div class="setup-content">
+                                <div class="row mx-0">
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label>Company Type <span style="color: red;">*</span></label>
+                                            <ng-select [items]="companyTypes" class="js-example-basic-single p-0" formControlName="companyTypeId" bindLabel="name" bindValue="id" name="companyType"
+                                                required>
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(companyDetailForm.get('companyTypeId') && !companyDetailForm.get('companyTypeId').valid && companyDetailForm.get('companyTypeId').touched)">
+                                                Company is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label>Nature of Business <span style="color: red;">*</span></label>
+                                            <ng-select [items]="businessNatures" class="js-example-basic-single p-0" formControlName="businessNatureId" bindLabel="name" bindValue="id" name="nature"
+                                                required>
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(companyDetailForm.get('businessNatureId') && !companyDetailForm.get('businessNatureId').valid && companyDetailForm.get('businessNatureId').touched)">
+                                                Business Nature is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label>Type of industry <span style="color: red;">*</span></label>
+                                            <ng-select [items]="industryTypes" class="js-example-basic-single p-0" formControlName="industryTypeId" bindLabel="name" bindValue="id" name="nature"
+                                                required groupBy="parentName">
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(companyDetailForm.get('industryTypeId') && !companyDetailForm.get('industryTypeId').valid && companyDetailForm.get('industryTypeId').touched)">
+                                                Industry Type is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label>Your gross annual profit <span style="color: red;">*</span></label>
+                                            <ng-select [items]="businessAnnualProfits" class="js-example-basic-single p-0" formControlName="businessAnnualProfitId" bindLabel="name" bindValue="id"
+                                                name="annual" required>
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(companyDetailForm.get('businessAnnualProfitId') && !companyDetailForm.get('businessAnnualProfitId').valid && companyDetailForm.get('businessAnnualProfitId').touched)">
+                                                Business Annual Profit is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label>Your Primary Bank Account is with? <span style="color: red;">*</span></label>
+                                            <ng-select [items]="banks" class="js-example-basic-single p-0" formControlName="primaryBankId" bindLabel="name" bindValue="id" name="banks" required>
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(companyDetailForm.get('primaryBankId') && !companyDetailForm.get('primaryBankId').valid && companyDetailForm.get('primaryBankId').touched)">
+                                                Bank is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label for="name">Total EMI you pay currently</label>
+                                            <input class="form-control" type="text" name="refernce" formControlName="currentlyPayEmi" onlyNumbers>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label for="name">Business Name <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="refernce" formControlName="businessName" required>
+                                            <mat-error *ngIf="(companyDetailForm.get('businessName') && !companyDetailForm.get('businessName').valid && companyDetailForm.get('businessName').touched)">
+                                                Business Name is required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label for="name">GST No <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="refernce" formControlName="businessGstNo" oninput="this.value = this.value.toUpperCase()" maxlength="15"
+                                                required>
+                                            <mat-error
+                                                *ngIf="(companyDetailForm.get('businessGstNo') && !companyDetailForm.get('businessGstNo').valid && companyDetailForm.get('businessGstNo').touched)">
+                                                <span *ngIf="companyDetailForm.get('businessGstNo').errors.pattern">Enter
+                                                    Valid GSTNO</span>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modalButton">
+                                <button class="btn btn-info pull-right " style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit" matStepperNext
+                                    (click)="addCompanyDetail(companyDetailForm)">Next</button>
+                                <button class="btn btn-info pull-right " style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit" matStepperPrevious>Previous</button>
+                            </div>
+
+                        </form>
+                    </mat-step>
+                    <mat-step label="Upload Document">
+                        <div class="setup-content" id="step-3">
+                            <div class="row mx-0">
+                                <div class="col-lg-4 col-md-6 col-sm-12 mt-2" *ngFor="let document of documents;let i =index">
+                                    <div>
+                                        <a *ngIf="!document.isPdf" class="form-control documentcard" type="upload" id="resume" required>
+                                            <div>
+                                                <div class="fileUpload text-center">
+                                                    <i class="fa fa-file-pdf-o txt-info" style="font-size:30px"></i>
+                                                    <h4 class="px-2 pb-2">
+                                                        {{document.displayName}}(maxSize:{{document.maxSize}}KB)<span *ngIf="document.isRequired" style="color: red;">*</span>
+                                                        <ng-container *ngIf="document.documentCount > 1">
+                                                            {{document?.documentName}}-{{document.count}}</ng-container>
+                                                    </h4>
+                                                </div>
+                                                <mat-error *ngIf="document.documentError && !document.isPdf">
+                                                    {{document.displayName}} is required
+                                                </mat-error>
+                                                <a href="javascript:;" class="mt-2 btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" (click)="fileInput.click()"
+                                                    title="Insert Loan">
+                                                    <i class="fa fa-upload"></i>Upload
+                                                </a>
+                                                <a *ngIf="document.documentData" (click)="debugBase64(document.documentData)" target="_blank" class="mt-2 btn btn-sm btn-info"
+                                                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" title="View Document">
+                                                    <i class="fa fa-eye"></i>View
+                                                </a>
+                                            </div>
+                                            <input type="file" #fileInput id="uploadFile" (change)="selectedImage($event,document,i)" name="photo" accept="image/*" style="display:none;" />
+                                        </a>
+
+                                        <a *ngIf="document.isPdf" class="form-control documentcard" type="upload" id="resume" required>
+                                            <div>
+                                                <div class="fileUpload">
+                                                    <i class="fa fa-file-pdf-o txt-info" style="font-size:30px"></i>
+                                                    <h4 class="px-2 pb-2">
+                                                        {{document.displayName}}(maxSize:{{document.maxSize}}KB)<span *ngIf="document.isRequired" style="color: red;">*</span>
+                                                        <ng-container *ngIf="document.documentCount > 1">
+                                                            {{document?.documentName}}-{{document.count}}</ng-container>
+                                                    </h4>
+                                                </div>
+                                                <mat-error *ngIf="document.documentError && document.isPdf">
+                                                    {{document.displayName}} is required
+                                                </mat-error>
+                                                <a href="javascript:;" class="mt-2 btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" (click)="filePdfInput.click()"
+                                                    title="Insert Loan">
+                                                    <i class="fa fa-upload"></i>Upload
+                                                </a>
+                                                <a *ngIf="document.documentData" (click)="debugBase64(document.documentData)" target="_blank" class="mt-2 btn btn-sm btn-info"
+                                                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" title="View Document">
+                                                    <i class="fa fa-eye"></i>View
+                                                </a>
+                                            </div>
+                                            <input type="file" #filePdfInput id="uploadFile" (change)="selectedImage($event,document,i)" name="pdf" accept="application/pdf" style="display:none;" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <div class="form-check" style="font-size: 16px; padding-top: 20px;">
+                                            <input id="checkbox-info-1" type="checkbox" value="isDone" name="isDone" [formControl]="isDone" [checked]="isSelect"> I hereby declare that the
+                                            information/documents submitted by me are true to the best of my
+                                            knowledge.<span style="color: red;">*</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modalButton">
+                            <button class="btn btn-info pull-right " style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit" matStepperNext
+                                (click)="addBusienssLoanDocument()">Save</button>
+                            <button class="btn btn-info pull-right " style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit" matStepperPrevious>Previous</button>
+                        </div>
+                    </mat-step>
+                </mat-stepper>
+                <!-- <aw-wizard navBarLayout='large-filled-symbols'>
+                    <aw-wizard-step [navigationSymbol]="{ symbol: '1' }">
+                        <ng-template awWizardStepTitle>
+                            <p>Select Type</p>
+                        </ng-template>
+                        <div class="setup-content" id="step-1">
+                            <div class="row mx-0">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="name" style="font-size: 20px;">Select Loan Type
+                                        </label>
+                                        <div class="form-group m-t-15 m-checkbox-inline mb-0 custom-radio-ml ml-2">
+                                            <div class="radio radio-primary">
+                                                <input type="radio" id="new" value="New" [formControl]="isTransfer" (change)="changeLoanType()">
+                                                <label class="mb-0" for="new">New</label>
+                                            </div>
+                                            <div class="radio radio-primary">
+                                                <input type="radio" id="transfer" 
+                                                value="Bank Transfer" [formControl]="isTransfer" 
+                                                (change)="changeLoanType()">
+                                                <label class="mb-0" for="transfer">Transfer</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modalButton">
+                            <button class="btn btn-info pull-right "
+                                style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit"
+                                awNextStep>Next</button>
+                        </div>
+                    </aw-wizard-step>
+                    <aw-wizard-step [navigationSymbol]="{ symbol: '2' }">
+                        <form [formGroup]="basicDetailForm">
+                            <ng-template awWizardStepTitle>
+                                <p>Basic Detail</p>
+                            </ng-template>
+                            <div class="setup-content" id="step-1">
+                                <div class="row mx-0">
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label for="name">Your Desired Loan Amount <span
+                                                    style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="refernce"
+                                                formControlName="loanAmount" required onlyNumbers>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('loanAmount') && !basicDetailForm.get('loanAmount').valid && basicDetailForm.get('loanAmount').touched)">
+                                                LoanAmount is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-form-label">How are you currently employeed? <span
+                                                    style="color: red;">*</span></div>
+                                            <ng-select [items]="employmentTypes" class="js-example-basic-single p-0"
+                                                bindLabel="employmentType" bindValue="employmentTypeId" name="Status"
+                                                required name="selectEmploymentType" formControlName="employmentTypeId"
+                                                (change)="changeEmploymentType()">
+                                            </ng-select>
+                                            <mat-error *ngIf=" (basicDetailForm.get('employmentTypeId') &&
+                                                !basicDetailForm.get('employmentTypeId').valid &&
+                                                basicDetailForm.get('employmentTypeId').touched)">
+                                                EmploymentType is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-form-label">Your gross annual Sales/TurnOver <span
+                                                    style="color: red;">*</span></div>
+                                            <input class="form-control" type="text" name="turnOver"
+                                                formControlName="businessAnnualSale" required onlyNumbers>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('businessAnnualSale') && !basicDetailForm.get('businessAnnualSale').valid  && basicDetailForm.get('businessAnnualSale').touched)">
+                                                Business Annual sales is required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-form-label">Years in current Business <span
+                                                    style="color: red;">*</span></div>
+                                            <ng-select [items]="businessExperiences" class="js-example-basic-single p-0"
+                                                bindLabel="name" bindValue="id" name="Status" required
+                                                formControlName="businessExperienceId">
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('businessExperienceId') && !basicDetailForm.get('businessExperienceId').valid  && basicDetailForm.get('businessExperienceId').touched)">
+                                                Business Experience is required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label for="name">Full Name <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="refernce"
+                                                formControlName="fullName" required onlyAlphabets>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('fullName') && !basicDetailForm.get('fullName').valid && basicDetailForm.get('fullName').touched)">
+                                                FullName is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label for="name">Email <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="email" formControlName="email"
+                                                required>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('email') && !basicDetailForm.get('email').valid  && basicDetailForm.get('email').touched)">
+                                                <span *ngIf="basicDetailForm.get('email').errors.required">Email
+                                                    is Required</span>
+                                                <span *ngIf="basicDetailForm.get('email').errors.pattern">Enter
+                                                    Valid Email</span>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label for="name">PanCard No <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="refernce"
+                                                formControlName="panCardNo" required
+                                                oninput="this.value = this.value.toUpperCase()" maxlength="10"
+                                                (keypress)="keyPressAlphanumeric($event)">
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('panCardNo') && !basicDetailForm.get('panCardNo').valid  && basicDetailForm.get('panCardNo').touched)">
+                                                <span *ngIf="basicDetailForm.get('panCardNo').errors.required">PanCardNo
+                                                    is Required</span>
+                                                <span *ngIf="basicDetailForm.get('panCardNo').errors.pattern">Enter
+                                                    Valid PanCard</span>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label>BirthDate(Min.Age:21year) <span style="color: red;">*</span></label>
+                                            <mat-form-field appearance="outline" class="d-block w-100">
+                                                <input matInput [matDatepicker]="filterPickerFrom"
+                                                    formControlName="birthdate" placeholder="From Date" name="fromDate"
+                                                    [readonly]="true" (focus)="filterPickerFrom.open()"
+                                                    (dateChange)="getAge()">
+                                                <mat-datepicker-toggle matSuffix [for]="filterPickerFrom">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #filterPickerFrom></mat-datepicker>
+                                            </mat-form-field>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('birthdate') && !basicDetailForm.get('birthdate').valid && basicDetailForm.get('birthdate').touched) && !basicDetailForm.get('birthdate').hasError('minAge')">
+                                                BirthDate is Required
+                                            </mat-error>
+                                            <mat-error *ngIf="basicDetailForm.get('birthdate').hasError('minAge')">
+                                                minimum Age 21 year is required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-form-label">Select Marital Status <span
+                                                    style="color: red;">*</span></div>
+                                            <ng-select [items]="maritalStatuses" class="js-example-basic-single p-0"
+                                                bindLabel="status" bindValue="id" name="Status" required
+                                                name="selectStatus" formControlName="maritalStatusId">
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('maritalStatusId') && !basicDetailForm.get('maritalStatusId').valid && basicDetailForm.get('maritalStatusId').touched)">
+                                                maritalStatus is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <div class="col-form-label">Select Resident Type <span
+                                                    style="color: red;">*</span></div>
+                                            <ng-select [items]="residenceTypes" class="js-example-basic-single p-0"
+                                                bindLabel="name" bindValue="id" name="name" required
+                                                formControlName="residentTypeId">
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(basicDetailForm.get('residentTypeId') && !basicDetailForm.get('residentTypeId').valid  && basicDetailForm.get('residentTypeId').touched)">
+                                                Resident Type is required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-6 col-sm-12">
+                                        <label for="name">Gender <span style="color: red;">*</span></label>
+                                        <div class="form-group m-t-15 m-checkbox-inline mb-0 custom-radio-ml ml-2">
+                                            <div class="radio radio-primary">
+                                                <input type="radio" id="Male" value="Male" formControlName="gender">
+                                                <label class="mb-0" for="Male">Male</label>
+                                            </div>
+                                            <div class="radio radio-primary">
+                                                <input type="radio" id="Female" value="Female" formControlName="gender">
+                                                <label class="mb-0" for="Female">Female</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mx-0 border mb-3 mx-3">
+                                    <div class="col-lg-12">
+                                        <h3 class="mt-2" style="font-size:25px">Address Detail <span
+                                                style="color: red;">*</span></h3>
+                                    </div>
+                                    <div class="row mx-0 w-100">
+                                        <div class="col-md-6 ">
+                                            <div class="form-group">
+                                                <label for="name">Current Residence Pincode <span
+                                                        style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" name="refernce"
+                                                    formControlName="pincode" required maxlength="6" onlyNumbers
+                                                    (keyup)="onKeyUpEvent($event,true)">
+                                                <mat-error
+                                                    *ngIf="(basicDetailForm.get('pincode') && !basicDetailForm.get('pincode').valid  && basicDetailForm.get('pincode').touched)">
+                                                    Pincode is required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="name">AddressLine1 <span
+                                                        style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" name="refernce"
+                                                    formControlName="addressLine1" required>
+                                                <mat-error
+                                                    *ngIf="(basicDetailForm.get('addressLine1') && !basicDetailForm.get('addressLine1').valid  && basicDetailForm.get('addressLine1').touched)">
+                                                    AddressLine1 is required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="name">AddressLine 2</label>
+                                                <input class="form-control" type="text" name="refernce"
+                                                    formControlName="addressLine2">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <div class="col-form-label">Where do you currently reside?<span
+                                                        style="color: red;">*</span></div>
+                                                <ng-select [items]="cities" class="js-example-basic-single p-0"
+                                                    placeholder="Select City" bindLabel="name" bindValue="id"
+                                                    name="name" formControlName="cityId" required>
+                                                </ng-select>
+                                                <mat-error
+                                                    *ngIf="(basicDetailForm.get('cityId') && !basicDetailForm.get('cityId').valid  && basicDetailForm.get('cityId').touched)">
+                                                    City is required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mx-0 border mb-3 mx-3" *ngIf="isTransfer.value=='Bank Transfer'">
+                                    <div class="col-lg-12">
+                                        <h3 class="mt-2" style="font-size:25px">Transfer</h3>
+                                    </div>
+                                    <div class="col-lg-12 mx-0">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="name">Loan Amount Taken Existing</label>
+                                                    <input class="form-control" type="text"
+                                                        name="loanAmountTakenExisting"
+                                                        formControlName="loanAmountTakenExisting" onlyNumbers>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="name">Approx Date</label>
+                                                    <mat-form-field appearance="outline" class="d-block w-100">
+                                                        <input matInput [matDatepicker]="filterPickerFrom"
+                                                            formControlName="approxDate" placeholder="From Date"
+                                                            name="fromDate" [readonly]="true"
+                                                            (focus)="filterPickerFrom.open()" (dateChange)="getAge()">
+                                                        <mat-datepicker-toggle matSuffix [for]="filterPickerFrom">
+                                                        </mat-datepicker-toggle>
+                                                        <mat-datepicker #filterPickerFrom></mat-datepicker>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="name">Aprox Current EMI</label>
+                                                    <input class="form-control" type="text" name="approxCurrentEMI"
+                                                        formControlName="approxCurrentEMI" onlyNumbers>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="name">Bank</label>
+                                                    <ng-select [items]="banks" class="js-example-basic-single p-0"
+                                                        placeholder="Select Bank" bindLabel="name" bindValue="id"
+                                                        name="bankId" formControlName="bankId"></ng-select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="name">Top Up Amount</label>
+                                                    <input class="form-control" type="text" name="topupAmount"
+                                                        formControlName="topupAmount" onlyNumbers>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modalButton">
+                                <button class="btn btn-info pull-right "
+                                    style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit"
+                                    awNextStep (click)="addBasicDetail(basicDetailForm)">Next</button>
+                            </div>
+                        </form>
+                    </aw-wizard-step>
+                    <aw-wizard-step [navigationSymbol]="{ symbol: '3' }" [canEnter]="basicDetailForm.valid">
+                        <form [formGroup]="companyDetailForm">
+                            <ng-template awWizardStepTitle>
+                                <p>Company Detail</p>
+                            </ng-template>
+                            <div class="setup-content" id="step-1">
+                                <div class="row mx-0">
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label>Company Type <span style="color: red;">*</span></label>
+                                            <ng-select [items]="companyTypes" class="js-example-basic-single p-0"
+                                                formControlName="companyTypeId" bindLabel="name" bindValue="id"
+                                                name="companyType" required>
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(companyDetailForm.get('companyTypeId') && !companyDetailForm.get('companyTypeId').valid && companyDetailForm.get('companyTypeId').touched)">
+                                                Company is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label>Nature of Business <span style="color: red;">*</span></label>
+                                            <ng-select [items]="businessNatures" class="js-example-basic-single p-0"
+                                                formControlName="businessNatureId" bindLabel="name" bindValue="id"
+                                                name="nature" required>
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(companyDetailForm.get('businessNatureId') && !companyDetailForm.get('businessNatureId').valid && companyDetailForm.get('businessNatureId').touched)">
+                                                Business Nature is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label>Type of industry <span style="color: red;">*</span></label>
+                                            <ng-select [items]="industryTypes" class="js-example-basic-single p-0"
+                                                formControlName="industryTypeId" bindLabel="name" bindValue="id"
+                                                name="nature" required groupBy="parentName">
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(companyDetailForm.get('industryTypeId') && !companyDetailForm.get('industryTypeId').valid && companyDetailForm.get('industryTypeId').touched)">
+                                                Industry Type is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label>Your gross annual profit <span style="color: red;">*</span></label>
+                                            <ng-select [items]="businessAnnualProfits"
+                                                class="js-example-basic-single p-0"
+                                                formControlName="businessAnnualProfitId" bindLabel="name" bindValue="id"
+                                                name="annual" required>
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(companyDetailForm.get('businessAnnualProfitId') && !companyDetailForm.get('businessAnnualProfitId').valid && companyDetailForm.get('businessAnnualProfitId').touched)">
+                                                Business Annual Profit is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label>Your Primary Bank Account is with? <span
+                                                    style="color: red;">*</span></label>
+                                            <ng-select [items]="banks" class="js-example-basic-single p-0"
+                                                formControlName="primaryBankId" bindLabel="name" bindValue="id"
+                                                name="banks" required>
+                                            </ng-select>
+                                            <mat-error
+                                                *ngIf="(companyDetailForm.get('primaryBankId') && !companyDetailForm.get('primaryBankId').valid && companyDetailForm.get('primaryBankId').touched)">
+                                                Bank is Required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label for="name">Total EMI you pay currently</label>
+                                            <input class="form-control" type="text" name="refernce"
+                                                formControlName="currentlyPayEmi" onlyNumbers>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label for="name">Business Name <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="refernce"
+                                                formControlName="businessName" required>
+                                            <mat-error
+                                                *ngIf="(companyDetailForm.get('businessName') && !companyDetailForm.get('businessName').valid && companyDetailForm.get('businessName').touched)">
+                                                Business Name is required
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="form-group">
+                                            <label for="name">GST No <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" name="refernce"
+                                                formControlName="businessGstNo"
+                                                oninput="this.value = this.value.toUpperCase()" maxlength="15" required>
+                                            <mat-error
+                                                *ngIf="(companyDetailForm.get('businessGstNo') && !companyDetailForm.get('businessGstNo').valid && companyDetailForm.get('businessGstNo').touched)">
+                                                <span
+                                                    *ngIf="companyDetailForm.get('businessGstNo').errors.pattern">Enter
+                                                    Valid GSTNO</span>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modalButton">
+                                <button class="btn btn-info pull-right "
+                                    style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit"
+                                    awNextStep (click)="addCompanyDetail(companyDetailForm)">Next</button>
+                            </div>
+                        </form>
+                    </aw-wizard-step>
+                    <aw-wizard-step [navigationSymbol]="{ symbol: '4' }" [canEnter]="companyDetailForm.valid">
+                        <ng-template awWizardStepTitle>
+                            <p>Upload Document</p>
+
+                        </ng-template>
+                        <div class="setup-content" id="step-3">
+                            <div class="row mx-0">
+                                <div class="col-lg-4 col-md-6 col-sm-12 mt-2"
+                                    *ngFor="let document of documents;let i =index">
+                                    <div>
+                                        <a *ngIf="!document.isPdf" class="form-control" type="upload" id="resume"
+                                            style="height: 200px; width: 100%; text-align: center; border: 1px solid #f1f1f1;align-items: center;background-color: #f6f7fb"
+                                            required>
+                                            <div>
+                                                <div class="fileUpload text-center">
+                                                    <i class="fa fa-file-pdf-o txt-info" style="font-size:30px"></i>
+                                                    <h4 class="px-2 pb-2">
+                                                        {{document.displayName}}(maxSize:{{document.maxSize}}KB)<span
+                                                            *ngIf="document.isRequired" style="color: red;">*</span>
+                                                        <ng-container *ngIf="document.documentCount > 1">
+                                                            {{document?.documentName}}-{{document.count}}</ng-container>
+                                                    </h4>
+                                                </div>
+                                                <mat-error *ngIf="document.documentError && !document.isPdf">
+                                                    {{document.displayName}} is required
+                                                </mat-error>
+                                                <a href="javascript:;" class="mt-2 btn btn-sm btn-info"
+                                                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                                    (click)="fileInput.click()" title="Insert Loan">
+                                                    <i class="fa fa-upload"></i>Upload
+                                                </a>
+                                                <a *ngIf="document.documentData"
+                                                    (click)="debugBase64(document.documentData)" target="_blank"
+                                                    class="mt-2 btn btn-sm btn-info"
+                                                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                                    title="View Document">
+                                                    <i class="fa fa-eye"></i>View
+                                                </a>
+                                            </div>
+                                            <input type="file" #fileInput id="uploadFile"
+                                                (change)="selectedImage($event,document,i)" name="photo"
+                                                accept="image/*" style="display:none;" />
+                                        </a>
+
+                                        <a *ngIf="document.isPdf" class="form-control" type="upload" id="resume"
+                                            style="height: 220px; width: 100%; text-align: center; border: 1px solid #f1f1f1;align-items: center;background-color: #f6f7fb"
+                                            required>
+                                            <div>
+                                                <div class="fileUpload">
+                                                    <i class="fa fa-file-pdf-o txt-info" style="font-size:30px"></i>
+                                                    <h4 class="px-2 pb-2">
+                                                        {{document.displayName}}(maxSize:{{document.maxSize}}KB)<span
+                                                            *ngIf="document.isRequired" style="color: red;">*</span>
+                                                        <ng-container *ngIf="document.documentCount > 1">
+                                                            {{document?.documentName}}-{{document.count}}</ng-container>
+                                                    </h4>
+                                                </div>
+                                                <mat-error *ngIf="document.documentError && document.isPdf">
+                                                    {{document.displayName}} is required
+                                                </mat-error>
+                                                <a href="javascript:;" class="mt-2 btn btn-sm btn-info"
+                                                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                                    (click)="filePdfInput.click()" title="Insert Loan">
+                                                    <i class="fa fa-upload"></i>Upload
+                                                </a>
+                                                <a *ngIf="document.documentData"
+                                                    (click)="debugBase64(document.documentData)" target="_blank"
+                                                    class="mt-2 btn btn-sm btn-info"
+                                                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                                    title="View Document">
+                                                    <i class="fa fa-eye"></i>View
+                                                </a>
+                                            </div>
+                                            <input type="file" #filePdfInput id="uploadFile"
+                                                (change)="selectedImage($event,document,i)" name="pdf"
+                                                accept="application/pdf" style="display:none;" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <div class="form-check" style="font-size: 16px; padding-top: 20px;">
+                                            <input id="checkbox-info-1" type="checkbox" value="isDone" name="isDone"
+                                                [formControl]="isDone" [checked]="isSelect"> I hereby declare that the
+                                            information/documents submitted by me are true to the best of my
+                                            knowledge.<span style="color: red;">*</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modalButton">
+                            <button class="btn btn-info pull-right "
+                                style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit" awNextStep
+                                (click)="addBusienssLoanDocument()">Save</button>
+                        </div>
+                    </aw-wizard-step>
+                </aw-wizard> -->
+            </div>
+        </div>
+    </div>

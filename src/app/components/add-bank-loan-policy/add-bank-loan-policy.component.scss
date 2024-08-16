@@ -1,0 +1,52 @@
+.card-body {
+    height    : calc(100vh - 270px);
+    overflow  : auto;
+    overflow-x: hidden;
+}
+
+.table-responsive {
+    display: block;
+    width  : 100%;
+}
+
+@media screen and (max-width: 1900px) {
+    ::ng-deep .policytable  table{
+        width: 1500px !important;
+        overflow: auto;
+    }
+}
+
+.policytable {
+    height: calc(100vh - 360px);
+}
+
+::ng-deep .policyTable tbody {
+    display     : block;
+    height      : calc(100vh - 480px);
+    table-layout: fixed;
+    overflow: auto;
+}
+
+::ng-deep .policyTable thead {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+::ng-deep .policyTable tr {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+.table-striped thead tbody tr {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+table {
+    width      : 100%;
+    white-space: inherit !important;
+    // height     : calc(100vh - 550px);
+}

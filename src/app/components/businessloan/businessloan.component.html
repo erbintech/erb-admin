@@ -1,0 +1,275 @@
+<title>Business Loan</title>
+<app-breadcrumb [title]="'Business Loan'" [active_item]="'Business Loan'">
+</app-breadcrumb>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <mat-drawer-container class="example-container" autosize>
+        <div class="card">
+          <div class="card-header p-1">
+            <div class="d-flex justify-content-between">
+              <div class="main-header-left ">
+              </div>
+              <div ngbDropdown class="btn-group">
+                <div class="ml-2">
+                  <button type="button" class="btn btn-info"
+                    style="margin-right: 5px;border-radius: 10px;padding:8px 14px" title="Filter Loans"
+                    (click)="drawer.toggle();">
+                    <i class="icon-filter p-0"></i>
+                    <span>Filter</span>
+                  </button>
+                  <button *ngIf="businessLoans && businessLoans.length > 0" type="button" class="btn btn-info"
+                    style="margin-right: 5px;border-radius: 10px;padding:8px 14px" title="DownLoad CSV"
+                    (click)="downloadCsv()">
+                    <i class="fa fa-download p-0"></i>
+                    <span>DownLoad CSV</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-container *ngIf="businessLoans && isFlag else NoBusinessLoans">
+            <div class="businessloan table-responsive userlist-table">
+              <table mat-table [dataSource]="businessLoans" class="mat-elevation-z8 table-striped table-vcenter lastcolumntable"
+                style="min-width: 2000px; box-shadow: none;" aria-label="businessLoan">
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef style="width:5%">#</th>
+                  <td mat-cell *matCellDef="let element; let i = index;" style="width:5%px">
+                    {{(paginate.currentPage - 1) * paginate.pageSize + i + 1}}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="Customer">
+                  <th mat-header-cell *matHeaderCellDef style="width:15%">Customer</th>
+                  <td mat-cell *matCellDef="let element" style="width:15%">
+                    <a (click)="navigateCustomerDetail(element)">{{element.basicDetail?.fullName}}</a>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="ContactNo">
+                  <th mat-header-cell *matHeaderCellDef>ContactNo</th>
+                  <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.basicDetail.contactNo else Novalue">
+                      {{element?.basicDetail?.contactNo}}
+                    </ng-container>
+                    <ng-template #Novalue>
+                      <span class="text-center">--</span>
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="Email">
+                  <th mat-header-cell *matHeaderCellDef style="width:15%">Email</th>
+                  <td mat-cell *matCellDef="let element" style="width:15%">
+                    <ng-container *ngIf="element.basicDetail.email else Novalue">
+                      {{element?.basicDetail?.email}}
+                    </ng-container>
+                    <ng-template #Novalue>
+                      <span class="text-center">--</span>
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="LoanAmount">
+                  <th mat-header-cell *matHeaderCellDef>Loan Amount</th>
+                  <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.basicDetail?.loanAmount else NoValue">
+                      ₹{{element.basicDetail?.loanAmount | number:'0.2-2'}}
+                    </ng-container>
+                    <ng-template #NoValue>
+                      ₹<span class="text-center">0</span>
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="Employment">
+                  <th mat-header-cell *matHeaderCellDef>Employment</th>
+                  <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.basicDetail.employmentType else Novalue">
+                      {{element.basicDetail?.employmentType}}
+                    </ng-container>
+                    <ng-template #Novalue>
+                      <span class="text-center">--</span>
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="Status">
+                  <th mat-header-cell *matHeaderCellDef>Status</th>
+                  <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.basicDetail && element.basicDetail.status else NoValue">
+                      <span
+                        *ngIf="(element.basicDetail && element.basicDetail.status == 'PENDING' || element.basicDetail.status == 'REJECTED' ) else NoPending"
+                        style="color: #ff0000;">
+                        {{element.basicDetail?.status}}
+                      </span>
+                      <ng-template #NoPending>
+                        <span style="color: #0b9d0b;">{{element.basicDetail?.status}}</span>
+                      </ng-template>
+                    </ng-container>
+                    <ng-template #NoValue>
+                      <span class="text-center" style="color: #ff0000;">PENDING</span>
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="DSACode">
+                  <th mat-header-cell *matHeaderCellDef>FIle Source</th>
+                  <td mat-cell *matCellDef="let element">
+                    <ng-container>
+                      <span *ngIf="element.basicDetail.partnerId && !element.basicDetail.leadId">Channel Partner</span>
+                      <span *ngIf="!element.basicDetail.partnerId && !element.basicDetail.leadId">Direct</span>
+                      <span *ngIf="element.basicDetail.leadId">From Lead</span>
+                    </ng-container>
+                    <ng-template #NoValue>
+                      <span class="text-center">--</span>
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="rmFullName">
+                  <th mat-header-cell *matHeaderCellDef>Assigned RM</th>
+                  <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.basicDetail.rmFullName else Novalue">
+                      {{element?.basicDetail?.rmFullName}}
+                    </ng-container>
+                    <ng-template #Novalue>
+                      <span class="text-center">--</span>
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="createdDate">
+                  <th mat-header-cell *matHeaderCellDef>Request Date</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{element.basicDetail.createdDate | date:'medium'}}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="isDelete">
+                  <th mat-header-cell *matHeaderCellDef>Delete</th>
+                  <td mat-cell *matCellDef="let element">
+                    <span *ngIf="element?.basicDetail?.isDelete == '1' else NoDelete" style="color: #ff0000;">
+                      yes
+                    </span>
+                    <ng-template #NoDelete>
+                      <span style="color: #0b9d0b;">No</span>
+                    </ng-template>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Action" stickyEnd>
+                  <th mat-header-cell *matHeaderCellDef class="text-right">
+                    Action</th>
+                  <td mat-cell *matCellDef="let element" class="text-right">
+                    <button mat-button [matMenuTriggerFor]="menu" (click)="toggleMenuService.toggleMenuStyles()"> <a href="javascript:;" class="btn btn-sm btn-info"
+                        title="Action" style="padding: 10px 12px;border-radius: 10px;margin: 0 5px;" >
+                        <i class="fa fa-angle-down"></i>
+                      </a></button>
+                    <mat-menu #menu="matMenu">
+                      <div mat-menu-item class="p-0 mx-2" (click)="navigateEditLoanPage(element)"
+                        *ngIf="isEditPermission && !element.basicDetail.isDelete ">
+                        <a title="Edit Loan" href="javascript:;" class="btn btn-sm btn-info"
+                          style="padding: 10px 12px;border-radius: 10px;margin: 0 5px;">
+                          <i class="icon-pencil"></i>
+                        </a>Edit
+                      </div>
+                      <div mat-menu-item class="p-0 mx-2" (click)="viewDetail(element)" *ngIf="isReadPermission ">
+                        <a title="View Detail" href="javascript:;" class="btn btn-sm btn-info"
+                          style="padding: 10px 12px;border-radius: 10px;margin: 0 5px;">
+                          <i class="icon-eye"></i>
+                        </a>View Detail
+                      </div>
+
+                      <div mat-menu-item class="p-0 mx-2" (click)="warningAlert(element)"
+                        *ngIf="element.basicDetail?.status && isDeletePermission && !element.basicDetail.isDelete && element.basicDetail?.status != 'REJECTED'">
+                        <a title="Delete BusinessLoan" href="javascript:;" class="btn btn-sm btn-info"
+                          style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                          <i class="fa fa-trash"></i>
+                        </a>Delete
+                      </div>
+                    </mat-menu>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayColumns;" class="student-element-row"
+                  style="cursor: pointer;"></tr>
+              </table>
+            </div>
+          </ng-container>
+          <ng-template #NoBusinessLoans>
+            <div class="d-flex vertical-center nodata" style="height:calc(100vh - 260px)">
+            </div>
+          </ng-template>
+
+          <div class="card-footer" *ngIf="businessLoans && businessLoans.length > 0">
+            <ul class="pagination mb-0 float-right">
+              <li [ngClass]="{ disabled: paginate.currentPage == 1 }" class="page-item page-prev">
+                <a class="page-link" href="javascript:;" tabindex="-1" (click)="setPage(paginate.currentPage - 1)">
+                  <span>Prev</span>
+                </a>
+              </li>
+              <li *ngFor="let page of paginate.pages" class="page-item active"
+                [ngClass]="{ active: paginate.currentPage == page }"><a
+                  [ngClass]="{current:paginate.currentPage == page}" class="page-link" href="javascript:;"
+                  (click)="setPage(page)">{{page}}</a></li>
+              <li [ngClass]="{ disabled: paginate.currentPage === paginate.totalPages}"
+                (click)="setPage(paginate.currentPage + 1)" class="page-item page-next">
+                <a class="page-link" href="javascript:;"><span>Next</span></a>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+        <mat-drawer #drawer class="example-sidenav" mode="over" position="end">
+          <div class="col-lg-12 px-3 pt-3">
+            <div class="d-inline" style="width: 100%;"><i class="fa fa-filter pr-1"><span class="ml-1">Filter</span></i>
+              <button v class="close" aria-label="Close" (click)="drawer.toggle();">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+          <hr>
+          <div class="position px-3">
+            <div class="form-group">
+              <label>Search</label>
+              <input type="text" class="form-control" placeholder="searchBy Name,ContactNo" [(ngModel)]="searchString">
+            </div>
+            <div class="form-group">
+              <label>Select Status</label>
+              <ng-select [items]="loanStatuses" class="js-example-basic-single p-0" placeholder="Search by Status"
+                bindLabel="status" bindValue="id" name="selectedStatus" [(ngModel)]="selectedStatus">
+              </ng-select>
+            </div>
+            <div>
+              <div class="col-form-label">From Date</div>
+              <mat-form-field appearance="outline" class="d-block w-100" (click)="toggleMenuService.togglePickerStyles()">
+                <input matInput [matDatepicker]="filterPickerFrom" [max]="dateTo" placeholder="From Date"
+                  [(ngModel)]="dateFrom" name="fromDate" [readonly]="true" (focus)="filterPickerFrom.open()" (click)="toggleMenuService.togglePickerStyles()">
+                <mat-datepicker-toggle matSuffix [for]="filterPickerFrom" (click)="toggleMenuService.togglePickerStyles()">
+                </mat-datepicker-toggle>
+                <mat-datepicker #filterPickerFrom></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div>
+              <div class="col-form-label">To Date</div>
+              <mat-form-field appearance="outline" class="d-block w-100 " (click)="toggleMenuService.togglePickerStyles()">
+                <input matInput [matDatepicker]="FilterPickerTo" [max]="dateTo" placeholder="To Date"
+                  [(ngModel)]="dateTo" name="toDate" [readonly]="true" (focus)="FilterPickerTo.open()" (click)="toggleMenuService.togglePickerStyles()">
+                <mat-datepicker-toggle matSuffix [for]="FilterPickerTo" (click)="toggleMenuService.togglePickerStyles()">
+                </mat-datepicker-toggle>
+                <mat-datepicker #FilterPickerTo></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="modal-footer p-0" style="margin-bottom: 20px;justify-content: center;">
+            <div class="float-right d-inline">
+              <button type="button" class="btn btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                title="Clear Filter" (click)="drawer.toggle();clearSearch();">
+                <span>Clear</span>
+              </button>
+              <button type="button" class="btn btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                title="Filter Loans" (click)="drawer.toggle();filterLoans();">
+                <span>Search</span>
+              </button>
+            </div>
+          </div>
+          <div class="px-3">
+          </div>
+
+        </mat-drawer>
+      </mat-drawer-container>
+    </div>
+  </div>
+</div>

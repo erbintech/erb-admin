@@ -1,0 +1,218 @@
+tr.student-element-row:not(.student-expanded-row):hover {
+    background: whitesmoke;
+}
+
+tr.student-element-row:not(.student-expanded-row):active {
+    background: #efefef;
+}
+
+.student-element-row td {
+    border-bottom-width: 0;
+}
+
+.card {
+    height    : calc(100vh - 200px);
+    overflow-x: auto;
+}
+
+.card-footer {
+    padding: 10px !important;
+}
+
+::ng-deep .maintable tbody {
+    display : block;
+    height  : calc(100vh - 395px);
+    overflow: auto;
+}
+
+::ng-deep .maintable thead {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+::ng-deep .maintable tr {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+::ng-deep .mat-drawer-inner-container {
+    overflow: auto !important;
+}
+
+
+.modal-title {
+    font-weight  : 500 !important;
+    font-size    : 18px !important;
+    margin-bottom: 0 !important;
+    line-height  : 1.2 !important;
+}
+
+.input-icons mat-icon {
+    position  : absolute;
+    text-align: end;
+    float     : right;
+    right     : 15px;
+    padding   : 7px !important;
+}
+
+.input-icons {
+    width        : 100%;
+    margin-bottom: 10px;
+}
+
+.icon {
+    padding  : 10px;
+    min-width: 50px;
+}
+
+.input-field {
+    width  : 100%;
+    padding: 10px;
+}
+
+::ng-deep .modal-backdrop.show {
+    z-index: 1049 !important;
+}
+
+::ng-deep {
+
+    .cdk-global-overlay-wrapper,
+    .cdk-overlay-container {
+        z-index: 9999 !important;
+    }
+}
+
+@media screen and (max-width: 776px) {
+    ::ng-deep.mat-table tbody {
+        display     : table;
+        width       : 100%;
+        table-layout: fixed;
+        overflow    : auto;
+    }
+
+    ::ng-deep.mat-table thead {
+        display     : table;
+        width       : 100%;
+        table-layout: fixed;
+        // position: absolute;
+    }
+
+    ::ng-deep.mat-table tr {
+        display     : table;
+        width       : 100%;
+        table-layout: fixed;
+    }
+
+    ::ng-deep.mat-table tbody {
+        width   : 1200px !important;
+        overflow: auto;
+    }
+
+    ::ng-deep.mat-table thead {
+        width   : 1200px !important;
+        overflow: auto;
+    }
+}
+
+::ng-deep.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+    color: #fff;
+}
+
+.uploadDocument {
+    border       : 1px dashed #7366ff;
+    align-items  : center;
+    display      : flex;
+    height       : 130px;
+    margin-top   : 10px;
+    border-radius: 10px;
+}
+
+.uploadDocument i {
+    margin   : auto;
+    font-size: 50px;
+}
+
+video img {
+    margin-top: 10px;
+    height    : 150px;
+}
+
+.fileName {
+    height: 40px;
+}
+
+.title {
+    font-size: 20px;
+    height:40px
+}
+
+.listContent {
+    overflow: auto
+}
+
+// @media screen and (min-width:1366px) {
+//     .file-content .files .file-box {
+//         width: calc(25vh - 100px);
+//     }
+// }
+
+
+.data {
+    height: calc(100vh - 310px);
+}
+
+.modal-body {
+    height    : calc(100vh - 200px);
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+::ng-deep.mat-expansion-panel-header.mat-expanded {
+    // background-color: #355efc !important;
+    color           : #fff;
+}
+
+::ng-deep.mat-expansion-panel-header {
+    background-color: #355efc0d;
+    width: 50px;
+    height: 50px;
+}
+
+::ng-deep.mat-expansion-panel-header.mat-expanded:focus,
+.mat-expansion-panel-header.mat-expanded:hover {
+    background-color: #355efc;
+}
+
+::ng-deep.mat-expansion-panel:not([class*=mat-elevation-z]) {
+    box-shadow: none;
+}
+.faq-item .bx-minus {
+    background-color: #fff;
+    color           : #000;
+}
+
+.faq-item .bx-plus {
+    background-color: #355efc;
+    color           : #fff;
+}
+
+.mat-expansion-panel-header-indicator{
+    color: rgba(0,0,0,.54);
+    border-radius: 80%;
+    background-color: #7366ff;
+    height: 80px;
+    width: 80px;
+}
+
+
+.example-card {
+    max-width: 1400px;
+    margin-bottom: 30px;
+    background-color: #c8c2f1;
+  }
+
+.mat-tab-label {
+    background-color:#7366ff;
+}

@@ -1,0 +1,67 @@
+/* You can add global styles to this file, and also import other style files */
+@import "./assets/scss/app.scss";
+
+.router-wrapper {
+    position: relative;
+    overflow: hidden;
+    width: 100vw;
+    height: calc(100% - 47px);
+    perspective: 1200px;
+    transform-style: preserve-3d;
+}
+
+:host {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #60d7a9;
+}
+
+mat-drawer {
+    width: 300px;
+}
+
+.page-item.active .page-link {
+    background-color: #a927f9 !important;
+    border-color: #a927f9 !important;
+    color: #fff !important;
+}
+
+.page-link {
+    color: #a927f9 !important;
+}
+
+.ng-dropdown-panel-items.scroll-host {
+    height: 100px !important;
+}
+
+// html, body { height: 100%; }
+// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// html, body { height: 100%; }
+// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// html, body { height: 100%; }
+// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #817977;
+}

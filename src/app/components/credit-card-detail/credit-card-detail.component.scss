@@ -1,0 +1,53 @@
+img {
+    object-fit: contain;
+    text-align: center;
+    height: 229px;
+    width: 291px;
+    padding-left: 20px;
+}
+
+@media screen and (max-width:400px) {
+    img{
+        width:290px;
+    }
+}
+.document {
+    height: 126px; 
+    width: 100%; 
+    border: 1px solid #f1f1f1;
+    align-items: center;
+    background-color: #f6f7fb;
+    color:#7366ff;
+    font-size:14px
+}
+
+.fileUpload {
+    height          : 110px;
+    background-color: #fff;
+    border          : 1px solid #ececec;
+    border-radius   : 5px;
+    font-size       : 36px;
+     display      : flex; 
+    align-items     : center;
+    justify-content : center;
+}
+
+.card .card-body {
+    padding: 20px;
+    background-color: transparent;
+}
+
+.nav-tabs {
+    margin-bottom: 18px;
+  }
+
+dt {
+    padding: 5px;
+    font-weight: 580;
+}
+
+.creditCard {
+    height: calc(100vh - 310px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}

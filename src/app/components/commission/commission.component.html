@@ -1,0 +1,345 @@
+<title>Bank Commission</title>
+<app-breadcrumb [title]="'Bank Commission'" [active_item]="'Bank Commission'">
+</app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+
+            <mat-drawer-container class="example-container" autosize>
+                <div class="card">
+                    <div class="card-header p-1">
+                        <div class="d-flex justify-content-between">
+                            <div class="main-header-left ">
+                            </div>
+                            <div ngbDropdown class="btn-group">
+                                <div class="ml-2">
+                                    <a title="Add Commission" href="javascript:;" class="btn btn-sm btn-info"
+                                        style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                        *ngIf="isWritePermission" (click)="modalOpen(basicmodal)">
+                                        <i class="icon-plus"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-info"
+                                        style="margin-right: 5px;border-radius: 10px;padding:8px 14px"
+                                        title="Filter commission" (click)="drawer.toggle();">
+                                        <i class="icon-filter p-0"></i>
+                                        <span>Filter</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="commissions && commissions.length > 0 else NoCommission">
+                        <div class="table-responsive border-top userlist-table">
+                            <table mat-table [dataSource]="commissions"
+                                class=" maintable mat-elevation-z8 table-striped table-vcenter" aria-label="commission">
+                                <ng-container matColumnDef="id">
+                                    <th mat-header-cell *matHeaderCellDef style="width:75px">#</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:75px">
+                                        {{(paginate.currentPage - 1) * paginate.pageSize + i + 1}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="bankName">
+                                    <th mat-header-cell *matHeaderCellDef>Bank</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.bankName else NoValue">
+                                            {{element.bankName}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="action">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">Action</th>
+                                    <td mat-cell *matCellDef="let element" class="text-right">
+
+                                        <a title="View Bank Commission" href="javascript:;" class="btn btn-sm btn-info"
+                                            style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                            *ngIf="isReadPermission" (click)="getBankCommission(element,basicmodal)">
+                                            <i class="icon-eye"></i>
+                                        </a>
+                                        <a title="Edit Commission" href="javascript:;" class="btn btn-sm btn-info"
+                                            style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                            *ngIf="isEditPermission" (click)="editDialog(element,basicmodal)">
+                                            <i class="icon-pencil"></i>
+                                        </a>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayColumns;" class="student-element-row"
+                                    style="cursor: pointer;"></tr>
+                            </table>
+                        </div>
+                    </ng-container>
+                    <ng-template #NoCommission>
+                        <div class="d-flex vertical-center nodata" style="height:calc(100vh - 260px)">
+                        </div>
+                    </ng-template>
+                    <div class="card-footer" *ngIf="commissions && commissions.length > 0">
+                        <ul class="pagination mb-0 float-right">
+                            <li [ngClass]="{ disabled: paginate.currentPage == 1 }" class="page-item page-prev">
+                                <a class="page-link" href="javascript:;" tabindex="-1"
+                                    (click)="setPage(paginate.currentPage - 1)">
+                                    <span>Prev</span>
+                                </a>
+                            </li>
+                            <li *ngFor="let page of paginate.pages" class="page-item active"
+                                [ngClass]="{ active: paginate.currentPage == page }"><a
+                                    [ngClass]="{current:paginate.currentPage == page}" class="page-link"
+                                    href="javascript:;" (click)="setPage(page)">{{page}}</a></li>
+                            <li [ngClass]="{ disabled: paginate.currentPage === paginate.totalPages}"
+                                (click)="setPage(paginate.currentPage + 1)" class="page-item page-next">
+                                <a class="page-link" href="javascript:;"><span>Next</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <mat-drawer #drawer class="example-sidenav" mode="over" position="end">
+                    <div class="col-lg-12 px-3 pt-3">
+                        <div class="d-inline" style="width: 100%;"><i class="fa fa-filter"><span>Filter</span></i>
+                            <button v class="close" aria-label="Close" (click)="drawer.toggle();">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="position px-3">
+
+                        <div class="form-group mb-2">
+                            <label>Select Bank</label>
+                            <ng-select [items]="bank" class="js-example-basic-single p-0" [(ngModel)]="bankIds"
+                                placeholder="Select Bank" bindLabel="name" bindValue="id" name="bank" [multiple]="true">
+                            </ng-select>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer px-3" style="padding-bottom: 35px;justify-content: center;">
+                        <div class="float-right d-inline">
+                            <button type="button" class="btn btn-info"
+                                style="margin-right: 5px;border-radius:10px;padding:8px 14px" title="Clear Filter"
+                                (click)="drawer.toggle();clearSearch();">
+                                <i class="icon-filter p-0"></i>
+                                <span>Clear</span>
+                            </button>
+                            <button type="button" class="btn btn-info"
+                                style="margin-right: 5px;border-radius: 10px;padding:8px 14px" title="Filter Loans"
+                                (click)="drawer.toggle();setPage(1);">
+                                <i class="icon-filter p-0"></i>
+                                <span>Search</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="px-3">
+                    </div>
+                </mat-drawer>
+            </mat-drawer-container>
+        </div>
+    </div>
+</div>
+<ng-template #basicmodal let-modal>
+    <div>
+        <ng-container *ngIf="isCommissionForm ">
+            <form [formGroup]="commissionForm">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pd-20">
+                    <div class="form-group mb-2">
+                        <label>Select Bank <span style="color: red;">*</span></label>
+                        <ng-select [items]="bank" class="js-example-basic-single p-0" formControlName="bankId"
+                            placeholder="Select Bank" bindLabel="name" bindValue="id" name="bank" required
+                            [readonly]="title == 'Edit Commission'"></ng-select>
+                        <mat-error
+                            *ngIf="(commissionForm.get('bankId') && !commissionForm.get('bankId').valid && commissionForm.get('bankId').touched)">
+                            Bank Selection is required
+                        </mat-error>
+                    </div>
+                    <div class="col-lg-12 pl-0 mb-2"> <a title="Add More Commission" href="javascript:;"
+                            class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                            *ngIf="isWritePermission" (click)="addMoreCommission()">
+                            <i class="icon-plus"></i>
+                        </a></div>
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <div class="form-group">
+                                <label>Select Service <span style="color: red;">*</span></label>
+                                <ng-select [items]="services" class="js-example-basic-single p-0"
+                                    formControlName="serviceId" placeholder="Select Service" bindLabel="displayName"
+                                    bindValue="id" name="service" required>
+                                </ng-select>
+                                <mat-error
+                                    *ngIf="(commissionForm.get('serviceId') && !commissionForm.get('serviceId').valid && commissionForm.get('serviceId').touched)">
+                                    Service is required
+                                </mat-error>
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="form-group">
+                                <label for="name">Commission(In %) <span style="color: red;">*</span></label>
+                                <input class="form-control" type="text" id="commission" formControlName="commission"
+                                    placeholder="Type here" required onlyNumbers>
+                                <mat-error
+                                    *ngIf="(commissionForm.get('commission') && !commissionForm.get('commission').valid && commissionForm.get('commission').touched)">
+                                    commission is required
+                                </mat-error>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 d-flex" style="align-items: center;">
+
+                            <a title="Add More Commission" href="javascript:;" class="btn btn-sm btn-info"
+                                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" *ngIf="isWritePermission"
+                                (click)="addMoreCommission()">
+                                <i class="icon-save"></i>
+                            </a>
+                            <a title="Cancel Commission" href="javascript:;" class="btn btn-sm btn-info"
+                                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" *ngIf="isEditPermission"
+                                (click)="resetCommission()">
+                                <i class="icon-close"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="bankCommissions && bankCommissions.length > 0">
+                        <div class="table-responsive border-top userlist-table">
+                            <table mat-table [dataSource]="bankCommissions"
+                                class="morecommissiontable mat-elevation-z8 table-striped table-vcenter" aria-label="">
+                                <ng-container matColumnDef="id">
+                                    <th mat-header-cell *matHeaderCellDef style="width:75px">#</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:75px">
+                                        {{i + 1}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="serviceName">
+                                    <th mat-header-cell *matHeaderCellDef>Service</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.serviceName else NoValue">
+                                            {{element.serviceName}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="commission">
+                                    <th mat-header-cell *matHeaderCellDef>Commission</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.commission else NoValue">
+                                            {{element.commission}}%
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="createdDate">
+                                    <th mat-header-cell *matHeaderCellDef>Created Date</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                        <ng-container *ngIf="element.createdDate else NoValue">
+                                            {{element.createdDate | date:'medium'}}
+                                        </ng-container>
+                                        <ng-template #NoValue>
+                                            <span class="text-center">--</span>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="action">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">Action</th>
+                                    <td mat-cell *matCellDef="let element;let i =index" class="text-right">
+                                        <a title="Edit Commission" href="javascript:;" class="btn btn-sm btn-info"
+                                            style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                            *ngIf="isEditPermission" (click)="editMoreCommissionDialog(element,i)">
+                                            <i class="icon-pencil"></i>
+                                        </a>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayCommissionColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayCommissionColumns;"
+                                    class="student-element-row" style="cursor: pointer;"></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-info" (click)="insertCommission(commissionForm)"
+                        style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                        Save
+                    </button>
+                    <button class="btn btn-sm btn-info" (click)="closeDialog()"
+                        style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+
+        </ng-container>
+        <ng-container *ngIf="isViewCommission">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            <div class="modal-body pd-20">
+                <h4>Bank: <span>{{bankName}}</span> </h4>
+                <div class="table-responsive border-top userlist-table">
+                    <table mat-table [dataSource]="bankCommissions"
+                        class="morecommissiontable mat-elevation-z8 table-striped table-vcenter" aria-label="bankCommission">
+                        <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef style="width:75px">#</th>
+                            <td mat-cell *matCellDef="let element; let i = index;" style="width:75px">
+                                {{i + 1}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="serviceName">
+                            <th mat-header-cell *matHeaderCellDef>Service</th>
+                            <td mat-cell *matCellDef="let element">
+                                <div *ngIf="element.serviceName else NoValue">
+                                    {{element.serviceName}}
+                                </div>
+                                <ng-template #NoValue>
+                                    --
+                                </ng-template>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="commission">
+                            <th mat-header-cell *matHeaderCellDef>Commission</th>
+                            <td mat-cell *matCellDef="let element">
+                                <div *ngIf="element.commission else NoValue">
+                                    {{element.commission}}%
+                                </div>
+                                <ng-template #NoValue>
+                                    --
+                                </ng-template>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="createdDate">
+                            <th mat-header-cell *matHeaderCellDef>Created Date</th>
+                            <td mat-cell *matCellDef="let element; let i = index;">
+                                <ng-container *ngIf="element.createdDate else NoValue">
+                                    {{element.createdDate | date:'medium'}}
+                                </ng-container>
+                                <ng-template #NoValue>
+                                    <span class="text-center">--</span>
+                                </ng-template>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="viewCommissionColumns; sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: viewCommissionColumns;" class="student-element-row"
+                            style="cursor: pointer;"></tr>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info"
+                    style="margin-right: 5px;border-radius: 10px;padding:8px 14px" title="Close Dialog"
+                    (click)="modal.dismiss('Cross click')">
+                    <span>Cancel</span>
+                </button>
+            </div>
+        </ng-container>
+    </div>
+</ng-template>

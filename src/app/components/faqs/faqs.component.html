@@ -1,0 +1,291 @@
+<title>FAQs</title>
+<app-breadcrumb [title]="'FAQs'" [active_item]="'faqs'"></app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-drawer-container class="example-container" autosize>
+                <div class="card">
+                    <div class="card-header p-1">
+                        <div class="d-flex justify-content-between">
+                            <div class="main-header-left "></div>
+                            <div ngbDropdown class="btn-group">
+                                <div class="ml-2">
+                                    <a title="Add FAQ Category" href="javascript:;" class="btn btn-sm btn-info"
+                                        style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                        *ngIf="isWritePermission" (click)="modalOpen(basicmodal)">
+                                        <i class="icon-plus"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <ng-container>
+
+                            <mat-tab-group>
+                                <mat-tab *ngFor="let faqType of faqTypes">
+                                    <ng-template mat-tab-label class="fixed">
+                                        <h2>{{faqType.name}}</h2>
+                                    </ng-template>
+                                    <ng-container class="example-headers-align"
+                                        *ngFor="let faqCategorie of faqCategories">
+                                        <mat-accordion class="exmple-headers-align" hideToggle>
+                                            <mat-expansion-panel class="mt-1" [expanded]="faqCategorie.expanded">
+                                                <mat-expansion-panel-header
+                                                    style="width: 100%; background-color: #dad6ff;">
+                                                    <ng-container>
+                                                        <nav class="navbar navbar-expand-sm"
+                                                            style=" color: #7366ff; font-family: Roboto; width: 100%;">
+                                                            <div class="container-fluid">
+                                                                <a class="navbar-brand"> {{ faqCategorie.categoryName }}
+                                                                </a>
+                                                                <form class="d-flex">
+                                                                    <div class="media-body text-right icon-state">
+                                                                        <label title="Change Status 1" class="switch"
+                                                                            style="top:7px" *ngIf="isEditPermission">
+                                                                                <input type="checkbox"
+                                                                            (click)="changeStatusCategory(faqCategorie)"
+                                                                            [(ngModel)]="faqCategorie.isActive" [checked]="faqCategorie.isActive"><span
+                                                                            class="switch-state"
+                                                                            [ngClass]="faqCategorie.isActive ? 'bg-success' : 'bg-warning'"></span>
+                                                                        </label>
+                                                                    </div>
+                                                                    <a title="Add FAQ" href="javascript:;"
+                                                                        class="btn btn-sm btn-info"
+                                                                        style="padding: 10px 12px;border-radius: 10px;margin:3px;display: flex;align-items: center;"
+                                                                        *ngIf="isWritePermission"
+                                                                        (click)="addfaq(faqmodal, faqCategorie.id, faqType.id)">
+                                                                        <i class="icon-plus"></i>
+                                                                    </a>
+                                                                    <a title="Edit FAQ Category" href="javascript:;"
+                                                                        class="btn btn-sm btn-info"
+                                                                        style="padding: 10px 12px;border-radius: 10px;margin:3px;display: flex;align-items: center;"
+                                                                        *ngIf="isEditPermission"
+                                                                        (click)="editDialog(basicmodal, faqCategorie)">
+                                                                        <i class="icon-pencil"></i>
+                                                                    </a>
+                                                                    <a href="javascript:;" class="btn btn-sm btn-info"
+                                                                        title="View Faqs"
+                                                                        style="padding: 10px 12px;border-radius: 10px;margin:3px;display: flex;align-items: center;">
+                                                                        <i class="fa fa-angle-down"></i>
+                                                                    </a>
+                                                                </form>
+                                                            </div>
+                                                        </nav>
+                                                    </ng-container>
+                                                </mat-expansion-panel-header>
+
+                                                <div *ngFor="let faqs of faqCategorie.faqs">
+
+                                                    <div *ngIf="faqs.faqType == '1' && faqType.id == 1 else NoFaqType">
+                                                        <div class="mt-1 faqque"
+                                                            style="padding: 3px;display: flex;justify-content: space-between;">
+                                                            <div style="display: inline-block; padding-left: 15px;">
+                                                                <h2>
+                                                                    Que. {{ faqs.question }}
+                                                                </h2>
+                                                            </div>
+                                                            <div style="display: flex;">
+                                                                <div class="media-body text-right icon-state">
+                                                                    <label title="Change Status" class="switch"
+                                                                        style="top:7px" *ngIf="isEditPermission">
+                                                                        <input type="checkbox"
+                                                                            (click)="changeStatus(faqs)"
+                                                                            [(ngModel)]="faqs.isActive"><span
+                                                                            class="switch-state"
+                                                                            [ngClass]="faqs.isActive ? 'bg-success' : 'bg-warning'"></span>
+                                                                    </label>
+                                                                </div>
+                                                                <a title="Edit FAQ" href="javascript:;"
+                                                                    class="btn btn-sm btn-info end"
+                                                                    style="border-radius: 10px;margin: 3px;padding: 10px 12px; display: flex; align-items: center;"
+                                                                    *ngIf="isEditPermission"
+                                                                    (click)="editFaq(faqmodal, faqs, faqCategorie.id, faqType.id)">
+                                                                    <i class="icon-pencil"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <h3 style="padding-left: 20px;"> Ans. {{ faqs.answer }} </h3>
+                                                    </div>
+
+                                                    <ng-template #NoFaqType>
+                                                        <div *ngIf="faqs.faqType == '2' && faqType.id == 2">
+                                                            <div class="mt-2"
+                                                                style="background-color: aliceblue; padding: 3px;display: flex;justify-content: space-between;">
+                                                                <div style="display: inline-block; padding-left: 15px;">
+                                                                    <h2>
+                                                                        Que. {{ faqs.question }}</h2>
+                                                                </div>
+                                                                <div style="display: flex;">
+                                                                    <div class="media-body text-right icon-state">
+                                                                        <label title="Change Status" class="switch"
+                                                                            style="top:7px" *ngIf="isEditPermission">
+                                                                            <input type="checkbox"
+                                                                                (click)="changeStatus(faqs)"
+                                                                                [(ngModel)]="faqs.isActive"><span
+                                                                                class="switch-state"
+                                                                                [ngClass]="faqs.isActive ? 'bg-success' : 'bg-warning'"></span>
+                                                                        </label>
+                                                                    </div>
+                                                                    <a title="Edit FAQ" href="javascript:;"
+                                                                        class="btn btn-sm btn-info end"
+                                                                        style="padding: 10px 12px;border-radius: 10px;margin:3px;display: flex;align-items: center;"
+                                                                        *ngIf="isEditPermission"
+                                                                        (click)="editFaq(faqmodal, faqs, faqCategorie.id, faqType.id)">
+                                                                        <i class="icon-pencil"></i>
+                                                                    </a>
+                                                                </div>
+
+                                                            </div>
+                                                            <h3 style="padding-left: 20px;"> Ans. {{ faqs.answer }}
+                                                            </h3>
+                                                        </div>
+                                                    </ng-template>
+
+                                                </div>
+                                                <div class="card-footer"
+                                                    *ngIf="faqCategorie.faqs && faqCategorie.faqs.length > 0">
+                                                    <ul class="pagination mb-0 float-right">
+                                                        <li [ngClass]="{ disabled: faqCategorie.faqPaginate.currentPage == 1 }"
+                                                            class="page-item page-prev">
+                                                            <a class="page-link" href="javascript:;" tabindex="-1"
+                                                                (click)="setPagefaqs(faqPaginate.currentPage - 1)">
+                                                                <span>Prev</span>
+                                                            </a>
+                                                        </li>
+                                                        <li *ngFor="let page of faqCategorie.faqPaginate.pages"
+                                                            class="page-item active"
+                                                            [ngClass]="{ active: faqCategorie.faqPaginate.currentPage == page }">
+                                                            <a [ngClass]="{current:faqCategorie.faqPaginate.currentPage == page}"
+                                                                class="page-link" href="javascript:;"
+                                                                (click)="setPagefaqs(page)">{{page}}</a>
+                                                        </li>
+                                                        <li [ngClass]="{ disabled: faqCategorie.faqPaginate.currentPage === faqCategorie.faqPaginate.totalPages}"
+                                                            (click)="setPagefaqs(faqCategorie.faqPaginate.currentPage + 1)"
+                                                            class="page-item page-next">
+                                                            <a class="page-link"
+                                                                href="javascript:;"><span>Next</span></a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+
+
+                                            </mat-expansion-panel>
+                                        </mat-accordion>
+                                    </ng-container>
+                                </mat-tab>
+                            </mat-tab-group>
+
+
+
+                        </ng-container>
+
+                        <ng-template #NoFaqCategories>
+                            <div class="d-flex vertical-center nodata" style="height:calc(100vh - 260px)">
+                            </div>
+                        </ng-template>
+
+                    </div>
+
+                    <div class="card-footer" *ngIf="faqCategories && faqCategories.length > 0">
+                        <ul class="pagination mb-0 float-right">
+                            <li [ngClass]="{ disabled: paginate.currentPage == 1 }" class="page-item page-prev">
+                                <a class="page-link" href="javascript:;" tabindex="-1"
+                                    (click)="setPage(paginate.currentPage - 1)">
+                                    <span>Prev</span>
+                                </a>
+                            </li>
+                            <li *ngFor="let page of paginate.pages" class="page-item active"
+                                [ngClass]="{ active: paginate.currentPage == page }"><a
+                                    [ngClass]="{current:paginate.currentPage == page}" class="page-link"
+                                    href="javascript:;" (click)="setPage(page)">{{page}}</a></li>
+                            <li [ngClass]="{ disabled: paginate.currentPage === paginate.totalPages}"
+                                (click)="setPage(paginate.currentPage + 1)" class="page-item page-next">
+                                <a class="page-link" href="javascript:;"><span>Next</span></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </mat-drawer-container>
+        </div>
+    </div>
+</div>
+
+<ng-template #basicmodal let-modal>
+    <div>
+        <form [formGroup]="faqCategoriesform">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-20">
+                <div class="form-group">
+                    <label for="categoryName">Category Name <span style="color: red;">*</span></label>
+                    <input class="form-control" type="text" name="categoryName" formControlName="categoryName" required
+                        onlyAlphabets>
+                    <mat-error
+                        *ngIf="(faqCategoriesform.get('categoryName') && !faqCategoriesform.get('categoryName').valid && faqCategoriesform.get('categoryName').touched)">
+                        Category Name is required
+                    </mat-error>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-info" (click)="insertUpdateFaqCategories()"
+                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                    Save
+                </button>
+                <button class="btn btn-sm btn-info" (click)="cancelUser()"
+                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #faqmodal let-modal>
+    <div>
+        <form [formGroup]="faqform">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pd-20">
+                <div class="form-group">
+                    <label for="question">Question <span style="color: red;">*</span></label>
+                    <input class="form-control" type="text" name="question" formControlName="question" required>
+                    <mat-error
+                        *ngIf="(faqform.get('question') && !faqform.get('question').valid && faqform.get('question').touched)">
+                        Question is required
+                    </mat-error>
+                </div>
+                <div class="form-group">
+                    <label for="answer">Answer <span style="color: red;">*</span></label>
+                    <angular-editor formControlName="answer" [config]="config" name="answer" class="mt-2">
+                    </angular-editor>
+                    <mat-error
+                        *ngIf="(faqform.get('answer') && !faqform.get('answer').valid && faqform.get('answer').touched)">
+                        Answer is required
+                    </mat-error>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-info" (click)="insertUpdateFaqs()"
+                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                    Save
+                </button>
+                <button class="btn btn-sm btn-info" (click)="cancelUser()"
+                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

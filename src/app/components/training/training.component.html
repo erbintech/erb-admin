@@ -1,0 +1,434 @@
+<title>Training</title>
+<app-breadcrumb [title]="'Trainings'" [active_item]="'Trainings'">
+</app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-drawer-container class="example-container" autosize>
+                <div class="card">
+                    <div class="card-header p-1">
+                        <div class="d-flex justify-content-between">
+                            <div class="main-header-left ">
+                            </div>
+                            <div ngbDropdown class="btn-group">
+                                <div class="ml-2">
+                                    <a title="Add Training" href="javascript:;" class="btn btn-sm btn-info"
+                                        style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                        *ngIf="isWritePermission" (click)="modalOpen(basicmodal)">
+                                        <i class="icon-plus"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-info"
+                                        style="margin-right: 5px;border-radius: 0.25rem;padding:8px 14px"
+                                        title="Filter Traning" (click)="drawer.toggle();">
+                                        <i class="icon-filter p-0"></i>
+                                        <span>Filter</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="listContent">
+                        <ng-container *ngIf="trainings && trainings.length > 0 else NoTraining">
+                            <div class="file-content border-top">
+                                <div class="p-1 file-manager data">
+                                    <div class="row files mx-0">
+                                        <div class="col-lg-4 col-md-6 col-sm-12 mt-2" *ngFor="let train of trainings">
+                                            <div class="form-control document">
+                                                <a href="{{train.url}}" target="_blank" type="upload" id="resume">
+                                                    <h3 class="text-dark title"> {{train.title}}</h3>
+                                                    <div>
+                                                        <div class="fileUpload text-center">
+                                                            <i *ngIf="train.documentType == 'text/plain' || train.documentType=='docx' || train.documentType=='doc'"
+                                                                class="fa fa-file-text-o txt-info"></i>
+                                                            <i *ngIf="train.documentType == 'webLink'"
+                                                                class="fa fa-link txt-info"></i>
+                                                            <i *ngIf="train.documentType == 'mp4' || train.documentType == 'mp3'"
+                                                                class="fa fa-file-video-o txt-info"></i>
+                                                            <i *ngIf="train.documentType == 'pdf'"
+                                                                class="fa fa-file-pdf-o txt-info"></i>
+                                                            <i *ngIf="train.documentType == 'jpeg' || train.documentType == 'png' || train.documentType == 'jpg'"
+                                                                class="fa fa-file-image-o txt-info"></i>
+                                                            <i *ngIf="train.documentType == 'pptx' || train.documentType == 'ppt'"
+                                                                class="fa fa-file-powerpoint-o txt-info"></i>
+                                                        </div>
+                                                        <div>
+                                                            <h6 *ngIf="train.documentType!='webLink' " class="fileName">
+                                                                {{train.fileName}} </h6>
+                                                            <h6 *ngIf="train.documentType == 'webLink' "
+                                                                class="fileName">
+                                                                {{train.url}} </h6>
+                                                            <div style="height:130px">
+                                                                <h6 class="text-dark">Training Category:
+                                                                    {{train.categoryName}}
+                                                                </h6>
+                                                                <h6 *ngIf="train.subCategoryName" class="text-dark">
+                                                                    Training
+                                                                    SubCategory: {{train.subCategoryName}}
+                                                                </h6>
+                                                                <h6 *ngIf="train.roleName" class="text-dark">
+                                                                    Assign Role: {{train.roleName}}
+                                                                </h6>
+                                                                <h6 *ngIf="train.completionTimeString"
+                                                                    class="text-dark">
+                                                                    Completion Time: {{train.completionTimeString}}
+                                                                </h6>
+                                                                <h6 *ngIf="train.createdDate" class="text-dark">
+                                                                    Created Date: {{train.createdDate | date:'medium'}}
+                                                                </h6>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <div class="d-inline">
+                                                    <a title="Edit Training" href="javascript:;"
+                                                        class="btn btn-sm btn-info"
+                                                        style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                                        *ngIf="isEditPermission" (click)="editDialog(train,basicmodal)">
+                                                        <i class="icon-pencil"></i>
+                                                    </a>
+                                                    <a title="Delete Training" href="javascript:;"
+                                                        class="btn btn-sm btn-info"
+                                                        style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                                        *ngIf="isDeletePermission" (click)="deleteDialog(train)">
+                                                        <i class="icon-trash"></i>
+                                                    </a>
+                                                    <a title="Assign Partners" href="javascript:;"
+                                                        class="btn btn-sm btn-info"
+                                                        style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                                        *ngIf="isEditPermission"
+                                                        (click)="assignUsers(train,basicmodal);getUser(1,'DSA')">
+                                                        <i class="icon-control-forward"></i>
+                                                    </a>
+                                                </div>
+                                                <div class="media-body icon-state d-inline">
+                                                    <label title="Active Inactive Training" class="switch"
+                                                        style="top:22px;margin-left:4px">
+                                                        <input type="checkbox" *ngIf="isEditPermission"
+                                                            (click)="changeStatus(train)"
+                                                            [(ngModel)]="train.isActive"><span class="switch-state"
+                                                            [ngClass]="train.isActive ? 'bg-success' : 'bg-warning'"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+
+
+                        <ng-template #NoTraining>
+                            <div class="d-flex vertical-center nodata" style="height:calc(100vh - 260px)">
+                            </div>
+                        </ng-template>
+                    </div>
+                    <div class="card-footer" *ngIf="trainings && trainings.length > 0">
+                        <ul class="pagination mb-0 float-right">
+                            <li [ngClass]="{ disabled: paginate.currentPage == 1 }" class="page-item page-prev">
+                                <a class="page-link" href="javascript:;" tabindex="-1"
+                                    (click)="setPage(paginate.currentPage - 1)">
+                                    <span>Prev</span>
+                                </a>
+                            </li>
+                            <li *ngFor="let page of paginate.pages" class="page-item active"
+                                [ngClass]="{ active: paginate.currentPage == page }"><a
+                                    [ngClass]="{current:paginate.currentPage == page}" class="page-link"
+                                    href="javascript:;" (click)="setPage(page)">{{page}}</a></li>
+                            <li [ngClass]="{ disabled: paginate.currentPage === paginate.totalPages}"
+                                (click)="setPage(paginate.currentPage + 1)" class="page-item page-next">
+                                <a class="page-link" href="javascript:;"><span>Next</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <mat-drawer #drawer class="example-sidenav" mode="over" position="end">
+                    <div class="col-lg-12 px-3 pt-3">
+                        <div class="d-inline" style="width: 100%;"><i class="fa fa-filter"><span>Filter</span></i>
+                            <button v class="close" aria-label="Close" (click)="drawer.toggle();">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="position px-3">
+                        <div class="form-group">
+                            <input class="form-control" type="text" id="search" [(ngModel)]="searchString"
+                                placeholder="search" required>
+                        </div>
+                        <div class="form-group">
+                            <ng-select [items]="trainingCategories" class="js-example-basic-single p-0"
+                                placeholder="Search by Training Category" bindLabel="name" bindValue="id" name="id"
+                                [(ngModel)]="selectedCategory" [multiple]="true"></ng-select>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer p-0" style="margin-bottom: 20px;justify-content: center;">
+                        <div class="float-right d-inline">
+                            <button type="button" class="btn btn-info"
+                                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" title="Clear Filter"
+                                (click)="drawer.toggle();clearSearch();">
+                                <span>Clear</span>
+                            </button>
+                            <button type="button" class="btn btn-info"
+                                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" title="Filter Loans"
+                                (click)="drawer.toggle();setPage(1);">
+                                <span>Search</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="px-3">
+                    </div>
+                </mat-drawer>
+            </mat-drawer-container>
+        </div>
+    </div>
+</div>
+<ng-template #basicmodal let-modal>
+    <div>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+            <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <ng-container *ngIf="!assignUserList">
+            <form #TrainingForm="ngForm">
+                <div class="modal-body pd-20">
+                    <div class="form-group">
+                        <label for="name">Title <span style="color: red;">*</span></label>
+                        <input class="form-control" type="text" name="tTitle" [(ngModel)]="training.title"
+                            #Title="ngModel" required>
+                        <mat-error *ngIf="(Title.touched) && (Title.errors && Title.errors['required'])">
+                            Title is required
+                        </mat-error>
+                    </div>
+                    <div class="form-group mb-2">
+                        <div class="col-form-label">Select Training Category <span style="color: red;">*</span></div>
+                        <ng-select [items]="trainingCategories" class="js-example-basic-single p-0"
+                            [(ngModel)]="training.trainingCategoryId" placeholder="Select Training Category"
+                            bindLabel="name" bindValue="id" name="trainingCategory" required #Category="ngModel"
+                            (change)="getTrainingSubCategory(training.trainingCategoryId)">
+                        </ng-select>
+                        <mat-error *ngIf="(Category.touched) && (Category.errors && Category.errors['required'])">
+                            Training Category is required
+                        </mat-error>
+                    </div>
+                    <div *ngIf="training.trainingCategoryId && trainingSubCategories && trainingSubCategories.length > 0"
+                        class="form-group mb-2">
+                        <div class="col-form-label">Select Training Sub Category</div>
+                        <ng-select [items]="trainingSubCategories" class="js-example-basic-single p-0"
+                            [(ngModel)]="training.trainingSubCategoryId" placeholder="Select Training SubCategory"
+                            bindLabel="name" bindValue="id" name="trainingSubCategory">
+                        </ng-select>
+                    </div>
+                    <div class="form-group mb-2">
+                        <div class="col-form-label">Select Role</div>
+                        <ng-select [items]="roles" class="js-example-basic-single p-0" [(ngModel)]="training.assignRole"
+                            placeholder="Select Assign Role" bindLabel="name" bindValue="id" name="roleId"
+                            [multiple]="true">
+                        </ng-select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-lg-8">
+                            <label for="name">Completion Time <span style="color: red;">*</span></label>
+                            <input class="form-control" type="text" name="tTime" [(ngModel)]="training.completionTime"
+                                #completionTime="ngModel" required onlyNumbers>
+                            <mat-error
+                                *ngIf="(completionTime.touched) && (completionTime.errors && completionTime.errors['required'])">
+                                Completion Time is required
+                            </mat-error>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label class="ml-2" for="name">Select Interval <span style="color: red;">*</span></label>
+                            <ng-select [items]="intervals" class="js-example-basic-single p-0 form-control ml-2"
+                                [(ngModel)]="interval" bindLabel="name" bindValue="name" name="interval" required>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group m-t-15 ml-1 d-inline">
+                            <div class="checkbox checkbox-info d-inline">
+                                <button class="btn btn-sm btn-info imagebtn">
+                                    <input id="checkbox-info-1" type="checkbox" [checked]="isUploadedUrl"
+                                        (change)="uploadUrl($event)">
+                                    <label for="checkbox-info-1" class=" pl-1 my-0">Upload Url</label>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="d-inline ml-2">
+                            <button *ngIf="!isUploadedUrl" (click)="fileInput.click()"
+                                class="btn btn-sm btn-info imagebtn">
+                                <i class="fa fa-upload fa-sm text-light pr-1"></i> Upload
+                                <input type="file" #fileInput id="uploadFile" (change)="selectedImage($event)"
+                                    name="photo" accept="application/pdf" style="display:none;" />
+                            </button>
+                        </div>
+                        <div>
+                            <div *ngIf="isUploadedUrl" class="form-group mt-2">
+                                <label for="name">Url</label>
+                                <input class="form-control" type="text" name="Url" [(ngModel)]="url" required>
+                            </div>
+                            <div *ngIf="(!url && !isUploadedUrl)" class="uploadDocument">
+                                <i class="fa fa-file-text-o txt-info"></i>
+                            </div>
+                            <div *ngIf="url && training.documentType !='webLink' && !isUploadedUrl">
+                                <div class="file-content">
+                                    <div class="p-1 file-manager">
+                                        <ul class="files">
+                                            <li class="file-box m-1 w-100" (click)="debugBase64(url)" target="_blank">
+                                                <div class="file-top">
+                                                    <i *ngIf="documentType == 'pdf' || documentType == 'application/pdf'"
+                                                        class="fa fa-file-pdf-o txt-info"></i>
+                                                    <i *ngIf=" documentType == 'text/plain' || documentType == 'docx' || documentType == 'doc'"
+                                                        class="fa fa-file-pdf-o txt-info"></i>
+
+                                                    <i *ngIf="documentType == 'mp4' || documentType == 'video/mp4'"
+                                                        class="fa fa-file-video-o txt-info"></i>
+
+                                                    <i *ngIf="documentType == 'jpeg' || documentType == 'png'"
+                                                        class="fa fa-file-image-o txt-info"></i>
+
+                                                    <i *ngIf="documentType == 'pptx' || documentType == 'ppt'"
+                                                        class="fa fa-file-powerpoint-o txt-info"></i>
+                                                </div>
+                                                <div class="file-bottom">
+                                                    <h6 class="fileName">{{training.fileName}} </h6>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </form>
+        </ng-container>
+        <ng-container *ngIf="assignUserList">
+            <div class="modal-body p-0">
+                <div class="row my-2">
+                    <div class="col-lg-8 pl-4">
+                        <span style="font-weight:500">Title: </span> {{training.title}}<br>
+                        <span style="font-weight:500"> Category: </span> {{training.categoryName}}<br>
+                    </div>
+
+                </div>
+                <div class="col-lg-12">
+                    <div class="form-group mb-2" *ngIf="training.assignUsers && training.assignUsers.length > 0">
+                        <div class="col-form-label">
+                            Select User Role</div>
+                        <ng-select [items]="userRoles" [closeOnSelect]="false" class="js-example-basic-single p-0"
+                            [(ngModel)]="selectedRoles" placeholder="Select userRoles" bindLabel="name" bindValue="id"
+                            name="role" [multiple]="true" (change)="getTrainingAssignUser(1)">
+                            <ng-template ng-header-tmp let-items="items">
+                                <input type="checkbox" (change)="toggleCheckAll($event)" />
+                            </ng-template>
+                            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                                <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.name}}
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                    <ng-container *ngIf="training.assignUsers && training.assignUsers.length > 0 else NoAssignUsers">
+                        <div class="table-responsive border-top userlist-table">
+                            <table mat-table [dataSource]="training.assignUsers"
+                                class=" maintable mat-elevation-z8 table-striped table-vcenter border-top"
+                                style="box-shadow: none;" aria-label="">
+                                <ng-container matColumnDef="id">
+                                    <th mat-header-cell *matHeaderCellDef style="width:75px">#</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:75px">
+                                        {{(assignUserPaginate.currentPage - 1) * assignUserPaginate.pageSize + i + 1}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="User">
+                                    <th mat-header-cell *matHeaderCellDef>User</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.fullName}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="ContactNo">
+                                    <th mat-header-cell *matHeaderCellDef>ContactNo</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.contactNo}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="Role">
+                                    <th mat-header-cell *matHeaderCellDef>Role</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.roleName}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="Status">
+                                    <th mat-header-cell *matHeaderCellDef>Training Status</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.trainingStatus}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="completeTime">
+                                    <th mat-header-cell *matHeaderCellDef>Stay Time</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <ng-container
+                                            *ngIf="element.stayTiming && element.stayTiming > 0 else NoTiming">
+                                            {{element.stayTimingString}}</ng-container>
+                                        <ng-template #NoTiming>--</ng-template>
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayColumns;" class="student-element-row"
+                                    style="cursor: pointer;"></tr>
+
+                            </table>
+                        </div>
+                    </ng-container>
+                    <ng-template #NoAssignUsers>
+                        <div class="d-flex vertical-center nodata" style="height:calc(100vh - 260px)">
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+
+        </ng-container>
+
+        <div class="modal-footer">
+            <ng-container *ngIf="!assignUserList">
+                <button *ngIf="!assignUserList" class="btn btn-info" (click)="insertTraining()"
+                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                    Save
+                </button>
+
+                <button class="btn btn-info" (click)="closeDialog()"
+                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                    Cancel
+                </button>
+            </ng-container>
+            <div class="col-lg-12" *ngIf="assignUserList">
+
+                <ng-container *ngIf="training.assignUsers && training.assignUsers.length > 0">
+                    <ul class="pagination mb-0 float-left">
+                        <li [ngClass]="{ disabled: assignUserPaginate.currentPage == 1 }" class="page-item page-prev">
+                            <a class="page-link" href="javascript:;" tabindex="-1"
+                                (click)="getTrainingAssignUser(assignUserPaginate.currentPage - 1)">
+                                <span>Prev</span>
+                            </a>
+                        </li>
+                        <li *ngFor="let page of assignUserPaginate.pages" class="page-item active"
+                            [ngClass]="{ active: assignUserPaginate.currentPage == page }"><a
+                                [ngClass]="{current:assignUserPaginate.currentPage == page}" class="page-link"
+                                href="javascript:;" (click)="getTrainingAssignUser(page)">{{page}}</a>
+                        </li>
+                        <li [ngClass]="{ disabled: assignUserPaginate.currentPage === assignUserPaginate.totalPages}"
+                            (click)="getTrainingAssignUser(assignUserPaginate.currentPage + 1)"
+                            class="page-item page-next">
+                            <a class="page-link" href="javascript:;"><span>Next</span></a>
+                        </li>
+                    </ul>
+                </ng-container>
+            </div>
+
+
+        </div>
+    </div>
+</ng-template>

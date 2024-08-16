@@ -1,0 +1,86 @@
+<title>News Letter Subscription</title>
+<app-breadcrumb [title]="'News Letter Subscription'" [active_item]="'NewsLetterSubscription'"></app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-drawer-container class="example-container" autosize>
+                <div class="card">
+                    <div class="card-header p-1">
+                        <div class="d-flex justify-content-between">
+                            <div class="main-header-left "></div>
+                            <div ngbDropdown class="btn-group">
+                                <div class="ml-2">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ng-container
+                        *ngIf="newsLetterSubscriptions && newsLetterSubscriptions.length > 0 else NoNewsLetterSubscriptions">
+                        <div class="table-responsive border-top userlist-table">
+                            <table mat-table [dataSource]="newsLetterSubscriptions"
+                                class="maintable mat-elevation-z8 table-striped table-vcenter" aria-label="">
+                                <ng-container matColumnDef="id">
+                                    <th mat-header-cell *matHeaderCellDef style="width:7%">#</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;" style="width: 7%">
+                                        {{(paginate.currentPage - 1) * paginate.pageSize + i + 1}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="email">
+                                    <th mat-header-cell *matHeaderCellDef>Email Id</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.email else NoValue">
+                                            {{element.email}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="createdDate">
+                                    <th mat-header-cell *matHeaderCellDef>Created Date</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.createdDate else NoValue">
+                                            {{element.createdDate | date:'medium'}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayColumns;" class="student-element-row"
+                                    style="cursor: pointer;"></tr>F
+                            </table>
+                        </div>
+                    </ng-container>
+
+                    <ng-template #NoNewsLetterSubscriptions>
+                        <div class="d-flex vertical-center nodata" style="height:calc(100vh - 260px)">
+                        </div>
+                    </ng-template>
+
+                    <div class="card-footer" *ngIf="newsLetterSubscriptions && newsLetterSubscriptions.length > 0">
+                        <ul class="pagination mb-0 float-right">
+                            <li [ngClass]="{ disabled: paginate.currentPage == 1 }" class="page-item page-prev">
+                                <a class="page-link" href="javascript:;" tabindex="-1"
+                                    (click)="setPage(paginate.currentPage - 1)">
+                                    <span>Prev</span>
+                                </a>
+                            </li>
+                            <li *ngFor="let page of paginate.pages" class="page-item active"
+                                [ngClass]="{ active: paginate.currentPage == page }"><a
+                                    [ngClass]="{current:paginate.currentPage == page}" class="page-link"
+                                    href="javascript:;" (click)="setPage(page)">{{page}}</a></li>
+                            <li [ngClass]="{ disabled: paginate.currentPage === paginate.totalPages}"
+                                (click)="setPage(paginate.currentPage + 1)" class="page-item page-next">
+                                <a class="page-link" href="javascript:;"><span>Next</span></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </mat-drawer-container>
+        </div>
+    </div>
+</div>

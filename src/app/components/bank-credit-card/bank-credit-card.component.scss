@@ -1,0 +1,112 @@
+::ng-deep .modal-backdrop.show {
+    z-index: 1050 !important;
+}
+
+.mainCard {
+    height    : calc(100vh - 200px);
+    overflow-x: auto;
+}
+
+.card-footer {
+    padding: 10px !important;
+}
+
+.listContent {
+    overflow: auto
+}
+
+::ng-deep .mat-drawer-inner-container {
+    overflow: auto !important;
+}
+
+.modal-title {
+    font-weight  : 500 !important;
+    font-size    : 18px !important;
+    margin-bottom: 0 !important;
+    line-height  : 1.2 !important;
+}
+
+.input-icons mat-icon {
+    position  : absolute;
+    text-align: end;
+    float     : right;
+    right     : 15px;
+    padding   : 7px !important;
+}
+
+.input-icons {
+    width        : 100%;
+    margin-bottom: 10px;
+}
+
+.icon {
+    padding  : 10px;
+    min-width: 50px;
+}
+
+.input-field {
+    width  : 100%;
+    padding: 10px;
+}
+
+input.upload {
+    opacity : 0;
+    position: absolute;
+    cursor  : pointer;
+}
+
+.image {
+    height    : 250px;
+    object-fit: contain;
+
+}
+
+.image img {
+    height    : 100%;
+    object-fit: contain;
+    width     : 100%
+}
+
+.imagebtn {
+    padding: 5px 10px;
+}
+
+
+::ng-deep .mat-error {
+    font-size: 12px !important;
+}
+
+.dot-label {
+    width        : 6px;
+    height       : 6px;
+    border-radius: 50%;
+    animation    : ani 1s linear infinite;
+    left         : 7px;
+    bottom       : -12px;
+    margin-top   : 2px;
+}
+
+.text-success span {
+    font-size: 14px;
+}
+
+.text-warning span {
+    font-size: 14px;
+}
+
+.modal-body {
+    height  : calc(100vh - 200px);
+    overflow: auto;
+}
+
+@media screen and (min-width: 400px) {
+    .image {
+        width: 330px;
+    }
+}
+
+.position {
+    height    : calc(100vh - 311px);
+    overflow-x: hidden;
+    overflow-y: auto;
+}

@@ -1,0 +1,214 @@
+<title>Customers</title>
+<div *ngIf="customerId else Add">
+    <app-breadcrumb [title]="'Customers'" [items]="[{'name':'Customers', 'route':'/customers'}]" [active_item]="'Edit'"></app-breadcrumb>
+</div>
+<ng-template #Add>
+    <app-breadcrumb [title]="'Customer'" [items]="[{'name':'Customers', 'route':'/customers'}]" [active_item]="'Add'"></app-breadcrumb>
+</ng-template>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <app-alert *ngIf="isAlert" class="alert-top" [alertType]="alertType" [alertErrorMessage]="alertMessage">
+            </app-alert>
+            <div class="card">
+                <div class="p-4">
+                    <form [formGroup]="customerform">
+
+                        <div>
+                            <h2>Personal Detail</h2>
+                            <div class="form-row">
+                                <div class="col-lg-2 col-md-2 col-sm-12">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <div class="main-contact-info-header p-2">
+                                                <div *ngIf="!url else upload">
+                                                    <img src="../../../assets/images/userprofile.png" class="rounded-pill" width="105px" height="105px" alt="" (click)="fileInput.click()" />
+                                                </div>
+                                                <ng-template #upload>
+                                                    <img [src]="url" class="rounded-pill" width="105px" height="105px" alt="" (click)="fileInput.click()" />
+                                                </ng-template>
+                                            </div>
+                                            <a>
+                                                <input type="file" #fileInput id="uploadFile" name="profilePicUrl" accept="image/*" style="display:none;" (change)="selectedImage($event)" />
+                                            </a>
+                                            <div class="center">
+                                                <button class="p-2 text-black" *ngIf="this.url && this.url.length > 0" (click)="removeImage()"
+                                                    style="text-align:center; border: none; border-radius:40%; font-size: 20px;">
+                                                    <i class="icon-trash"></i>
+                                                </button>
+                                                <button class="p-2 text-black" *ngIf="!this.url" style="text-align:center; border: none; border-radius:40%; font-size: 18px;">
+                                                    <i class="icon-gallery" (click)="fileInput.click()"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-10 col-md-10 col-sm-12">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="fullName">Full Name <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" id="fullName" name="fullName" formControlName="fullName" onlyAlphabets placeholder="Type here" required />
+                                            <mat-error *ngIf="(customerform.get('fullName') && !customerform.get('fullName')?.valid && customerform.get('fullName')?.touched)">
+                                                Full Name is required
+                                            </mat-error>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="contactNo">Contact No <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" maxlength="10" minlength="10" id="contactNo" name="contactNo" formControlName="contactNo"
+                                                placeholder="Enter your mobile no" ContactNo required>
+                                            <mat-error *ngIf="(customerform.get('contactNo') && !customerform.get('contactNo').valid  && customerform.get('contactNo').touched)">
+                                                <span *ngIf="customerform.get('contactNo').errors.required">
+                                                    Contact No is Required</span>
+                                                <span *ngIf="customerform.get('contactNo').errors.minlength">Enter
+                                                    Valid Contact No</span>
+                                            </mat-error>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="aadhaarCardNo">Aadhaar Card No <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" id="aadhaarCardNo" formControlName="aadhaarCardNo" placeholder="Type here" maxlength="12" onlyNumbers required>
+                                            <mat-error *ngIf="(customerform.get('aadhaarCardNo') && !customerform.get('aadhaarCardNo')?.valid && customerform.get('aadhaarCardNo')?.touched)">
+                                                Aadhaar Card no is required
+                                            </mat-error>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="panCardNo">PAN Card No <span style="color: red;">*</span></label>
+                                            <input class="form-control" type="text" id="panCardNo" formControlName="panCardNo" placeholder="Enter your pan card no" maxlength="10"
+                                                oninput="this.value = this.value.toUpperCase()" required>
+                                            <mat-error *ngIf="(customerform.get('panCardNo') && !customerform.get('panCardNo')?.valid && customerform.get('panCardNo')?.touched)">
+                                                <span *ngIf="customerform.get('panCardNo').errors.required">PanCardNo
+                                                    is Required</span>
+                                                <span *ngIf="customerform.get('panCardNo').errors.pattern">Enter
+                                                    Valid PanCard</span>
+                                            </mat-error>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="email">Email Id</label>
+                                    <input class="form-control" type="text" id="email" formControlName="email" placeholder="Enter your email">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Date of Birth <span style="color: red;">*</span></label>
+                                    <mat-form-field appearance="outline" class="birthdate w-100" (click)="toggleMenuService.togglePickerStyles()">
+                                        <input matInput [matDatepicker]="filterPickerFrom" placeholder="Select Birthdate" formControlName="birthDate" name="birthDate" [readonly]="true"
+                                            (focus)="filterPickerFrom.open()" (click)="filterPickerFrom.open();toggleMenuService.togglePickerStyles()">
+                                        <mat-datepicker-toggle matSuffix [for]="filterPickerFrom" (click)="toggleMenuService.togglePickerStyles()">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #filterPickerFrom></mat-datepicker>
+                                    </mat-form-field>
+                                    <mat-error *ngIf="(customerform.get('birthDate') && !customerform.get('birthDate')?.valid && customerform.get('birthDate')?.touched)">
+                                        Birthdate is required
+                                    </mat-error>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="maritalStatusId">Marital Status <span style="color: red;">*</span></label>
+                                    <ng-select [items]="maritalStatuses" class="js-example-basic-single p-0" placeholder="Select Marital Status" bindLabel="status" bindValue="id"
+                                        name="maritalStatusId" formControlName="maritalStatusId"></ng-select>
+                                    <mat-error *ngIf="(customerform.get('maritalStatusId') && !customerform.get('maritalStatusId')?.valid && customerform.get('maritalStatusId')?.touched)">
+                                        Marital Status is required
+                                    </mat-error>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="fullName">Cibil Score</label>
+                                    <input class="form-control" type="text" id="cibilScore" name="cibilScore" formControlName="cibilScore" onlyNumbers placeholder="Type here" />
+                                </div>
+                                <div class="form-group col-md-4" style="padding-left: 30px;">
+                                    <label for="gender">Gender <span style="color: red;">*</span></label>
+                                    <div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" id="radioinline1" type="radio" value="Male" name="gender" formControlName="gender">
+                                            <label class="form-check-label" for="radioinline1">Male</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" id="radioinline2" type="radio" value="Female" name="gender" formControlName="gender">
+                                            <label class="form-check-label" for="radioinline2">Female</label>
+                                        </div>
+                                    </div>
+                                    <mat-error *ngIf="(customerform.get('gender') && !customerform.get('gender')?.valid && !customerform.get('gender')?.touched)">
+                                        Gender is required
+                                    </mat-error>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div>
+                            <h2>Address</h2>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="label">Company Name <span style="color: red;">*</span></label>
+                                    <input class="form-control" type="text" id="email" formControlName="label" placeholder="Type here" required>
+                                    <mat-error *ngIf="(customerform.get('label') && !customerform.get('label')?.valid && customerform.get('label')?.touched)">
+                                        Company Name is required
+                                    </mat-error>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="pincode">Pin Code <span style="color: red;">*</span></label>
+                                    <input class="form-control" type="text" id="pincode" formControlName="pincode" placeholder="Type here" required (keyup)="onKeyUpEvent($event,true)" onlyNumbers>
+                                    <mat-error *ngIf="(customerform.get('pincode') && !customerform.get('pincode')?.valid && customerform.get('pincode')?.touched)">
+                                        Pincode is required
+                                    </mat-error>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="addressLine1">Address Line 1 <span style="color: red;">*</span></label>
+                                    <input class="form-control" type="text" id="addressLine1" formControlName="addressLine1" placeholder="Type here" name="addressLine1" required />
+                                    <mat-error *ngIf="(customerform.get('addressLine1') && !customerform.get('addressLine1')?.valid && customerform.get('addressLine1')?.touched)">
+                                        AddressLine1 is required
+                                    </mat-error>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="addressLine2">Address Line 2</label>
+                                    <input class="form-control" type="text" id="addressLine2" formControlName="addressLine2" placeholder="Type here" name="addressLine2" />
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="cityId">City <span style="color: red;">*</span></label>
+                                    <ng-select [items]="cities" class="js-example-basic-single p-0" placeholder="Select city" bindLabel="name" bindValue="id" name="cityId" formControlName="cityId"
+                                        name="cityId"></ng-select>
+                                    <mat-error *ngIf="(customerform.get('cityId') && !customerform.get('cityId')?.valid && customerform.get('cityId')?.touched)">
+                                        City is required
+                                    </mat-error>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="districtName">District <span style="color: red;">*</span></label>
+                                    <input class="form-control" type="text" id="districtName" formControlName="districtName" placeholder="Type here" required>
+                                    <mat-error *ngIf="(customerform.get('districtName') && !customerform.get('districtName')?.valid && customerform.get('districtName')?.touched)">
+                                        District is required
+                                    </mat-error>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="state">State <span style="color: red;">*</span></label>
+                                    <input class="form-control" type="text" id="state" formControlName="state" placeholder="Type here" required>
+                                    <mat-error *ngIf="(customerform.get('state') && !customerform.get('state')?.valid && customerform.get('state')?.touched)">
+                                        State is required
+                                    </mat-error>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button class="btn btn-info btn-sm" type="submit" (click)="insertCustomer(customerform)" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                                Save
+                            </button>
+                            <button class="btn btn-info btn-sm" type="reset" (click)="cancelUser()" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                                Cancel
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

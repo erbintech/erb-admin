@@ -1,0 +1,285 @@
+<title>Credit Card</title>
+<app-breadcrumb [title]="'Credit Card'" [active_item]="'Credit Card'">
+</app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-drawer-container class="example-container" autosize>
+                <div class="card drawercard">
+                    <div class="card-header p-1">
+                        <div class="d-flex justify-content-between">
+                            <div class="main-header-left ">
+                            </div>
+                            <div ngbDropdown class="btn-group">
+                                <div class="ml-2">
+                                    <button type="button" class="btn btn-info" style="margin-right: 5px;border-radius: 10px;padding:8px 14px" title="Filter Credit Card" (click)="drawer.toggle();">
+                                        <i class="icon-filter p-0"></i>
+                                        <span>Filter</span>
+                                    </button>
+                                    <button *ngIf="customerCreditCards && customerCreditCards.length > 0" type="button" class="btn btn-info"
+                                        style="margin-right: 5px;border-radius: 10px;padding:8px 14px" title="DownLoad CSV" (click)="downloadCsv()">
+                                        <i class="fa fa-download p-0"></i>
+                                        <span>DownLoad CSV</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="customerCreditCards && customerCreditCards.length > 0 else NoCustomerCreditCards">
+                        <div class="creditcard table-responsive border-top userlist-table">
+                            <table mat-table [dataSource]="customerCreditCards" class="mat-elevation-z8 table-striped table-vcenter" style="min-width: 1500px; box-shadow: none;" aria-label="">
+                                <ng-container matColumnDef="id">
+                                    <th mat-header-cell *matHeaderCellDef style="width:5%">#</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:5%">
+                                        {{(paginate.currentPage - 1) * paginate.pageSize + i + 1}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="creditCard">
+                                    <th mat-header-cell *matHeaderCellDef style="width :12%">Credit Card</th>
+                                    <td mat-cell *matCellDef="let element" style="width :12%">
+                                        <ng-container *ngIf="element?.creditCardUrl else DefaultPetProfile">
+                                            <img class="creditCard" [src]="element?.creditCardUrl" onerror="this.src='../../assets/images/default.png';" alt="">
+                                        </ng-container>
+                                        <ng-template #DefaultPetProfile>
+                                            <img class="creditCard" src="../../assets/images/default.png" alt="">
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="bnakCreditCard">
+                                    <th mat-header-cell *matHeaderCellDef style="width :14%">Bank CreditCard</th>
+                                    <td mat-cell *matCellDef="let element" style="width :14%">
+                                        <ng-container *ngIf="element.bankName else NoBank">
+                                            {{element.bankName}} - {{element.creditCardName}}
+                                            <br>
+                                            Joining Fee:{{element.joiningfee}}<br>
+                                            Renual Fee:{{element.renualfee}}
+                                        </ng-container>
+                                        <ng-template #NoBank>
+                                            <p>--</p>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="Customer">
+                                    <th mat-header-cell *matHeaderCellDef style="width :15%">Customer Name</th>
+                                    <td mat-cell *matCellDef="let element" style="width :15%">
+                                        {{element.fullName}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="contactNo">
+                                    <th mat-header-cell *matHeaderCellDef>Contact No</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.contactNo}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="transactionDate">
+                                    <th mat-header-cell *matHeaderCellDef>Transaction Date</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.creditCardTransactionDate | date}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="refrenceNo">
+                                    <th mat-header-cell *matHeaderCellDef>RefrenceNo</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.referenceNo}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="status">
+                                    <th mat-header-cell *matHeaderCellDef>Status</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <ng-container *ngIf="element.status else NoValue">
+                                            <span *ngIf="(element.status == 'PENDING' || element.status == 'REJECTED' ) else NoPending" style="color: #ff0000;">
+                                                {{element?.status}}
+                                            </span>
+                                            <ng-template #NoPending>
+                                                <span style="color: #0b9d0b;">{{element.status}}</span>
+                                            </ng-template>
+                                        </ng-container>
+                                        <ng-template #NoValue>
+                                            <span style="color: #ff0000;" class="text-center">PENDING</span>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="createdDate">
+                                    <th mat-header-cell *matHeaderCellDef style="width:21%;">Request date</th>
+                                    <td mat-cell *matCellDef="let element" style="width: 21%;">
+                                        {{element.createdDate | date :'medium'}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="Action" stickyEnd>
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">Action</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <button mat-button [matMenuTriggerFor]="menu"  (click)="toggleMenuService.toggleMenuStyles()"> <a href="javascript:;" class="btn btn-sm btn-info" title="Action"
+                                                style="padding: 10px 12px;border-radius: 10px;margin: 0 5px;">
+                                                <i class="fa fa-angle-down"></i>
+                                            </a></button>
+                                        <mat-menu #menu="matMenu">
+                                            <div mat-menu-item class="p-0 mx-2" *ngIf="isEditPermission" (click)="navigateEditCard(element)">
+                                                <a title="Edit Detail" href="javascript:;" class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 5px;">
+                                                    <i class="icon-pencil"></i>
+                                                </a>Edit Detail
+                                            </div>
+                                            <div mat-menu-item class="p-0 mx-2" *ngIf="isReadPermission" (click)="navigateViewDetail(element.id)">
+                                                <a title="View Detail" href="javascript:;" class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 5px;">
+                                                    <i class="icon-eye"></i>
+                                                </a>View Detail
+                                            </div>
+                                            <div *ngIf="element.status && (element?.status != 'PENDING'  && element?.status != 'REJECTED' && element?.status != 'COMPLETED') && isEditPermission"
+                                                mat-menu-item (click)="modalOpen(basicmodal,element,'changeStatus')" class="p-0 mx-2">
+                                                <a title="Change Status" href="javascript:;" class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 5px;">
+                                                    <i class="icon-control-forward"></i>
+                                                </a>Change Status
+                                            </div>
+                                            <div mat-menu-item *ngIf="element.status && isEditPermission && element?.status != 'REJECTED'" (click)="openCreditCardRejectionModal(element,basicmodal)"
+                                                class="p-0 mx-2">
+                                                <a title="Reject Application" href="javascript:;" class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 5px;">
+                                                    <i class="icon-close"></i>
+                                                </a>Reject Application
+                                            </div>
+                                        </mat-menu>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayColumns;" class="student-element-row" style="cursor: pointer;"></tr>
+                            </table>
+                        </div>
+                    </ng-container>
+                    <ng-template #NoCustomerCreditCards>
+                        <div class="d-flex vertical-center nodata" style="height:calc(100vh - 260px)">
+                        </div>
+                    </ng-template>
+                    <div class="card-footer" *ngIf="customerCreditCards && customerCreditCards.length > 0">
+                        <ul class="pagination mb-0 float-right">
+                            <li [ngClass]="{ disabled: paginate.currentPage == 1 }" class="page-item page-prev">
+                                <a class="page-link" href="javascript:;" tabindex="-1" (click)="setPage(paginate.currentPage - 1)">
+                                    <span>Prev</span>
+                                </a>
+                            </li>
+                            <li *ngFor="let page of paginate.pages" class="page-item active" [ngClass]="{ active: paginate.currentPage == page }"><a [ngClass]="{current:paginate.currentPage == page}"
+                                    class="page-link" href="javascript:;" (click)="setPage(page)">{{page}}</a></li>
+                            <li [ngClass]="{ disabled: paginate.currentPage === paginate.totalPages}" (click)="setPage(paginate.currentPage + 1)" class="page-item page-next">
+                                <a class="page-link" href="javascript:;"><span>Next</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <mat-drawer #drawer class="example-sidenav" mode="over" position="end">
+                    <div class="col-lg-12 px-3 pt-3">
+                        <div class="d-inline" style="width: 100%;"><i class="fa fa-filter pr-1"><span class="ml-1">Filter</span></i>
+                            <button v class="close" aria-label="Close" (click)="drawer.toggle();">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="position px-3">
+                        <div class="col-form-label">From Date</div>
+                        <mat-form-field appearance="outline" class="d-block w-100" (click)="toggleMenuService.togglePickerStyles()">
+
+                            <input matInput [matDatepicker]="pickerFrom" [max]="dateTo" placeholder="From Date" [(ngModel)]="dateFrom" name="fromDate" [readonly]="true" (focus)="pickerFrom.open()" (click)="toggleMenuService.togglePickerStyles()">
+                            <mat-datepicker-toggle matSuffix [for]="pickerFrom" (click)="toggleMenuService.togglePickerStyles()"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerFrom></mat-datepicker>
+                        </mat-form-field>
+                        <div class="col-form-label">To Date</div>
+                        <mat-form-field appearance="outline" class="d-block w-100">
+
+                            <input matInput [matDatepicker]="pickerTo" [min]="dateFrom" placeholder="To Date" [(ngModel)]="dateTo" name="toDate" [readonly]="true" (focus)="pickerTo.open()">
+                            <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerTo></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="modal-footer p-0" style="margin-bottom: 20px;justify-content: center;">
+                        <div class="float-right d-inline">
+                            <button type="button" class="btn btn-info" style="margin-right: 5px;border-radius: 10px;padding:8px 14px" title="Clear Filter" (click)="drawer.toggle();clearSearch();">
+                                <span>Clear</span>
+                            </button>
+                            <button type="button" class="btn btn-info" style="margin-right: 5px;border-radius: 10px;padding:8px 14px" title="Filter Loans" (click)="drawer.toggle();setPage(1);">
+                                <span>Search</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="px-3">
+                    </div>
+                </mat-drawer>
+            </mat-drawer-container>
+        </div>
+    </div>
+</div>
+
+<ng-template #basicmodal let-modal>
+    <div>
+
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body mainmodal p-0" [ngClass]="{documentModal:isRejectionReason}">
+            <ng-container *ngIf="isChangeStatus">
+                <div class="col-xs-12">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-form-label">Select Credit Card Status</div>
+                            <ng-select [items]="selectedCreditCardStatuses" class="js-example-basic-single p-0" [(ngModel)]="selectedStatus" placeholder="Select Credit Card Status" bindLabel="status"
+                                bindValue="id" name="Status" required #LoanStatus="ngModel" name="selectStatus">
+                            </ng-select>
+                            <mat-error *ngIf="(LoanStatus.touched) && (LoanStatus.errors?.required)">
+                                Credit Card Status Selection is required
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="isRejectionReason">
+                <div class="col-lg-12 mt-1">
+                    <div class="form-group">
+                        <label for="reasons">Reason</label>
+                        <textarea class="form-control" type="text" id="reasons" [formControl]="reason" rows="4" required></textarea>
+                        <mat-error *ngIf="(reasonError)">
+                            Reason is required
+                        </mat-error>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <button class="btn btn-info " style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit" (click)="addMoreReason()"><i class="fa fa-plus"></i> Add More
+                        Reason</button>
+                </div>
+                <div *ngIf="isAddMoreReason">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label>Reason</label>
+                            <input class="form-control" type="text" name="rejectReason" [formControl]="rejectReason">
+                        </div>
+                        <div class="form-group">
+                            <label for="reasons">Description</label>
+                            <textarea class="form-control" type="text" id="description" name="desc" [formControl]="reasonDescription" rows="4"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <mat-expansion-panel class="mt-2" *ngFor="let reason of reasons;let i = index" hideToggle [expanded]="i == 0">
+                        <mat-expansion-panel-header>
+                            <mat-panel-description [ngStyle]="{'color':(reason.isCollapsed == false) ? '#fff':'#221668'}">
+                                {{reason.reason}}
+                            </mat-panel-description>
+                            <mat-icon style="text-align: right;"> <i class='icon-trash' (click)="removeReason(reason,i)"></i>
+                            </mat-icon>
+                        </mat-expansion-panel-header>
+                        <p style="text-align: justify;" class="mt-2">
+                            {{reason.description}}
+                    </mat-expansion-panel>
+                </div>
+            </ng-container>
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="isChangeStatus" class="btn btn-info pull-right " style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit" (click)="changeStatus()">Change</button>
+            <button *ngIf="isRejectionReason" class="btn btn-info pull-right " style="margin-right: 5px;border-radius:10px;padding:8px 14px" type="submit"
+                (click)="insertRejectionReason()">Save</button>
+            <button class="btn btn-info pull-right " style="margin-right: 5px;border-radius:10px;padding:8px 14px" (click)="modal.dismiss('Cross click')">
+                Cancel
+            </button>
+        </div>
+    </div>
+</ng-template>

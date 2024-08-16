@@ -1,0 +1,322 @@
+<title>Products</title>
+<app-breadcrumb [title]="'Products'" [active_item]="'Products'"></app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-drawer-container autosize>
+                <div class="card">
+                    <div class="card-header p-1">
+                        <div class="d-flex justify-content-between">
+                            <div class="main-header-left "></div>
+                            <div ngbDropdown class="btn-group">
+                                <div class="ml-2">
+                                    <a *ngIf="isWritePermission" title="Add Gift Product" href="javascript:;"
+                                        class="btn btn-sm btn-info"
+                                        style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                        (click)="modalOpen(basicmodal)">
+                                        <i class="icon-plus"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-info"
+                                        style="margin-right: 5px;border-radius: 0.25rem;padding:8px 14px"
+                                        title="Filter Gift Product" (click)="drawer.toggle();">
+                                        <i class="icon-filter p-0"></i>
+                                        <span>Filter</span>
+                                    </button>
+                                    <button *ngIf="giftProducts && giftProducts.length > 0" type="button"
+                                        class="btn btn-info"
+                                        style="margin-right: 5px;border-radius: 10px;padding:8px 14px"
+                                        title="DownLoad CSV" (click)="downloadCsv()">
+                                        <i class="fa fa-download p-0"></i>
+                                        <span>DownLoad CSV</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ng-container *ngIf="giftProducts && giftProducts.length > 0 else NoGiftProducts">
+                        <div class="giftProduct table-responsive mat-elevation-z8">
+                            <table mat-table [dataSource]="giftProducts"
+                                class="mat-elevation-z8 table-striped table-vcenter"
+                                style="min-width: 1200px; box-shadow: none;" aria-label="">
+                                <ng-container matColumnDef="id">
+                                    <th mat-header-cell *matHeaderCellDef style="width:5%">#</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:5%">
+                                        {{(paginate.currentPage - 1) * paginate.pageSize + i + 1}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="imageUrl">
+                                    <th mat-header-cell *matHeaderCellDef style="width:8%">Image</th>
+                                    <td mat-cell *matCellDef="let element"
+                                        style="padding-top: 8px; padding-bottom: 8px; width: 8%;">
+                                        <div *ngIf="element.imageUrl else defaultServicePic">
+                                            <img [src]="element.imageUrl" class="rounded-circle" alt="" width="50px"
+                                                height="50px" />
+                                        </div>
+                                        <ng-template #defaultServicePic>
+                                            <img src="../../../assets/images/userprofile.png" class="rounded-circle"
+                                                width="50px" height="50px" alt="" />
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="name">
+                                    <th mat-header-cell *matHeaderCellDef>Name</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.name else NoValue">
+                                            {{element.name}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="description">
+                                    <th mat-header-cell *matHeaderCellDef>Description</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div class="a" *ngIf="element.description else NoValue">
+                                            {{element.description}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="coin">
+                                    <th mat-header-cell *matHeaderCellDef>Coin</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.coin else NoValue">
+                                            {{element.coin}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="duration">
+                                    <th mat-header-cell *matHeaderCellDef>Duration</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.duration else NoValue">
+                                            {{element.duration}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="status">
+                                    <th mat-header-cell *matHeaderCellDef translate>Status</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <ng-container *ngIf="element.isActive else InActive">
+                                            <span class="label text-success d-flex">
+                                                <div class="dot-label bg-success mr-1"></div>
+                                                <span>Active</span>
+                                            </span>
+                                        </ng-container>
+                                        <ng-template #InActive>
+                                            <span class="label text-warning d-flex">
+                                                <div class="dot-label bg-warning mr-1"></div>
+                                                <span>InActive</span>
+                                            </span>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="createdDate">
+                                    <th mat-header-cell *matHeaderCellDef>Request date</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.createdDate | date :'medium'}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="action" stickyEnd>
+                                    <th mat-header-cell *matHeaderCellDef translate class="text-right"
+                                        >Action</th>
+                                    <td mat-cell *matCellDef="let element"
+                                        style="display: flex;">
+                                        <div class="media-body text-right icon-state">
+                                            <label title="Active Inactive Gift Product" class="switch" style="top:7px"
+                                                *ngIf="isEditPermission">
+                                                <input type="checkbox" (click)="changeStatus(element)"
+                                                    [(ngModel)]="element.isActive"><span class="switch-state"
+                                                    [ngClass]="element.isActive ? 'bg-success' : 'bg-warning'"></span>
+                                            </label>
+                                        </div>
+                                        <a *ngIf="isEditPermission" title="Edit Gift Product" href="javascript:;"
+                                            class="btn btn-sm btn-info"
+                                            style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                            (click)="editDialog(element,basicmodal)">
+                                            <i class="icon-pencil"></i>
+                                        </a>
+                                        <a *ngIf="isReadPermission" title="View Detail" href="javascript:;"
+                                            class="btn btn-sm btn-info"
+                                            style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                            (click)="viewDetail(element,basicmodal)">
+                                            <i class="icon-eye"></i>
+                                        </a>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayColumns;" class="student-element-row"
+                                    style="cursor: pointer;"></tr>
+                            </table>
+                        </div>
+                    </ng-container>
+
+                    <ng-template #NoGiftProducts>
+                        <div class="d-flex vertical-center nodata" style="height:calc(100vh - 260px)">
+                        </div>
+                    </ng-template>
+
+                    <div class="card-footer" *ngIf="giftProducts && giftProducts.length > 0">
+                        <ul class="pagination mb-0 float-right">
+                            <li [ngClass]="{ disabled: paginate.currentPage == 1 }" class="page-item page-prev">
+                                <a class="page-link" href="javascript:;" tabindex="-1"
+                                    (click)="setPage(paginate.currentPage - 1)">
+                                    <span>Prev</span>
+                                </a>
+                            </li>
+                            <li *ngFor="let page of paginate.pages" class="page-item active"
+                                [ngClass]="{ active: paginate.currentPage == page }"><a
+                                    [ngClass]="{current:paginate.currentPage == page}" class="page-link"
+                                    href="javascript:;" (click)="setPage(page)">{{page}}</a></li>
+                            <li [ngClass]="{ disabled: paginate.currentPage === paginate.totalPages}"
+                                (click)="setPage(paginate.currentPage + 1)" class="page-item page-next">
+                                <a class="page-link" href="javascript:;"><span>Next</span></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <mat-drawer #drawer class="example-sidenav" mode="over" position="end">
+                    <div class="col-lg-12 px-3 pt-3">
+                        <div class="d-inline" style="width: 100%;"><i class="fa fa-filter"><span>Filter</span></i>
+                            <button v class="close" aria-label="Close" (click)="drawer.toggle();">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="position px-3">
+                        <div class="form-group">
+                            <input class="form-control" type="text" id="search" [(ngModel)]="searchString"
+                                placeholder="Search By Name" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer px-3" style="padding-bottom: 35px;justify-content: center;">
+                        <div class="float-right d-inline">
+                            <button type="button" class="btn btn-sm btn-info"
+                                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" title="Clear Filter"
+                                (click)="drawer.toggle();clearSearch();">
+                                <span>Clear</span>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-info"
+                                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" title="Filter Loans"
+                                (click)="drawer.toggle();setPage(1);">
+                                <span>Search</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="px-3">
+                    </div>
+                </mat-drawer>
+
+            </mat-drawer-container>
+        </div>
+    </div>
+</div>
+
+<ng-template #basicmodal let-modal>
+    <div>
+        <form [formGroup]="giftForm">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pd-20 mt-1 mb-1">
+                <div class="form-group">
+                    <label for="name">Name <span style="color: red;">*</span></label>
+                    <input class="form-control" type="text" name="name" formControlName="name" onlyAlphabets
+                        [readonly]="isReadonly" required>
+                    <mat-error
+                        *ngIf="(giftForm.get('name') && !giftForm.get('name').valid && giftForm.get('name').touched)">
+                        Name is required
+                    </mat-error>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description </label>
+                    <textarea class="form-control" type="text" id="description" formControlName="description" rows="4"
+                        cols="10" [readonly]="isReadonly"></textarea>
+
+                </div>
+                <div class="form-group">
+                    <label for="coin">Coin <span style="color: red;">*</span></label>
+                    <input class="form-control" type="text" name="coin" formControlName="coin" onlyNumbers
+                        [readonly]="isReadonly" required>
+                    <mat-error
+                        *ngIf="(giftForm.get('coin') && !giftForm.get('coin').valid && giftForm.get('coin').touched)">
+                        Coin is required
+                    </mat-error>
+                </div>
+                <div class="form-group">
+                    <label for="imageUrl">Gift Product Image <span style="color: red;">*</span></label>
+                    <div *ngIf="!giftForm.get('imageUrl').value else Image">
+                        <a class="form-control" type="upload" id="imageUrl"
+                            style="height: 150px; width: 100%; text-align: center; border-style: dashed; border-color: rgb(63, 105, 223);display: flex;align-items: center;"
+                            required (click)="fileUpload.click()">
+                            <div class="absolute text-center m-auto">
+                                <i class="icon-plus" style="font-size:30px"></i>
+                                <h4>Tap to upload image</h4>
+                            </div>
+                        </a>
+                    </div>
+                    <ng-template #Image>
+                        <div *ngIf="!isReadonly else Edit">
+                            <a type="upload" id="imageUrl" required (click)="fileUpload.click()"
+                                style="height: 200px; width: 80%; text-align: center; display: flex;align-items: center;">
+                                <img [src]="giftForm.get('imageUrl').value" style="height: 200px; width: 80%;" alt="">
+                            </a>
+                        </div>
+                        <ng-template #Edit>
+                            <div>
+                                <a type="upload" id="imageUrl"
+                                    style="height: 200px; width: 80%; text-align: center; display: flex;align-items: center;">
+                                    <img [src]="giftForm.get('imageUrl').value" style="height: 200px; width: 80%;" alt="">
+                                </a>
+                            </div>
+
+                        </ng-template>
+
+                    </ng-template>
+
+                    <input type="file" #fileUpload id="imageUrl" (change)="selectedImage($event)" name="imageUrl"
+                        style="display:none;" accept="image/*" />
+                    <mat-error
+                        *ngIf="(giftForm.get('imageUrl') && !giftForm.get('imageUrl').valid && giftForm.get('imageUrl').touched)">
+                        Image is required
+                    </mat-error>
+
+                </div>
+                <div class="form-group">
+                    <label for="name">Duration</label>
+                    <ng-select class="form-select" name="duration" formControlName="duration">
+                        <ng-option value="Monthly" name="experienceTime">Monthly</ng-option>
+                        <ng-option value="Quarterly" name="experienceTime">Quarterly</ng-option>
+                        <ng-option value="Yearly" name="experienceTime">Yearly</ng-option>
+                    </ng-select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button *ngIf="!isReadonly" class="btn btn-sm btn-info" (click)="insertGiftProduct()"
+                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                    Save
+                </button>
+                <button *ngIf="!isReadonly" class="btn btn-sm btn-info" (click)="cancelUser()"
+                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

@@ -1,0 +1,74 @@
+tr.student-element-row:not(.student-expanded-row):hover {
+    background: whitesmoke;
+}
+
+tr.student-element-row:not(.student-expanded-row):active {
+    background: #efefef;
+}
+
+.student-element-row td {
+    border-bottom-width: 0;
+}
+
+.card {
+    height    : calc(100vh - 200px);
+    overflow-x: auto;
+}
+
+.card-footer {
+    padding: 10px !important;
+}
+
+::ng-deep .mat-drawer-inner-container{
+    overflow: hidden !important;
+}
+
+
+.modal-title {
+    font-weight  : 500 !important;
+    font-size    : 18px !important;
+    margin-bottom: 0 !important;
+    line-height  : 1.2 !important;
+}
+
+.input-icons mat-icon {
+    position  : absolute;
+    text-align: end;
+    float     : right;
+    right     : 15px;
+    padding   : 7px !important;
+}
+
+.input-icons {
+    width        : 100%;
+    margin-bottom: 10px;
+}
+
+.icon {
+    padding  : 10px;
+    min-width: 50px;
+}
+
+.input-field {
+    width  : 100%;
+    padding: 10px;
+}
+
+::ng-deep .modal-backdrop.show {
+    z-index: 1050 !important;
+}
+
+::ng-deep {
+
+    .cdk-global-overlay-wrapper,
+    .cdk-overlay-container {
+        z-index: 9999 !important;
+    }
+}
+
+.center {
+    position: absolute;
+    top: 37%;
+    padding-left: 93px;
+  }
+  

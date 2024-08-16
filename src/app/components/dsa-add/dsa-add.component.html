@@ -1,0 +1,481 @@
+<div *ngIf="this.dsa.roleName == 'dsa' else Subdsa">
+    <title>DSA</title>
+    <div *ngIf="paramid else Add">
+        <app-breadcrumb [title]="'DSA'" [items]="[{'name':'Dsa', 'route':'/dsa'}]" [active_item]="'Edit'">
+        </app-breadcrumb>
+    </div>
+    <ng-template #Add>
+        <app-breadcrumb [title]="'DSA'" [items]="[{'name':'Dsa', 'route':'/dsa'}]" [active_item]="'Add'">
+        </app-breadcrumb>
+    </ng-template>
+</div>
+<ng-template #Subdsa>
+    <div *ngIf="this.dsa.roleName == 'subdsa'">
+        <title>SUB DSA</title>
+        <div *ngIf="paramid else Add">
+            <app-breadcrumb [title]="'SUBDSA'" [items]="[{'name':'Subdsa', 'route':'/subdsa'}]" [active_item]="'Edit'">
+            </app-breadcrumb>
+        </div>
+        <ng-template #Add>
+            <app-breadcrumb [title]="'SUBDSA'" [items]="[{'name':'Subdsa', 'route':'/subdsa'}]" [active_item]="'Add'">
+            </app-breadcrumb>
+        </ng-template>
+    </div>
+</ng-template>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-drawer-container class="example-container" autosize>
+                <div class="card">
+                    <div class="p-4">
+
+                        <form [formGroup]="dsaform">
+
+                            <div>
+                                <h2>Personal Detail</h2>
+
+                                <div class="form-row">
+                                    <div class="col-lg-2 col-sm-12">
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <div class="main-contact-info-header pt-3">
+                                                    <div *ngIf="!url else upload">
+                                                        <img src="../../../assets/images/userprofile.png"
+                                                            class="rounded-pill" width="120px" height="120px" alt=""
+                                                            (click)="fileInput.click()" />
+                                                    </div>
+                                                    <ng-template #upload>
+                                                        <img [src]="url" class="rounded-pill" width="120px"
+                                                            height="120px" alt="" (click)="fileInput.click()" />
+                                                    </ng-template>
+                                                </div>
+                                                <a>
+                                                    <input type="file" #fileInput id="uploadFile"
+                                                        (change)="selectedImage($event)" name="profilePicUrl"
+                                                        accept="image/*" style="display:none;" />
+                                                </a>
+                                                <div class="center">
+                                                    <button class="p-2 text-black"
+                                                        *ngIf="this.url && this.url.length > 0" (click)="removeImage()"
+                                                        style="text-align:center; border: none; border-radius:40%; font-size: 18px;">
+                                                        <i class="icon-trash"></i>
+                                                    </button>
+                                                    <button class="p-2 text-black" *ngIf="!this.url"
+                                                        style="text-align:center; border: none; border-radius:40%; font-size: 18px;">
+                                                        <i class="icon-gallery" (click)="fileInput.click()"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="name">Gender <span style="color: red;">*</span></label>
+                                                <div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" id="radioinline1" type="radio"
+                                                            value="Male" name="gender" formControlName="gender">
+                                                        <label class="form-check-label" for="radioinline1">Male</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" id="radioinline2" type="radio"
+                                                            value="Female" name="gender" formControlName="gender">
+                                                        <label class="form-check-label"
+                                                            for="radioinline2">Female</label>
+                                                    </div>
+                                                </div>
+                                                <mat-error
+                                                    *ngIf="(dsaform.get('gender') && !dsaform.get('gender')?.valid && dsaform.get('gender')?.touched)">
+                                                    Gender is required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-10 col-sm-12">
+                                        <div class="form-row">
+                                            <div class="form-group col-lg-6 col-md-6 ">
+                                                <label for="fullName">Full Name <span
+                                                        style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" id="fullName" name="fullName"
+                                                    formControlName="fullName" onlyAlphabets placeholder="Type here"
+                                                    required />
+                                                <mat-error
+                                                    *ngIf="(dsaform.get('fullName') && !dsaform.get('fullName')?.valid && dsaform.get('fullName')?.touched)">
+                                                    Full Name is required
+                                                </mat-error>
+                                            </div>
+                                            <div class="form-group col-lg-6 col-md-6">
+                                                <label for="contactNo">Contact No <span
+                                                        style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" maxlength="10" minlength="0"
+                                                    id="contactNo" name="contactNo" formControlName="contactNo"
+                                                    placeholder="Enter your mobile no" ContactNo required>
+                                                <mat-error
+                                                    *ngIf="(dsaform.get('contactNo') && !dsaform.get('contactNo').valid  && dsaform.get('contactNo').touched)">
+                                                    <span *ngIf="dsaform.get('contactNo').errors['required']">
+                                                        ContactNo is Required</span>
+                                                    <span *ngIf="dsaform.get('contactNo').errors.minlength">Enter
+                                                        Valid ContactNo</span>
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="form-row" *ngIf="dsa.roleName == 'dsa' else Subdsacode">
+                                            <div class="form-group col-md-4">
+                                                <label for="aadhaarCardNo">Aadhar Card No <span
+                                                        style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" id="aadhaarCardNo"
+                                                    formControlName="aadhaarCardNo" placeholder="Type here"
+                                                    maxlength="12" required>
+                                                <mat-error
+                                                    *ngIf="(dsaform.get('aadhaarCardNo') && !dsaform.get('aadhaarCardNo')?.valid && dsaform.get('aadhaarCardNo')?.touched)">
+                                                    Aadhaar Card no is required
+                                                </mat-error>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="panCardNo">PAN Card No <span
+                                                        style="color: red;">*</span></label>
+                                                <input class="form-control" type="text" id="panCardNo"
+                                                    formControlName="panCardNo" placeholder="Enter your pan card no"
+                                                    maxlength="10" required
+                                                    oninput="this.value = this.value.toUpperCase()"
+                                                    (keypress)="keyPressAlphanumeric($event)">
+                                                <mat-error
+                                                    *ngIf="(dsaform.get('panCardNo') && !dsaform.get('panCardNo')?.valid && dsaform.get('panCardNo')?.touched)">
+                                                    PAN Card no is required
+                                                </mat-error>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label>Job Type <span style="color: red;">*</span></label>
+                                                <div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" id="radioinline2" type="radio"
+                                                            value="FullTime" formControlName="jobType">
+                                                        <label class="form-check-label" for="radioinline2">Full
+                                                            Time</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" id="radioinline1" type="radio"
+                                                            value="PartTime" formControlName="jobType">
+                                                        <label class="form-check-label" for="radioinline1">Part
+                                                            Time</label>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <ng-template #Subdsacode>
+                                            <div class="form-row" *ngIf="this.dsa.roleName == 'subdsa' ">
+                                                <div class="form-group col-lg-3 col-md-3">
+                                                    <label for="aadhaarCardNo">Aadhar Card No <span
+                                                            style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" id="aadhaarCardNo"
+                                                        formControlName="aadhaarCardNo" placeholder="Type here"
+                                                        maxlength="12" required>
+                                                    <mat-error
+                                                        *ngIf="(dsaform.get('aadhaarCardNo') && !dsaform.get('aadhaarCardNo')?.valid && dsaform.get('aadhaarCardNo')?.touched)">
+                                                        Aadhaar Card no is required
+                                                    </mat-error>
+                                                </div>
+                                                <div class="form-group col-lg-3 col-md-3">
+                                                    <label for="panCardNo">PAN Card No <span
+                                                            style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" id="panCardNo"
+                                                        formControlName="panCardNo" placeholder="Enter your pan card no"
+                                                        maxlength="10" required>
+                                                    <mat-error
+                                                        *ngIf="(dsaform.get('panCardNo') && !dsaform.get('panCardNo')?.valid && dsaform.get('panCardNo')?.touched)">
+                                                        PAN Card no is required
+                                                    </mat-error>
+                                                </div>
+                                                <div class="form-group col-lg-3 col-md-3">
+                                                    <label for="referralCode">Dsa Code <span
+                                                            style="color: red;">*</span></label>
+                                                    <input class="form-control" type="text" id="contactNo"
+                                                        name="referralCode" formControlName="referralCode"
+                                                        placeholder="Enter your referralCode">
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label>Job Type <span style="color: red;">*</span></label>
+                                                    <div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" id="subdsaradioinline2"
+                                                                type="radio" value="FullTime" formControlName="jobType" >
+                                                            <label class="form-check-label"
+                                                                for="subdsaradioinline2">Full
+                                                                Time</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" id="subdsaradioinline1"
+                                                                type="radio" value="PartTime" formControlName="jobType">
+                                                            <label class="form-check-label"
+                                                                for="subdsaradioinline1">Part
+                                                                Time</label>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h2>Adderss</h2>
+                                <div class="form-group">
+                                    <label for="label">Current Address <span style="color: red;">*</span></label>
+                                    <input class="form-control" type="text" id="label" formControlName="label"
+                                        placeholder="Type here" required>
+                                    <mat-error
+                                        *ngIf="(dsaform.get('label') && !dsaform.get('label')?.valid && dsaform.get('label')?.touched)">
+                                        Company name is required
+                                    </mat-error>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="addressLine1">Address Line 1 <span
+                                                style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" id="addressLine1"
+                                            formControlName="addressLine1" placeholder="Type here" name="addressLine1"
+                                            required />
+                                        <mat-error
+                                            *ngIf="(dsaform.get('addressLine1') && !dsaform.get('addressLine1')?.valid && dsaform.get('addressLine1')?.touched)">
+                                            AddressLine1 is required
+                                        </mat-error>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="addressLine2">Address Line 2</label>
+                                        <input class="form-control" type="text" id="addressLine2"
+                                            formControlName="addressLine2" placeholder="Type here"
+                                            name="addressLine2" />
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-lg-6">
+                                        <label for="pincode">Pin Code <span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" id="pincode" formControlName="pincode"
+                                            placeholder="Type here" maxlength="6" onlyNumbers
+                                            (keyup)="onKeyUpEvent($event,true)" required>
+                                        <mat-error
+                                            *ngIf="(dsaform.get('pincode') && !dsaform.get('pincode')?.valid && dsaform.get('pincode')?.touched)">
+                                            Pin Code is required
+                                        </mat-error>
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label for="cityId">City <span style="color: red;">*</span></label>
+                                        <ng-select [items]="cities" class="js-example-basic-single p-0"
+                                            placeholder="Select city" bindLabel="name" bindValue="id"
+                                            formControlName="cityId" name="cityId"></ng-select>
+                                        <mat-error
+                                            *ngIf="(dsaform.get('cityId') && !dsaform.get('cityId')?.valid && dsaform.get('cityId')?.touched)">
+                                            City is required
+                                        </mat-error>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-lg-6">
+                                        <label for="districtName">District <span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" id="districtName"
+                                            formControlName="districtName" required [disabled]="true">
+                                        <mat-error
+                                            *ngIf="(dsaform.get('districtName') && !dsaform.get('districtName')?.valid && dsaform.get('districtName')?.touched)">
+                                            District is required
+                                        </mat-error>
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label for="state">State <span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" id="state" formControlName="state"
+                                            required [disabled]="true">
+                                        <mat-error
+                                            *ngIf="(dsaform.get('state') && !dsaform.get('state')?.valid && dsaform.get('state')?.touched)">
+                                            State is required
+                                        </mat-error>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div>
+                                <h2>Business Details</h2>
+                                <div class="form-row">
+                                    <div class="form-group col-lg-6">
+                                        <label for="companyName">Company Name <span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" id="companyName"
+                                            formControlName="companyName" placeholder="Enter your company name"
+                                            (keypress)="keyPressAlpha($event)" required>
+                                        <mat-error
+                                            *ngIf="(dsaform.get('companyName') && !dsaform.get('companyName')?.valid && dsaform.get('companyName')?.touched)">
+                                            Company Name is required
+                                        </mat-error>
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label for="profession">Profession <span style="color: red;">*</span></label>
+                                        <ng-select [items]="professions" class="js-example-basic-single p-0"
+                                            placeholder="Select profession" bindLabel="name" bindValue="id"
+                                            name="professionTypeId" formControlName="professionTypeId"></ng-select>
+                                        <mat-error
+                                            *ngIf="(dsaform.get('professionTypeId') && !dsaform.get('professionTypeId')?.valid && dsaform.get('professionTypeId')?.touched)">
+                                            Proffession is required
+                                        </mat-error>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-lg-6">
+                                        <label for="businessName">Bussiness Name <span
+                                                style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" id="gender"
+                                            formControlName="businessName" placeholder="Enter your bussiness name"
+                                            (keypress)="keyPressAlpha($event)" required>
+                                        <mat-error
+                                            *ngIf="(dsaform.get('businessName') && !dsaform.get('businessName')?.valid && dsaform.get('businessName')?.touched)">
+                                            Bussiness Name is required
+                                        </mat-error>
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label for="gstNo">GST No </label>
+                                        <input class="form-control" type="text" id="gstNo" formControlName="gstNo"
+                                            placeholder="Enter your GST no" maxlength="15"
+                                            oninput="this.value = this.value.toUpperCase()" required>
+                                        <mat-error
+                                            *ngIf="(dsaform.get('gstNo') && !dsaform.get('gstNo')?.valid && dsaform.get('gstNo')?.touched)">
+                                            GST No is required
+                                        </mat-error>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-lg-4">
+                                        <label for="businessName">Label</label>
+                                        <input class="form-control" type="text" formControlName="businessAddress">
+                                    </div>
+                                    <div class="form-group col-lg-4">
+                                        <label for="businessName">AddressLine 1 <span
+                                                style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" formControlName="businessAddressLine1"
+                                            required>
+                                        <mat-error
+                                            *ngIf="(dsaform.get('businessAddressLine1') && !dsaform.get('businessAddressLine1')?.valid && dsaform.get('businessAddressLine1')?.touched)">
+                                            Address Line1 is required
+                                        </mat-error>
+                                    </div>
+                                    <div class="form-group col-lg-4">
+                                        <label for="businessAddressLine2">AddressLine 2</label>
+                                        <input class="form-control" type="text" formControlName="businessAddressLine2">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-lg-6">
+                                        <label for="businessName">Pincode <span style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" formControlName="businessAddressPincode"
+                                            required onlyNumber maxlength="6"
+                                            (keyup)="onKeyUpEvent($event,true,'business')">
+                                        <mat-error
+                                            *ngIf="(dsaform.get('businessAddressPincode') && !dsaform.get('businessAddressPincode')?.valid && dsaform.get('businessAddressPincode')?.touched)">
+                                            Pincode is required
+                                        </mat-error>
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label for="cityId">City <span style="color: red;">*</span></label>
+                                        <ng-select [items]="businessAddressCities" class="js-example-basic-single p-0"
+                                            placeholder="Select city" bindLabel="name" bindValue="id"
+                                            formControlName="workAddressCityId" name="cityId"></ng-select>
+                                        <mat-error
+                                            *ngIf="(dsaform.get('workAddressCityId') && !dsaform.get('workAddressCityId')?.valid && dsaform.get('workAddressCityId')?.touched)">
+                                            City is required
+                                        </mat-error>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label for="haveOffice">Have Office <span style="color: red;">*</span></label>
+                                        <div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" id="radioinline1" type="radio" value="1"
+                                                    name="haveOffice" formControlName="haveOffice">
+                                                <label class="form-check-label" for="radioinline1">Yes</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" id="radioinline2" type="radio" value="2"
+                                                    name="haveOffice" formControlName="haveOffice">
+                                                <label class="form-check-label" for="radioinline2">No</label>
+                                            </div>
+                                        </div>
+                                        <mat-error
+                                            *ngIf="(dsaform.get('haveOffice') && !dsaform.get('haveOffice')?.valid && dsaform.get('haveOffice')?.touched)">
+                                            Have Office is required
+                                        </mat-error>
+                                    </div>
+                                    <div class="form-group col">
+                                        <label for="workExperience">Experience in Finance Industry (in years) <span
+                                                style="color: red;">*</span></label>
+                                        <input class="form-control" type="text" id="workExperience"
+                                            formControlName="workExperience" placeholder="Enter your work experience"
+                                            (keypress)="keyPressNumbers($event)" required>
+                                        <mat-error
+                                            *ngIf="(dsaform.get('workExperience') && !dsaform.get('workExperience')?.valid && dsaform.get('workExperience')?.touched)">
+                                            Work Experience is required
+                                        </mat-error>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h2>Other Detail</h2>
+                                <div class="form-group">
+                                    <label for="commitment">Business Commitment(Amount) <span
+                                            style="color: red;">*</span></label>
+                                    <input class="form-control" type="text" id="commitment" formControlName="commitment"
+                                        placeholder="Enter your commitment" (keypress)="keyPressNumbers($event)"
+                                        required>
+                                    <mat-error
+                                        *ngIf="(dsaform.get('commitment') && !dsaform.get('commitment')?.valid && dsaform.get('commitment')?.touched)">
+                                        Business Commitment is required
+                                    </mat-error>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h2>Bank Detail</h2>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="accountHolderName">Account Holder Name</label>
+                                        <input class="form-control" type="text" id="accountHolderName"
+                                            formControlName="accountHolderName" placeholder="Type here" onlyAlphabets>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="bankId">Bank</label>
+                                        <ng-select [items]="banks" class="js-example-basic-single p-0"
+                                            placeholder="Select Bank" bindLabel="name" bindValue="id" name="bankId"
+                                            formControlName="bankId"></ng-select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="accountNo">Account No</label>
+                                        <input class="form-control" type="text" id="accountNo"
+                                            formControlName="accountNo" placeholder="Type here" onlyNumbers>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="ifscCode">IFSC Code</label>
+                                        <input class="form-control" type="text" id="ifscCode" formControlName="ifscCode"
+                                            placeholder="Type here" (keypress)="keyPressAlphanumeric($event)"
+                                            oninput="this.value = this.value.toUpperCase()">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="submit" (click)="insertDsa()" class="btn btn-sm btn-info"
+                                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                                    Save
+                                </button>
+                                <button type="reset" (click)="cancelUser()" class="btn btn-sm btn-info"
+                                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </mat-drawer-container>
+        </div>
+    </div>
+</div>

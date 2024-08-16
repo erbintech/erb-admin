@@ -1,0 +1,157 @@
+tr.student-element-row:not(.student-expanded-row):hover {
+    background: whitesmoke;
+}
+
+tr.student-element-row:not(.student-expanded-row):active {
+    background: #efefef;
+}
+
+.student-element-row td {
+    border-bottom-width: 0;
+}
+
+// ::ng-deep .dsaTable tbody {
+//     display: block;
+//     height : calc(100vh - 365px);
+// }
+
+// ::ng-deep .dsaTable thead {
+//     display     : table;
+//     width       : 100%;
+//     table-layout: fixed;
+// }
+
+
+// ::ng-deep .dsaTable tr {
+//     display     : table;
+//     width       : 100%;
+//     table-layout: fixed;
+// }
+
+::ng-deep .tableData tbody {
+    display: block;
+    // height : calc(100vh - 450px);
+}
+
+::ng-deep .tableData thead {
+    display     : table;
+    width       : 100%;
+   
+    table-layout: fixed;
+}
+
+::ng-deep.tableData th{
+    z-index: 0 !important;
+}
+::ng-deep .tableData tbody {
+    display     : table;
+    // width: 100%;
+    table-layout: fixed;
+}
+
+::ng-deep .tableData tr {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+::ng-deep .mat-drawer-inner-container {
+    overflow: auto !important;
+}
+
+@media screen and (max-width: 776px) {
+    ::ng-deep.tableData tbody {
+        display     : table;
+        width       : 100%;
+        table-layout: fixed;
+        overflow    : auto;
+    }
+
+    ::ng-deep.tableData thead {
+        display     : table;
+        width       : 100%;
+        table-layout: fixed;
+        // position: absolute;
+    }
+
+    ::ng-deep.tableData tr {
+        display     : table;
+        width       : 100%;
+        table-layout: fixed;
+    }
+
+    ::ng-deep.tableData tbody {
+        width   : 1200px !important;
+        overflow: auto;
+    }
+
+    ::ng-deep.tableData thead {
+        width   : 1200px !important;
+        overflow: auto;
+    }
+}
+
+::ng-deep.topTable tbody {
+    height: calc(100vh - 450px)
+}
+
+
+
+.table-striped thead tbody tr {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+
+.listContent {
+    overflow: auto;
+}
+
+@media only screen and (max-width: 992px) {
+    .responsive {
+        padding-right: 0px;
+        padding-left : 0px
+    }
+}
+
+// .card-body {
+//     min-height: 1px;
+//     padding: 1.25rem;
+//     height: calc(55vh - 20px);
+// }
+
+// .card {
+//     min-height: 1px;
+//     padding: 1.25rem;
+//     height: calc(45vh - 20px);
+// }
+
+.card-footer {
+    padding-top: 30px;
+}
+
+.count {
+    position: relative;
+    width: 100%;
+    padding-right: 8px;
+    padding-left: 8px; 
+}
+
+.firstcount {
+    position: relative;
+    width: 100%;
+    padding-right: 8px;
+    padding-left: 15px; 
+}
+
+.lastcount {
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 8px; 
+}
+
+::ng-deep.static-top-widget div.align-self-center svg {
+    height:70px!important
+}

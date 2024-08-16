@@ -1,0 +1,4 @@
+<ngb-alert [type]="alertType" [dismissible]="false" *ngIf="!alertClosed" (close)="alertClosed = true"
+    style="width:300px">
+    {{alertErrorMessage}}
+</ngb-alert>

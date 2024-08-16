@@ -1,0 +1,1015 @@
+<title>DSA</title>
+<app-breadcrumb [title]="'DSA'" [items]="[{'name':'DSA', 'route':'/dsa'}]" [active_item]="'View'"></app-breadcrumb>
+<div class="container-fluid">
+  <div class="row">
+
+    <div class="col-lg-4 col-md-6 col-sm-12 px-1">
+      <div class="card">
+        <div class="card-body profileCard">
+          <div class="row">
+            <div class="col-md-4 col-4">
+              <div *ngIf="!dsas?.basicDetail?.profilePicUrl else upload">
+                <img src="../../../assets/images/userprofile.png" class="rounded-pill" width="80px" height="80px"
+                  alt="" />
+              </div>
+              <ng-template #upload>
+                <img [src]="dsas?.basicDetail?.profilePicUrl" class="rounded-pill" width="80px" height="80px" alt="" />
+              </ng-template>
+            </div>
+            <div class="col-md-8 col-8" style="margin-top: 15px;">
+              <h2 class="mb-0">{{dsas?.basicDetail?.fullName}}</h2>
+              <h6>{{dsas?.basicDetail?.code}}</h6>
+            </div>
+          </div>
+          <table class="table" style="margin-bottom: 5px; margin-top: 10px;" aria-label="">
+            <tbody>
+              <tr>
+                <td style="font-weight: 550;">Contact</td>
+                <td>{{dsas?.basicDetail?.contactNo}}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 550;">Gender</td>
+                <td>{{dsas?.basicDetail?.gender}}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 550;">Aadhaar Card No</td>
+                <td>{{dsas?.basicDetail?.aadhaarCardNo}}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 550;">PAN Card No</td>
+                <td>{{dsas?.basicDetail?.panCardNo}}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 550;">Job Type</td>
+                <td>{{dsas?.basicDetail?.jobType}}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 550;">Address</td>
+                <td>{{dsas?.basicDetail?.companyName}},{{dsas?.basicDetail?.partnerAddressLine1}}
+                  <span *ngIf="dsas?.basicDetail?.partnerAddressLine2 != ''">
+                    ,{{dsas?.basicDetail?.partnerAddressLine2}}
+                  </span>
+                  <span>
+                    {{dsas?.basicDetail?.city}},{{dsas?.basicDetail?.district}},{{dsas?.basicDetail?.state}} -
+                    {{dsas?.basicDetail?.partnerPincode}}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8 col-md-6 col-sm-12 px-1">
+      <div class="card">
+        <div class="card-body">
+          <div class="tabs-menu">
+            <ul ngbNav #nav="ngbNav" class=" nav-tabs profile navtab-custom panel-tabs">
+
+              <li [ngbNavItem]="1">
+                <a ngbNavLink>
+                  <span class="visible-xs">
+                    <i class="fa fa-sm fa-inr tx-16 mr-1"></i>
+                  </span>
+                  <span class="hidden-xs">Business</span>
+                </a>
+                <ng-template ngbNavContent>
+                  <div class="business p-1 border-top">
+                    <div class="p-1">
+                      <h6 class="sub-title">Business Detail</h6>
+                      <dl>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <dt>Profession Type - <span
+                                style="font-weight:lighter;">{{dsas?.basicDetail?.profesionType}}</span>
+                            </dt>
+                            <dt>Company Name - <span
+                                style="font-weight:lighter;">{{dsas?.basicDetail?.companyName}}</span>
+                            </dt>
+                            <dt>Business Name - <span
+                                style="font-weight:lighter;">{{dsas?.basicDetail?.businessName}}</span>
+                            </dt>
+                            <dt>Business Address -
+                              <span style="font-weight:lighter;">
+                                {{dsas?.basicDetail?.businessAddress}}, {{dsas?.basicDetail?.addressLine1}}
+                                <span *ngIf="dsas?.basicDetail?.addressLine2 != ''">
+                                  , {{dsas?.basicDetail?.addressLine2}}
+                                </span>
+                              </span>
+                              <span style="font-weight:lighter;">
+                                {{dsas?.basicDetail?.workAddressCity}} - {{dsas?.basicDetail?.pincode}}
+                              </span>
+                            </dt>
+                          </div>
+                          <div class="col-md-6">
+                            <dt>Profession - <span style="font-weight:lighter;">{{dsas?.basicDetail?.profession}}</span>
+                            </dt>
+                            <dt>GST No - <span style="font-weight:lighter;">{{dsas?.basicDetail?.gstNo}}</span></dt>
+                            <dt>Work Experience - <span
+                                style="font-weight:lighter;">{{dsas?.basicDetail?.workExperience}}
+                                Months </span></dt>
+                            <div *ngIf="dsas?.basicDetail?.haveOffice == 2 else HaveOffice">
+                              <dt>Have Office - <span style="font-weight:lighter;">No</span></dt>
+                            </div>
+                            <ng-template #HaveOffice>
+                              <dt>Have Office - <span style="font-weight:lighter;">Yes</span></dt>
+                            </ng-template>
+                          </div>
+                        </div>
+                      </dl>
+                    </div>
+
+                    <table class="table" *ngIf="dsas?.partnerBankDetail else otherDetail" aria-label="">
+                      <tbody>
+                        <tr>
+                          <td>
+                            <div>
+                              <h6 class="sub-title">Bank Detail</h6>
+                              <dl>
+                                <dt>AccountHolder Name - <span
+                                    style="font-weight:lighter;">{{dsas?.partnerBankDetail?.accountHolderName}}</span>
+                                </dt>
+                                <dt>AccountNo - <span
+                                    style="font-weight:lighter;">{{dsas?.partnerBankDetail?.accountNo}}</span>
+                                </dt>
+                                <dt>Bank - <span
+                                    style="font-weight:lighter;">{{dsas?.partnerBankDetail?.bankName}}</span>
+                                </dt>
+                                <dt>IFSC Code - <span
+                                    style="font-weight:lighter;">{{dsas?.partnerBankDetail?.ifscCode}}</span>
+                                </dt>
+                              </dl>
+                            </div>
+                          </td>
+                          <td class="border-left">
+                            <div class="">
+                              <h6 class="sub-title">Other Detail</h6>
+                              <dl>
+                                <dt>Business Commitment (Amount) - <span
+                                    style="font-weight:lighter;">{{dsas?.basicDetail?.commitment}}₹</span></dt>
+                              </dl>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    <ng-template #otherDetail>
+                      <div class="p-1 border-top">
+                        <h6 class="sub-title">other Detail</h6>
+                        <ng-container>
+                          <dl>
+                            <dt>Business Commitment (Amount) - <span
+                                style="font-weight:lighter;">{{dsas?.basicDetail?.commitment}}₹</span></dt>
+                          </dl>
+                        </ng-container>
+                      </div>
+                    </ng-template>
+
+                    <div class="p-1 border-top" *ngIf="dsas?.visitingCard && dsas.visitingCard.length > 0">
+                      <h6 class="sub-title">Visiting Card</h6>
+                      <ng-container>
+                        <dl>
+                          <img class="p-2" [src]="dsas?.visitingCard[0].location" height="160px" width="270px" alt="">
+                        </dl>
+                      </ng-container>
+                    </div>
+
+                  </div>
+                </ng-template>
+              </li>
+
+              <li [ngbNavItem]="2">
+                <a ngbNavLink>
+                  <span class="visible-xs">
+                    <i class="fa fa-sm fa-users tx-16 mr-1"></i>
+                  </span>
+                  <span class="hidden-xs">Customer</span>
+                </a>
+                <ng-template ngbNavContent>
+                  <div class="p-1 border-top">
+                    <ng-container *ngIf="dsas.customers && dsas.customers.length > 0 else NoCustomer">
+                      <div class="customer example-container table-responsive userlist-table">
+                        <table mat-table [dataSource]="dsas.customers"
+                          class="mat-elevation-z8 table-striped table-vcenter" style="min-width: 1000px;" aria-label="">
+                          <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef style="width: 6%;">#Id</th>
+                            <td mat-cell *matCellDef="let element;let i = index" style="width: 6%;">
+                              {{i + 1}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Name">
+                            <th mat-header-cell *matHeaderCellDef style="width: 25%;">Full Name</th>
+                            <td mat-cell *matCellDef="let element" style="width: 25%;">
+                              {{element.fullName}}-{{element.contactNo}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="birthdate">
+                            <th mat-header-cell *matHeaderCellDef>Birth Date</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.birthdate | date:'d/M/y'}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="gender">
+                            <th mat-header-cell *matHeaderCellDef>Gender</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.gender}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="panCardNo">
+                            <th mat-header-cell *matHeaderCellDef>Pan No</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.panCardNo}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="temporaryCode">
+                            <th mat-header-cell *matHeaderCellDef>Temporary Code</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.temporaryCode}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="action" stickyEnd>
+                            <th mat-header-cell *matHeaderCellDef class="text-right">Action
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="text-right">
+                              <a title="View Detail" href="javascript:;" class="btn btn-sm btn-info"
+                                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                (click)="navigateCustomerDetail(element.id)">
+                                <i class="icon-eye"></i>
+                              </a>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="customersDisplayColumns;  sticky: true"></tr>
+                          <tr mat-row *matRowDef="let row; columns: customersDisplayColumns;"
+                            class="student-element-row" style="cursor: pointer;"></tr>
+                        </table>
+                      </div>
+                    </ng-container>
+
+                    <ng-template #NoCustomer>
+                      <div class="d-flex vertical-center nodata" style="height:calc(100vh - 350px)">
+                      </div>
+                    </ng-template>
+                  </div>
+                </ng-template>
+              </li>
+
+              <li [ngbNavItem]="3">
+                <a ngbNavLink>
+                  <span class="visible-xs">
+                    <i class="fa fa-sm fa fa-percent tx-16 mr-1"></i>
+                  </span>
+                  <span class="hidden-xs">Commission</span>
+                </a>
+                <ng-template ngbNavContent>
+                  <div class="p-1 border-top">
+
+                    <ng-container *ngIf="dsas.commission && dsas.commission.length > 0 else NoCommission">
+                      <div class="commission example-container table-responsive userlist-table">
+                        <table mat-table [dataSource]="dsas.commission"
+                          class="mat-elevation-z8 table-striped table-vcenter" style="min-width: 560px;" aria-label="">
+                          <ng-container matColumnDef="id" aria-label="">
+                            <th mat-header-cell *matHeaderCellDef style="width: 10%;">Id</th>
+                            <td mat-cell *matCellDef="let element;let i = index" style="width: 10%;">
+                              {{i + 1}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="bankName">
+                            <th mat-header-cell *matHeaderCellDef style="width: 25%;">Bank Name</th>
+                            <td mat-cell *matCellDef="let element" style="width: 25%;">
+                              {{element.bankName}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="commissionType">
+                            <th mat-header-cell *matHeaderCellDef style="width: 35%;">Commission Type</th>
+                            <td mat-cell *matCellDef="let element" style="width: 35%;">
+                              {{element.commissionType}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="serviceName">
+                            <th mat-header-cell *matHeaderCellDef>service Name</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.serviceName}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="commission">
+                            <th mat-header-cell *matHeaderCellDef>Commission</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.commission}}%
+                            </td>
+                          </ng-container>
+
+                          <tr mat-header-row *matHeaderRowDef="commissionDisplayColumns; sticky: true"></tr>
+                          <tr mat-row *matRowDef="let row; columns: commissionDisplayColumns;"
+                            class="student-element-row" style="cursor: pointer;"></tr>
+                        </table>
+                      </div>
+                    </ng-container>
+
+                    <ng-template #NoCommission>
+                      <div class="d-flex vertical-center nodata" style="height:calc(100vh - 350px)">
+                      </div>
+                    </ng-template>
+                  </div>
+                </ng-template>
+              </li>
+
+              <li [ngbNavItem]="4">
+                <a ngbNavLink>
+                  <span class="visible-xs">
+                    <i class="fa fa-sm fa-suitcase tx-16 mr-1"></i>
+                  </span>
+                  <span class="hidden-xs">loan</span>
+                </a>
+                <ng-template ngbNavContent>
+                  <div class="p-1 border">
+                    <ng-container *ngIf="dsas.loans && dsas.loans.length > 0 else NoLoan">
+                      <div class="loan example-container table-responsive userlist-table">
+                        <table mat-table [dataSource]="dsas.loans" class="mat-elevation-z8 table-striped table-vcenter"
+                          style="min-width: 1000px;" aria-label="">
+                          <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef style="width: 6%;">Id</th>
+                            <td mat-cell *matCellDef="let element;let i =index" style="width: 6%;">
+                              {{i + 1}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="fullName">
+                            <th mat-header-cell *matHeaderCellDef style="width: 25%;">Full Name</th>
+                            <td mat-cell *matCellDef="let element" style="width: 25%;">
+                              {{element.fullName}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="serviceName">
+                            <th mat-header-cell *matHeaderCellDef>Loan Type</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.serviceName}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="loanAmount">
+                            <th mat-header-cell *matHeaderCellDef>Loan Amount</th>
+                            <td mat-cell *matCellDef="let element">
+                              ₹{{element.loanAmount}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="loanTransactionDate">
+                            <th mat-header-cell *matHeaderCellDef>Transaction Date</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.loanTransactionDate | date:'d/M/y'}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="motherName">
+                            <th mat-header-cell *matHeaderCellDef>Mother Name</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.motherName}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="action" stickyEnd>
+                            <th mat-header-cell *matHeaderCellDef class="text-right">Action
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="text-right">
+                              <a title="View Detail" href="javascript:;" class="btn btn-sm btn-info"
+                                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px; text-align: center;"
+                                (click)="viewLoanDetail(element)">
+                                <i class="icon-eye"></i>
+                              </a>
+                            </td>
+                          </ng-container>
+
+                          <tr mat-header-row *matHeaderRowDef="LoanDisplayColumns; sticky: true"></tr>
+                          <tr mat-row *matRowDef="let row; columns: LoanDisplayColumns;" class="student-element-row"
+                            style="cursor: pointer;"></tr>
+                        </table>
+                      </div>
+                    </ng-container>
+
+                    <ng-template #NoLoan>
+                      <div class="d-flex vertical-center nodata" style="height:calc(100vh - 350px)">
+                      </div>
+                    </ng-template>
+                  </div>
+                </ng-template>
+              </li>
+
+              <li [ngbNavItem]="5">
+                <a ngbNavLink>
+                  <span class="visible-xs">
+                    <i class="fa fa-sm fa-users tx-16 mr-1"></i>
+                  </span>
+                  <span class="hidden-xs">Employee</span>
+                </a>
+                <ng-template ngbNavContent>
+                  <div class="p-1 border">
+                    <div class="employee example-container table-responsive userlist-table">
+                      <ng-container *ngIf="dsas.employee && dsas.employee.length > 0 else NoEmployee">
+                        <table mat-table [dataSource]="dsas.employee"
+                          class="mat-elevation-z8 table-striped table-vcenter" style="min-width: 1300px;" aria-label="">
+                          <ng-container matColumnDef="id" aria-label="">
+                            <th mat-header-cell *matHeaderCellDef style="width: 5%;">ID</th>
+                            <td mat-cell *matCellDef="let element;let i =index" style="width: 5%;">
+                              {{i + 1}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="code">
+                            <th mat-header-cell *matHeaderCellDef>Code</th>
+                            <td mat-cell *matCellDef="let element;let i =index">
+                              <ng-container *ngIf="element.permanentCode else temporary">
+                                {{element.permanentCode}}
+                              </ng-container>
+                              <ng-template #temporary>
+                                {{element.temporaryCode}}
+                              </ng-template>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="fullName">
+                            <th mat-header-cell *matHeaderCellDef style="width: 20%;">Name</th>
+                            <td mat-cell *matCellDef="let element" style="width: 20%;">
+                              {{element.fullName}} - {{element.contactNo}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="panCardNo">
+                            <th mat-header-cell *matHeaderCellDef>PanCard</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.panCardNo}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="gender">
+                            <th mat-header-cell *matHeaderCellDef style="width: 8%;">Gender</th>
+                            <td mat-cell *matCellDef="let element" style="width: 8%;">
+                              {{element.gender}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="city">
+                            <th mat-header-cell *matHeaderCellDef style="width: 8%;">City</th>
+                            <td mat-cell *matCellDef="let element" style="width: 8%;">
+                              {{element.city}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="companyType">
+                            <th mat-header-cell *matHeaderCellDef>Company Type</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.companyType}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="companyName">
+                            <th mat-header-cell *matHeaderCellDef>Company Name</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.companyName}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="createdDate">
+                            <th mat-header-cell *matHeaderCellDef>Created Date</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.createdDate | date}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="action" stickyEnd>
+                            <th mat-header-cell *matHeaderCellDef class="text-right">Action
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="text-right">
+                              <a title="View Detail" href="javascript:;" class="btn btn-sm btn-info"
+                                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                (click)="navigateEmployeeDetail(element.id)">
+                                <i class="icon-eye"></i>
+                              </a>
+                            </td>
+                          </ng-container>
+
+                          <tr mat-header-row *matHeaderRowDef="employeeColumns; sticky: true"></tr>
+                          <tr mat-row *matRowDef="let row; columns: employeeColumns;" class="student-element-row"
+                            style="cursor: pointer;"></tr>
+                        </table>
+                      </ng-container>
+                    </div>
+                    <ng-template #NoEmployee>
+                      <div class="d-flex vertical-center nodata" style="height:calc(100vh - 350px)">
+                      </div>
+                    </ng-template>
+                  </div>
+                </ng-template>
+              </li>
+
+              <li [ngbNavItem]="6">
+                <a ngbNavLink>
+                  <span class="visible-xs">
+                    <i class="fa fa-sm fa-users tx-16 mr-1"></i>
+                  </span>
+                  <span class="hidden-xs">Group</span>
+                </a>
+                <ng-template ngbNavContent>
+                  <div class="p-1 border-top">
+
+                    <ng-container *ngIf="dsas.group && dsas.group.length > 0 else NoEmployee">
+                      <div class="group example-container table-responsive userlist-table">
+                        <table mat-table [dataSource]="dsas.group" class="mat-elevation-z8 table-striped table-vcenter"
+                          style="min-width: 1400px;" aria-label="">
+                          <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef style="width:5%">ID</th>
+                            <td mat-cell *matCellDef="let element;let i =index" style="width:5%">
+                              {{i + 1}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="code">
+                            <th mat-header-cell *matHeaderCellDef>Code</th>
+                            <td mat-cell *matCellDef="let element;let i =index">
+                              <ng-container *ngIf="element.permanentCode else temporary">
+                                {{element.permanentCode}}
+                              </ng-container>
+                              <ng-template #temporary>
+                                {{element.temporaryCode}}
+                              </ng-template>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="fullName">
+                            <th mat-header-cell *matHeaderCellDef style="width: 20%;">Name</th>
+                            <td mat-cell *matCellDef="let element" style="width: 20%;">
+                              {{element.fullName}} - {{element.contactNo}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="panCardNo">
+                            <th mat-header-cell *matHeaderCellDef>PanCard</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.panCardNo}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="gender">
+                            <th mat-header-cell *matHeaderCellDef style="width: 6%;">Gender</th>
+                            <td mat-cell *matCellDef="let element" style="width: 6%;">
+                              {{element.gender}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="city">
+                            <th mat-header-cell *matHeaderCellDef style="width: 8%;">City</th>
+                            <td mat-cell *matCellDef="let element" style="width: 8%;">
+                              {{element.city}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="companyType">
+                            <th mat-header-cell *matHeaderCellDef>Company Type</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.companyType}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="companyName">
+                            <th mat-header-cell *matHeaderCellDef>Company Name</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.companyName}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="createdDate">
+                            <th mat-header-cell *matHeaderCellDef>Created Date</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element.createdDate | date}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="role">
+                            <th mat-header-cell *matHeaderCellDef style="width: 8%;">Role</th>
+                            <td mat-cell *matCellDef="let element" style="width: 8%;">
+                              {{element.roleName}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="action" stickyEnd>
+                            <th mat-header-cell *matHeaderCellDef class="text-right">Action
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="text-right">
+                              <a title="View Detail" href="javascript:;" class="btn btn-sm btn-info"
+                                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                (click)="navigateGroupDetail(element)">
+                                <i class="icon-eye"></i>
+                              </a>
+                            </td>
+                          </ng-container>
+
+                          <tr mat-header-row *matHeaderRowDef="groupColumns; sticky: true"></tr>
+                          <tr mat-row *matRowDef="let row; columns: groupColumns;" class="student-element-row"
+                            style="cursor: pointer;"></tr>
+                        </table>
+                      </div>
+                    </ng-container>
+
+                    <ng-template #NoEmployee>
+                      <div class="d-flex vertical-center nodata" style="height:calc(100vh - 350px)">
+                      </div>
+                    </ng-template>
+                  </div>
+                </ng-template>
+              </li>
+
+              <li [ngbNavItem]="7">
+                <a ngbNavLink>
+                  <span class="visible-xs">
+                    <i class="fa fa-sm fa-tv tx-16 mr-1"></i>
+                  </span>
+                  <span class="hidden-xs">Training</span>
+                </a>
+                <ng-template ngbNavContent>
+                  <div class="p-1 border-top">
+
+                    <ng-container *ngIf="dsas.assignTrainings && dsas.assignTrainings.length > 0 else NoDsasData">
+                      <div class="file-content">
+                        <div class="p-1 file-manager data">
+                          <div class="row files mx-0">
+                            <div class="col-lg-6 col-md-12 col-sm-12 mt-2" *ngFor="let train of dsas.assignTrainings">
+                              <a href="{{train.url}}" target="_blank" class="form-control document" type="upload"
+                                id="resume">
+                                <h3 class="text-dark title"> {{train.title}}</h3>
+                                <div>
+                                  <div class="fileUpload text-center">
+                                    <i *ngIf="train.documentType == 'text/plain' || train.documentType=='docx' || train.documentType=='doc'"
+                                      class="fa fa-file-text-o txt-info"></i>
+                                    <i *ngIf="train.documentType == 'webLink'" class="fa fa-link txt-info"></i>
+                                    <i *ngIf="train.documentType == 'video/mp4'"
+                                      class="fa fa-file-video-o txt-info"></i>
+                                    <i *ngIf="train.documentType == 'application/pdf'"
+                                      class="fa fa-file-pdf-o txt-info"></i>
+                                    <i *ngIf="train.documentType == 'image/jpeg' || train.documentType == 'image/png' || train.documentType == 'jpeg'"
+                                      class="fa fa-file-image-o txt-info"></i>
+                                    <i *ngIf="train.documentType == 'pptx' || train.documentType == 'ppt'"
+                                      class="fa fa-file-powerpoint-o txt-info"></i>
+                                  </div>
+                                  <div>
+                                    <h6 *ngIf="train.documentType!='webLink' " class="fileName">
+                                      {{train.fileName}} </h6>
+                                    <h6 *ngIf="train.documentType == 'webLink' " class="fileName">
+                                      {{train.url}} </h6>
+                                    <div style="height:80px">
+                                      <h6 class="text-dark">Training Category:
+                                        {{train.categoryName}}
+                                      </h6>
+                                      <h6 *ngIf="train.subCategoryName" class="text-dark">Training
+                                        SubCategory: {{train.subCategoryName}}
+                                      </h6>
+                                      <h6 class="text-dark">Assign ON:
+                                        {{train.createdDate | date}}
+                                      </h6>
+                                      <h6 class="text-dark">Training Status:
+                                        {{train.trainingStatus}}
+                                      </h6>
+                                    </div>
+                                  </div>
+                                </div>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+
+                    <ng-template #NoDsasData>
+                      <div class="d-flex vertical-center nodata" style="height:calc(100vh - 350px)">
+                      </div>
+                    </ng-template>
+                  </div>
+                </ng-template>
+              </li>
+
+              <li [ngbNavItem]="8">
+                <a ngbNavLink>
+                  <span class="visible-xs">
+                    <i class="fa fa-sm fa-inr tx-16 mr-1"></i>
+                  </span>
+                  <span class="hidden-xs">Wallet History</span>
+                </a>
+                <ng-template ngbNavContent style="padding-bottom: 20px;">
+                  <div class="p-1 border-top" style="height: calc(100vh - 340px);">
+                    <div class="total">
+                      <div class="m-auto">
+                        <img src="../../../assets/images/favicon-2.jpg" alt="">
+                        <ng-container *ngIf="dsas.walletHistory && dsas.walletHistory.length > 0 else NoHistory">
+                          <span
+                            style="font-size:35px;padding-left:10px;vertical-align: middle;">{{dsas.walletHistory[0].totalCoin}}</span>
+                        </ng-container>
+                        <ng-template #NoHistory><span style="font-size:45px;padding-left:6px;vertical-align: middle;">0</span>
+                        </ng-template>
+                      </div>
+                    </div>
+                    <ng-container *ngIf="dsas.walletHistory && dsas.walletHistory.length > 0 else NoLeads">
+                      <div class="example-container table-responsive border-top userlist-table">
+                        <table mat-table [dataSource]="dsas.walletHistory"
+                          class="walletTable maintable mat-elevation-z8 table-striped table-vcenter"
+                          style="min-width: 600px;" aria-label="">
+                          <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef style="width: 9%;">#</th>
+                            <td mat-cell *matCellDef="let element;let  i=index" style="width: 15%;">
+                              {{i + 1}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="coin">
+                            <th mat-header-cell *matHeaderCellDef style="width: 18%;">Coin</th>
+                            <td mat-cell *matCellDef="let element" style="width: 18%;">
+                              {{element?.coin}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="rewardType">
+                            <th mat-header-cell *matHeaderCellDef>Reward Type</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element?.name}}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="isWithdrawal">
+                            <th mat-header-cell *matHeaderCellDef>isWithdrawal</th>
+                            <td mat-cell *matCellDef="let element">
+                              <ng-container *ngIf="element?.isWithdrawal else noWithdrawal">
+                                true
+                              </ng-container>
+                              <ng-template #noWithdrawal>
+                                false
+                              </ng-template>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="createdDate">
+                            <th mat-header-cell *matHeaderCellDef style="width: 30%;">Transaction Date</th>
+                            <td mat-cell *matCellDef="let element" style="width: 30%;">
+                              {{element?.createdDate |date}}
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="walletColumns; sticky: true">
+                          </tr>
+                          <tr mat-row *matRowDef="let row; columns: walletColumns;" class="student-element-row"
+                            style="cursor: pointer;"></tr>
+                        </table>
+                      </div>
+                    </ng-container>
+
+                    <ng-template #NoLeads>
+                      <div class="d-flex vertical-center nodata" style="height:calc(100vh - 425px)">
+                      </div>
+                    </ng-template>
+                  </div>
+                </ng-template>
+
+              </li>
+
+              <li [ngbNavItem]="9">
+                <a ngbNavLink>
+                  <span class="visible-xs">
+                    <i class="fa fa-sm fa-inr tx-16 mr-1"></i>
+                  </span>
+                  <span class="hidden-xs">Payout</span>
+                </a>
+                <ng-template ngbNavContent>
+                  <div class="p-1 border-top" style="height: calc(100vh - 340px);">
+                    <div class="total">
+                      <div class="m-auto">
+                        <img src="../../../assets/images/favicon-2.jpg" alt="">
+                        <ng-container
+                          *ngIf="dsas.partnerCommission && dsas.partnerCommission.length > 0 else NoHistory">
+                          <span
+                            style="font-size:45px;padding-left:10px;vertical-align: middle;">{{dsas.partnerCommission[0].PendingCommission}}</span>
+                        </ng-container>
+                        <ng-template #NoHistory><span style="font-size: 45px;vertical-align: middle; padding-left: 6px;">0</span>
+                        </ng-template>
+                      </div>
+                    </div>
+                    <ng-container *ngIf="dsas.partnerCommission && dsas.partnerCommission.length > 0 else NoLeads">
+                      <div class="table-responsive border-top userlist-table">
+                        <table mat-table [dataSource]="dsas.partnerCommission"
+                          class="walletTable maintable mat-elevation-z8 table-striped table-vcenter" aria-label="">
+                          <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef>#Id</th>
+                            <td mat-cell *matCellDef="let element;let  i=index">
+                              {{i + 1}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="type">
+                            <th mat-header-cell *matHeaderCellDef>Type</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element?.type}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="commission">
+                            <th mat-header-cell *matHeaderCellDef>Commission</th>
+                            <td mat-cell *matCellDef="let element">
+                              ₹{{element?.commission}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="createdDate">
+                            <th mat-header-cell *matHeaderCellDef>Date</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element?.createdDate |date}}
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="partnerCommission; sticky: true">
+                          </tr>
+                          <tr mat-row *matRowDef="let row; columns: partnerCommission;" class="student-element-row"
+                            style="cursor: pointer;"></tr>
+                        </table>
+                      </div>
+                    </ng-container>
+
+                    <ng-template #NoLeads>
+                      <div class="d-flex vertical-center nodata" style="height:calc(100vh - 425px)">
+                      </div>
+                    </ng-template>
+                  </div>
+                </ng-template>
+
+              </li>
+
+              <li [ngbNavItem]="10">
+                <a ngbNavLink>
+                  <span class="visible-xs">
+                    <i class="fa fa-sm fa-suitcase tx-16 mr-1"></i>
+                  </span>
+                  <span class="hidden-xs">Orders</span>
+                </a>
+                <ng-template ngbNavContent>
+                  <div class="p-1 border-top" style="height: calc(100vh - 330px);">
+                    <ng-container *ngIf="dsas.orders && dsas.orders.length > 0 else NoOrders">
+                      <div class="order table-responsive userlist-table" style="height: calc(100vh - 338px);">
+                        <table mat-table [dataSource]="dsas.orders" class="mat-elevation-z8 table-striped table-vcenter"
+                          style="min-width: 900px;" aria-label="">
+                          <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef style="width:7%">#Id
+                            </th>
+                            <td mat-cell *matCellDef="let element;let  i=index" style="width:7%">
+                              {{i + 1}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="productName">
+                            <th mat-header-cell *matHeaderCellDef style="width:25%">Product Name</th>
+                            <td mat-cell *matCellDef="let element" style="width:25%">
+                              {{element?.productName}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="quantity">
+                            <th mat-header-cell *matHeaderCellDef>Quantity</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element?.quantity}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="unitCoin">
+                            <th mat-header-cell *matHeaderCellDef>Unit Coin</th>
+                            <td mat-cell *matCellDef="let element">
+                              <ng-container *ngIf="element?.unitCoin else NoUnitCoin">
+                                {{element?.unitCoin}}
+                              </ng-container>
+                              <ng-template #NoUnitCoin>
+                                <p>--</p>
+                              </ng-template>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="totalcoin">
+                            <th mat-header-cell *matHeaderCellDef>Total Coin</th>
+                            <td mat-cell *matCellDef="let element">
+                              <ng-container *ngIf="element?.totalCoin else NoTotalcoin">
+                                {{element?.totalCoin}}
+                              </ng-container>
+                              <ng-template #NoTotalcoin>
+                                <p>--</p>
+                              </ng-template>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="orderstatus">
+                            <th mat-header-cell *matHeaderCellDef style="width:15%">Orderstatus</th>
+                            <td mat-cell *matCellDef="let element" style="width:15%">
+                              <ng-container *ngIf="element?.status else NoOrderstatus">
+                                {{element?.status}}
+                              </ng-container>
+                              <ng-template #NoOrderstatus>
+                                <p>--</p>
+                              </ng-template>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="transactiondate">
+                            <th mat-header-cell *matHeaderCellDef>Transaction Date</th>
+                            <td mat-cell *matCellDef="let element" >
+                              <ng-container *ngIf="element?.transactionDate else NoTransactiondate">
+                                {{element?.transactionDate | date}}
+                              </ng-container>
+                              <ng-template #NoTransactiondate>
+                                <p>--</p>
+                              </ng-template>
+                            </td>
+                          </ng-container>
+
+                          <tr mat-header-row *matHeaderRowDef="OrderDisplayColumns; sticky: true">
+                          </tr>
+                          <tr mat-row *matRowDef="let row; columns: OrderDisplayColumns;" class="student-element-row"
+                            style="cursor: pointer;"></tr>
+                        </table>
+                      </div>
+                    </ng-container>
+                    <ng-template #NoOrders>
+                      <div class="d-flex vertical-center nodata" style="height:calc(100vh - 350px)">
+                      </div>
+                    </ng-template>
+                  </div>
+                </ng-template>
+              </li>
+
+              <li [ngbNavItem]="11">
+                <a ngbNavLink>
+                  <span class="visible-xs">
+                    <i class="fa fa-sm fa-info tx-16 mr-1"></i>
+                  </span>
+                  <span class="hidden-xs">Lead</span>
+                </a>
+                <ng-template ngbNavContent>
+                  <div class="p-1 border-top" style="height: calc(100vh - 330px);">
+                    <div class="lead table-responsive userlist-table" style="height: calc(100vh - 338px);">
+                      <ng-container *ngIf="dsas.leads && dsas.leads.length > 0 else NoLeads">
+                        <table mat-table [dataSource]="dsas.leads" class="mat-elevation-z8 table-striped table-vcenter"
+                          style="min-width: 1200px;" aria-label="">
+                          <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef style="width:6%">#Id
+                            </th>
+                            <td mat-cell *matCellDef="let element;let  i=index" style="width:6%">
+                              {{i + 1}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef>Name</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element?.customerFullName}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="contactNo">
+                            <th mat-header-cell *matHeaderCellDef>Contact No</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element?.contactNo}}
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="panCardNo">
+                            <th mat-header-cell *matHeaderCellDef>PAN Card No</th>
+                            <td mat-cell *matCellDef="let element">
+                              <ng-container *ngIf="element?.panCardNo else NoData">
+                                ₹{{element?.panCardNo}}
+                              </ng-container>
+                              <ng-template #NoData>
+                                <p>--</p>
+                              </ng-template>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="leadStatus">
+                            <th mat-header-cell *matHeaderCellDef>Lead Status</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element?.leadstatus}}
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="assignpartner">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">Assign Partner</th>
+                            <td mat-cell *matCellDef="let element" class="text-center">
+                              <ng-container *ngIf="element?.partnerName else NoAssignPartner">
+                                {{element?.partnerName}}-{{element?.partnerContactNo}}
+                              </ng-container>
+                              <ng-template #NoAssignPartner>
+                                <p>--</p>
+                              </ng-template>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="loanAmount">
+                            <th mat-header-cell *matHeaderCellDef>Loan Amount</th>
+                            <td mat-cell *matCellDef="let element">
+                              <ng-container *ngIf="element?.loanAmount else NoLoanAmount">
+                                {{element?.loanAmount}}
+                              </ng-container>
+                              <ng-template #NoLoanAmount>
+                                <p>--</p>
+                              </ng-template>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="service">
+                            <th mat-header-cell *matHeaderCellDef>Service</th>
+                            <td mat-cell *matCellDef="let element">
+                              <ng-container *ngIf="element?.serviceName else NoService">
+                                {{element?.serviceName}}
+                              </ng-container>
+                              <ng-template #NoService>
+                                <p>--</p>
+                              </ng-template>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="createdDate">
+                            <th mat-header-cell *matHeaderCellDef>Created Date</th>
+                            <td mat-cell *matCellDef="let element">
+                              {{element?.createdDate |date}}
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="leadDisplayColumn; sticky: true">
+                          </tr>
+                          <tr mat-row *matRowDef="let row; columns: leadDisplayColumn;" class="student-element-row"
+                            style="cursor: pointer;"></tr>
+                        </table>
+                      </ng-container>
+                    </div>
+                    <ng-template #NoLeads>
+                      <div class="d-flex vertical-center nodata" style="height:calc(100vh - 350px)">
+                      </div>
+                    </ng-template>
+                  </div>
+                </ng-template>
+              </li>
+
+            </ul>
+          </div>
+          <div class=" border-left border-bottom border-right border-top-0">
+            <div [ngbNavOutlet]="nav" class="mt-0 tab-content"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

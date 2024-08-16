@@ -1,0 +1,24 @@
+.flagGroup {
+    padding: 10px 18px 10px 18px;
+    background: #ecf0fa;
+    border-radius: 4px;
+    margin: 10px 0px 10px 0px;
+    text-align: center;
+    display: block;
+    color: #14112d !important;
+    width: 200px;
+}
+.activeflag {
+    background-color: #0162e8;
+    color: #fff !important;
+}
+.tab-content .tab-pane {
+    display: block !important;
+}
+.grid-conatiner-systemflag-value {
+    display              : grid;
+    grid-template-columns: 200px 1fr;
+    grid-column-gap      : 15px;
+    grid-row-gap         : 5px;
+    padding-top          : 5px;
+}

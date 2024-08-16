@@ -1,0 +1,213 @@
+<title>leads</title>
+<div *ngIf="leadId else Add">
+<app-breadcrumb [title]="'Leads'" [items]="[{'name':'Leads', 'route':'/leads'}]" [active_item]="'Edit'"></app-breadcrumb>
+</div>
+<ng-template #Add>
+    <app-breadcrumb [title]="'Leads'" [items]="[{'name':'Leads', 'route':'/leads'}]" [active_item]="'Add'"></app-breadcrumb>
+</ng-template>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <form [formGroup]="leadForm">
+                        <div class="row mx-0">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <label for="name">Full Name <span style="color: red;">*</span></label>
+                                    <input class="form-control" type="text" formControlName="customerFullName" required
+                                        onlyAlphabets>
+                                    <mat-error
+                                        *ngIf="(leadForm.get('customerFullName') && !leadForm.get('customerFullName').valid  && leadForm.get('customerFullName').touched)">
+                                        <span *ngIf="leadForm.get('customerFullName').errors.required">CustomerName
+                                            is Required</span>
+                                    </mat-error>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <label for="name">Phone Number <span style="color: red;">*</span></label>
+                                    <input class="form-control" type="text" name="contact" formControlName="contactNo"
+                                        ContactNo required>
+                                    <mat-error
+                                        *ngIf="(leadForm.get('contactNo') && !leadForm.get('contactNo').valid  && leadForm.get('contactNo').touched)">
+                                        <span *ngIf="leadForm.get('contactNo').errors.required">
+                                            ContactNo is Required</span>
+                                        <span *ngIf="leadForm.get('contactNo').errors.minlength">Enter
+                                            Valid ContactNo</span>
+                                    </mat-error>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <label for="name">Email <span style="color: red;">*</span></label>
+                                    <input class="form-control" type="text" name="name" formControlName="email"
+                                        required>
+                                    <mat-error
+                                        *ngIf="(leadForm.get('email') && !leadForm.get('email').valid  && leadForm.get('email').touched)">
+                                        <span *ngIf="leadForm.get('email').errors.required">Email
+                                            is Required</span>
+                                        <span *ngIf="leadForm.get('email').errors.pattern">Invalid Email</span>
+                                    </mat-error>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <label>Select EmploymentType <span style="color: red;">*</span></label>
+                                    <ng-select [items]="employmentTypes" class="js-example-basic-single p-0"
+                                        formControlName="employmentTypeId" placeholder="Select Employment Type"
+                                        bindLabel="name" bindValue="id" groupBy="parentName" name="commissionType"
+                                        required>
+                                    </ng-select>
+                                    <mat-error
+                                        *ngIf="(leadForm.get('employmentTypeId') && !leadForm.get('employmentTypeId').valid && leadForm.get('employmentTypeId').touched)">
+                                        EmploymentType is Required
+                                    </mat-error>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <label>Select LoanType <span style="color: red;">*</span></label>
+                                    <ng-select [items]="services" class="js-example-basic-single p-0"
+                                        formControlName="serviceId" placeholder="Select Loan Type" bindLabel="name"
+                                        bindValue="id" required>
+                                    </ng-select>
+                                    <mat-error
+                                        *ngIf="(leadForm.get('serviceId') && !leadForm.get('serviceId').valid && leadForm.get('serviceId').touched)">
+                                        Loan Type is Required
+                                    </mat-error>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <label for="name">Loan Amount <span style="color: red;">*</span></label>
+                                    <input class="form-control" type="text" name="name" formControlName="loanAmount"
+                                        required onlyNumbers>
+                                    <mat-error
+                                        *ngIf="(leadForm.get('loanAmount') && !leadForm.get('loanAmount').valid  && leadForm.get('loanAmount').touched)">
+                                        <span *ngIf="leadForm.get('loanAmount').errors.required">Loan Amount
+                                            is Required</span>
+                                    </mat-error>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <label for="name">AadharCard Number <span style="color: red;">*</span></label>
+                                    <input class="form-control" type="text" name="name" formControlName="aadhaarCardNo"
+                                        required onlyNumbers maxLength="12">
+                                    <mat-error
+                                        *ngIf="(leadForm.get('aadhaarCardNo') && !leadForm.get('aadhaarCardNo').valid  && leadForm.get('aadhaarCardNo').touched)">
+                                        <span *ngIf="leadForm.get('aadhaarCardNo').errors.required">Loan Amount
+                                            is Required</span>
+                                        <span *ngIf="leadForm.get('aadhaarCardNo').errors.pattern">AadharCard Number
+                                            Invalid</span>
+                                    </mat-error>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <label for="name">PanCard Number <span style="color: red;">*</span></label>
+                                    <input class="form-control" type="text" name="name" formControlName="panCardNo"
+                                        required oninput="this.value = this.value.toUpperCase()" maxlength="10"
+                                        (keypress)="keyPressAlphanumeric($event)">
+                                    <mat-error
+                                        *ngIf="(leadForm.get('panCardNo') && !leadForm.get('panCardNo').valid  && leadForm.get('panCardNo').touched)">
+                                        <span *ngIf="leadForm.get('panCardNo').errors.required">PanCard Number
+                                            is Required</span>
+                                        <span *ngIf="leadForm.get('panCardNo').errors.pattern">PanCard Number
+                                            Invalid</span>
+                                    </mat-error>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <label>Label</label>
+                                    <input class="form-control" type="text" formControlName="label">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <label for="name">Address Line 1 <span style="color: red;">*</span></label>
+                                    <input class="form-control" type="text" name="name" formControlName="addressLine1"
+                                        required>
+                                    <mat-error
+                                        *ngIf="(leadForm.get('addressLine1') && !leadForm.get('addressLine1').valid  && leadForm.get('addressLine1').touched)">
+                                        <span *ngIf="leadForm.get('addressLine1').errors.required">Address
+                                            is Required</span>
+                                    </mat-error>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <label for="name">Address Line 2</label>
+                                    <input class="form-control" type="text" name="name" formControlName="addressLine2">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <label for="name">Pincode <span style="color: red;">*</span></label>
+                                    <input class="form-control" type="text" formControlName="pincode"
+                                        (keyup)="onKeyUpEvent($event,true)" onlyNumbers maxlength="6" required>
+                                    <mat-error
+                                        *ngIf="(leadForm.get('pincode') && !leadForm.get('pincode').valid  && leadForm.get('pincode').touched)">
+                                        <span *ngIf="leadForm.get('pincode').errors.required">Pincode
+                                            is required</span>
+                                        <span *ngIf="leadForm.get('pincode').errors.minlength">Enter
+                                            Valid Pincode</span>
+                                    </mat-error>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6">
+                                <div class="form-group">
+                                    <div class="col-form-label">Select City <span style="color: red;">*</span></div>
+                                    <ng-select [items]="cities" class="js-example-basic-single p-0"
+                                        placeholder="Select City" bindLabel="name" bindValue="id" name="cityName"
+                                        required formControlName="cityId">
+                                    </ng-select>
+                                    <mat-error
+                                        *ngIf="(leadForm.get('cityId') && !leadForm.get('cityId').valid && leadForm.get('cityId').touched)">
+                                        City is Required
+                                    </mat-error>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6">
+                                <div class="form-group">
+                                    <label for="name">District <span style="color: red;">*</span></label>
+                                    <input class="form-control" type="text" formControlName="district" readonly
+                                        required>
+                                    <mat-error
+                                        *ngIf="(leadForm.get('district') && !leadForm.get('district').valid && leadForm.get('district').touched)">
+                                        District is Required
+                                    </mat-error>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6">
+                                <div class="form-group">
+                                    <label for="name">State <span style="color: red;">*</span></label>
+                                    <input class="form-control" type="text" formControlName="state" readonly required>
+                                    <mat-error
+                                        *ngIf="(leadForm.get('state') && !leadForm.get('state').valid && leadForm.get('state').touched)">
+                                        State is Required
+                                    </mat-error>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer p-2">
+                    <button class="btn btn-info btn-sm pull-right"
+                        style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" type="reset"
+                        (click)="cancelUser()">
+                        Cancel
+                    </button>
+                    <button class="btn btn-info btn-sm pull-right"
+                        style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" type="submit"
+                        (click)="insertLead(leadForm)">
+                        Save
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

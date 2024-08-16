@@ -1,0 +1,317 @@
+<title>Bank Credit Card Policy</title>
+<app-breadcrumb [title]="'Bank Credit Card Policy'" [active_item]="'Bank Credit Card Policy'">
+</app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-drawer-container class="example-container" autosize>
+                <div class="card">
+                    <div class="card-header p-1">
+                        <div class="d-flex justify-content-between">
+                            <div class="main-header-left "></div>
+                            <div ngbDropdown class="btn-group">
+                                <div class="ml-2">
+                                    <a title="Add Bank Credit Card Policy" href="javascript:;"
+                                        class="btn btn-sm btn-info"
+                                        style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                        *ngIf="isWritePermission" (click)="modalOpen(basicmodal)">
+                                        <i class="icon-plus"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-info"
+                                        style="margin-right: 5px;border-radius: 10px;padding:8px 14px"
+                                        title="Filter Bank Credit Card Policy" (click)="drawer.toggle();">
+                                        <i class="icon-filter p-0"></i>
+                                        <span>Filter</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-container
+                        *ngIf="bankCreditCardPolicies && bankCreditCardPolicies.length > 0 else NoBankCreditCardPolicy">
+                        <div class="table-responsive border-top userlist-table">
+                            <table mat-table [dataSource]="bankCreditCardPolicies"
+                                class=" policyTable mat-elevation-z8 table-striped table-vcenter" aria-label="">
+                                <ng-container matColumnDef="id">
+                                    <th mat-header-cell *matHeaderCellDef>#</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                        {{(paginate.currentPage - 1) * paginate.pageSize + i + 1}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="bankName">
+                                    <th mat-header-cell *matHeaderCellDef>Bank Name</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.bankName else NoValue">
+                                            {{element.bankName}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="creditCardName">
+                                    <th mat-header-cell *matHeaderCellDef>CreditCard Name</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.creditcardName else NoValue">
+                                            {{element.creditcardName}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="employmentType">
+                                    <th mat-header-cell *matHeaderCellDef>Employment Type</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.employmentType else NoValue">
+                                            {{element.employmentType}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="age">
+                                    <th mat-header-cell *matHeaderCellDef>Age</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.minAge}} - {{element.maxAge}} Years
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="minIncome">
+                                    <th mat-header-cell *matHeaderCellDef>Min Income</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <ng-container *ngIf="element.minIncome else NoMinIncome">
+                                            ₹{{element.minIncome}}
+                                        </ng-container>
+                                        <ng-template #NoMinIncome>
+                                            <span>--</span>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="createdDate">
+                                    <th mat-header-cell *matHeaderCellDef>Created Date</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <ng-container *ngIf="element.createdDate else NoCreatedDate">
+                                            {{element.createdDate | date:'medium'}}
+                                        </ng-container>
+                                        <ng-template #NoCreatedDate>
+                                            <span>--</span>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="cibilScore">
+                                    <th mat-header-cell *matHeaderCellDef>Min.CibilScore</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <ng-container *ngIf="element.minimumCibilScore else NoCibilScore">
+                                            {{element.minimumCibilScore}}
+                                        </ng-container>
+                                        <ng-template #NoCibilScore>
+                                            <span>--</span>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="companyCategoryType">
+                                    <th mat-header-cell *matHeaderCellDef>Company Category Type</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <ng-container *ngIf="element.companyCategoryType else NoCategory">
+                                            {{element.companyCategoryType}}
+                                        </ng-container>
+                                        <ng-template #NoCategory>
+                                            <span>--</span>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="action">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">Action</th>
+                                    <td mat-cell *matCellDef="let element" class="text-right">
+                                        <a title="Edit Bank Credit Card Policy" href="javascript:;"
+                                            class="btn btn-sm btn-info"
+                                            style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                            *ngIf="isEditPermission" (click)="editDialog(element,basicmodal)">
+                                            <i class="icon-pencil"></i>
+                                        </a>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayColumns;" class="student-element-row"
+                                    style="cursor: pointer;"></tr>
+
+                            </table>
+                        </div>
+                    </ng-container>
+
+                    <ng-template #NoBankCreditCardPolicy>
+                        <div class="d-flex vertical-center nodata" style="height:calc(100vh - 260px)">
+                        </div>
+                    </ng-template>
+
+                    <div class="card-footer" *ngIf="bankCreditCardPolicies && bankCreditCardPolicies.length > 0">
+                        <ul class="pagination mb-0 float-right">
+                            <li [ngClass]="{ disabled: paginate.currentPage == 1 }" class="page-item page-prev">
+                                <a class="page-link" href="javascript:;" tabindex="-1"
+                                    (click)="setPage(paginate.currentPage - 1)">
+                                    <span>Prev</span>
+                                </a>
+                            </li>
+                            <li *ngFor="let page of paginate.pages" class="page-item active"
+                                [ngClass]="{ active: paginate.currentPage == page }"><a
+                                    [ngClass]="{current:paginate.currentPage == page}" class="page-link"
+                                    href="javascript:;" (click)="setPage(page)">{{page}}</a></li>
+                            <li [ngClass]="{ disabled: paginate.currentPage === paginate.totalPages}"
+                                (click)="setPage(paginate.currentPage + 1)" class="page-item page-next">
+                                <a class="page-link" href="javascript:;"><span>Next</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <mat-drawer #drawer class="example-sidenav" mode="over" position="end">
+                    <div class="col-lg-12 px-3 pt-3">
+                        <div class="d-inline" style="width: 100%;"><i class="fa fa-filter"><span>Filter</span></i>
+                            <button v class="close" aria-label="Close" (click)="drawer.toggle();">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="position px-3">
+                        <div class="form-group">
+                            <label for="name">Min Age</label>
+                            <input class="form-control" type="text" [(ngModel)]="minAge" onlyNumbers>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Max Age</label>
+                            <input class="form-control" type="text" [(ngModel)]="maxAge" onlyNumbers>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Cibil Score</label>
+                            <input class="form-control" type="text" [(ngModel)]="minCibilScore" onlyNumbers>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Bank</label>
+                            <ng-select [items]="banks" class="js-example-basic-single p-0" bindLabel="name"
+                                bindValue="id" name="bank" [(ngModel)]="selectedBank"></ng-select>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Company Category</label>
+                            <ng-select [items]="companyCategoryTypes" class="js-example-basic-single p-0"
+                                bindLabel="name" bindValue="id" name="category" [(ngModel)]="selectedCompanyCategory">
+                            </ng-select>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Employment Type</label>
+                            <ng-select [items]="employmentTypes" class="js-example-basic-single p-0" bindLabel="name"
+                                bindValue="id" name="category" [(ngModel)]="selectedEmploymentType">
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="modal-footer px-3" style="padding-bottom: 35px;justify-content: center;">
+                        <div class="float-right d-inline">
+                            <button type="button" class="btn btn-info"
+                                style="margin-right: 5px;border-radius: 0.25rem;padding:8px 14px" title="Clear Filter"
+                                (click)="drawer.toggle();clearSearch();">
+                                <span>Clear</span>
+                            </button>
+                            <button type="button" class="btn btn-info"
+                                style="margin-right: 5px;border-radius: 0.25rem;padding:8px 14px"
+                                title="Filter Training" (click)="drawer.toggle();setPage(1);">
+                                <span>Search</span>
+                            </button>
+                        </div>
+                    </div>
+
+
+                </mat-drawer>
+            </mat-drawer-container>
+        </div>
+    </div>
+</div>
+
+<ng-template #basicmodal let-modal>
+    <div>
+        <form [formGroup]="bankCreditCardForm">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pd-20">
+                <div class="form-group">
+                    <label for="name">Bank Credit Card <span *ngIf="isRequired == true"
+                            style="color: red;">*</span></label>
+                    <ng-select [items]="bankCreditCards" class="js-example-basic-single p-0"
+                        bindLabel="bankCreditCardName" bindValue="id" name="bank" formControlName="bankCreditCardId">
+                    </ng-select>
+                    <mat-error
+                        *ngIf="(bankCreditCardForm.get('bankCreditCardId') && !bankCreditCardForm.get('bankCreditCardId')?.valid && bankCreditCardForm.get('bankCreditCardId')?.touched)">
+                        Bank Category Id is required
+                    </mat-error>
+                </div>
+                <div class="form-group">
+                    <label for="name">Employment Type <span *ngIf="isRequired == true"
+                            style="color: red;">*</span></label>
+                    <ng-select [items]="employmentTypes" class="js-example-basic-single p-0" bindLabel="name"
+                        bindValue="id" name="bank" formControlName="employmentTypeId" groupBy="parentName"></ng-select>
+                    <mat-error
+                        *ngIf="(bankCreditCardForm.get('employmentTypeId') && !bankCreditCardForm.get('employmentTypeId')?.valid && bankCreditCardForm.get('employmentTypeId')?.touched)">
+                        Employment Type is required
+                    </mat-error>
+                </div>
+                <div class="form-group">
+                    <label for="name">Min.CibilScore <span *ngIf="isRequired == true"
+                            style="color: red;">*</span></label>
+                    <input class="form-control" type="text" id="name" formControlName="minimumCibilScore" required
+                        onlyNumbers>
+                    <mat-error
+                        *ngIf="(bankCreditCardForm.get('minimumCibilScore') && !bankCreditCardForm.get('minimumCibilScore')?.valid && bankCreditCardForm.get('minimumCibilScore')?.touched)">
+                        Min.CibilScore is required
+                    </mat-error>
+                </div>
+                <div class="form-group">
+                    <label for="name">Min Age <span *ngIf="isRequired == true" style="color: red;">*</span></label>
+                    <input class="form-control" type="text" id="name" formControlName="minAge" required onlyNumbers>
+                    <mat-error
+                        *ngIf="(bankCreditCardForm.get('minAge') && !bankCreditCardForm.get('minAge')?.valid && bankCreditCardForm.get('minAge')?.touched)">
+                        Min Age is required
+                    </mat-error>
+                </div>
+                <div class="form-group">
+                    <label for="name">Max Age <span *ngIf="isRequired == true" style="color: red;">*</span></label>
+                    <input class="form-control" type="text" id="name" formControlName="maxAge" required onlyNumbers>
+                    <mat-error
+                        *ngIf="(bankCreditCardForm.get('maxAge') && !bankCreditCardForm.get('maxAge')?.valid && bankCreditCardForm.get('maxAge')?.touched)">
+                        Max Age is required
+                    </mat-error>
+                </div>
+                <div class="form-group">
+                    <label for="name">Min Income <span style="color: red;">*</span></label>
+                    <input class="form-control" type="text" id="name" formControlName="minIncome" required onlyNumbers>
+                    <mat-error
+                        *ngIf="(bankCreditCardForm.get('minIncome') && !bankCreditCardForm.get('minIncome')?.valid && bankCreditCardForm.get('minIncome')?.touched)">
+                        Min Income is required
+                    </mat-error>
+                </div>
+                <div class="form-group">
+                    <label for="name">Company Category Type <span style="color: red;">*</span></label>
+                    <ng-select [items]="companyCategoryTypes" class="js-example-basic-single p-0"
+                        placeholder="Select Bank" bindLabel="name" bindValue="id" name="bank"
+                        formControlName="companyCategoryTypeId" required></ng-select>
+                    <mat-error
+                        *ngIf="(bankCreditCardForm.get('companyCategoryTypeId') && !bankCreditCardForm.get('companyCategoryTypeId')?.valid && bankCreditCardForm.get('companyCategoryTypeId')?.touched)">
+                        Company Category Type is required
+                    </mat-error>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info" (click)="insertBankCreditCardPolicy(bankCreditCardForm)"
+                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                    Save
+                </button>
+                <button class="btn btn-info" (click)="closeDialog()"
+                    style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

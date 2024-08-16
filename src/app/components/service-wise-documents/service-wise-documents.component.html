@@ -1,0 +1,338 @@
+<title>Service Document</title>
+<app-breadcrumb [title]="'Service Document'" [active_item]="'Service Document'">
+</app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+
+            <mat-drawer-container class="example-container" autosize>
+                <div class="card">
+                    <div class="card-header p-1">
+                        <div class="d-flex justify-content-between">
+                            <div class="main-header-left ">
+                            </div>
+                            <div ngbDropdown class="btn-group">
+                                <div class="ml-2">
+                                    <a *ngIf="isWritePermission" title="Add Service Document" href="javascript:;"
+                                        class="btn btn-sm btn-info"
+                                        style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                        (click)="modalOpen(basicmodal)">
+                                        <i class="icon-plus"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-info"
+                                        style="margin-right: 5px;border-radius: 10px;padding:8px 14px"
+                                        title="Filter Service Document" (click)="drawer.toggle();">
+                                        <i class="icon-filter p-0"></i>
+                                        <span>Filter</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="serviceDocuments && serviceDocuments.length > 0 else NoDocument">
+                        <div class="table-responsive border-top userlist-table">
+                            <table mat-table [dataSource]="serviceDocuments"
+                                class=" maintable mat-elevation-z8 table-striped table-vcenter" aria-label="">
+                                <ng-container matColumnDef="id">
+                                    <th mat-header-cell *matHeaderCellDef style="width:75px">#</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:75px">
+                                        {{(paginate.currentPage - 1) * paginate.pageSize + i + 1}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="serviceName">
+                                    <th mat-header-cell *matHeaderCellDef>ServiceName</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.serviceDisplayName else NoValue">
+                                            {{element.serviceDisplayName}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="document">
+                                    <th mat-header-cell *matHeaderCellDef>Document</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.documentName else NoValue">
+                                            {{element.documentName}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="displayName">
+                                    <th mat-header-cell *matHeaderCellDef>DisplayName</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.displayName else NoValue">
+                                            {{element.displayName}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="noOfDocument">
+                                    <th mat-header-cell *matHeaderCellDef>Document Count</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.documentCount else NoValue">
+                                            {{element.documentCount}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="employmentType">
+                                    <th mat-header-cell *matHeaderCellDef>Employment Type</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.employmentType else NoValue">
+                                            {{element.employmentType}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+
+
+                                <ng-container matColumnDef="required">
+                                    <th mat-header-cell *matHeaderCellDef>Document Type</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div class="checkbox checkbox-primary">
+                                            <input id="required" type="checkbox" [checked]="element.isRequired"
+                                                disabled>
+                                            <label for="required">isRequired</label>
+                                        </div>
+                                        <div class="checkbox checkbox-primary">
+                                            <input id="pdf" type="checkbox" [checked]="element.isPdf" disabled>
+                                            <label for="pdf">isPdf</label>
+                                        </div>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="newTransfer">
+                                    <th mat-header-cell *matHeaderCellDef>New/Transfer</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div class="checkbox checkbox-primary">
+                                            <input id="required" type="checkbox"
+                                                [checked]="element.isRequiredForTransfer" disabled>
+                                            <label for="required">Transfer</label>
+                                        </div>
+                                        <div class="checkbox checkbox-primary">
+                                            <input id="pdf" type="checkbox" [checked]="element.isRequiredForNew"
+                                                disabled>
+                                            <label for="pdf">New</label>
+                                        </div>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="status">
+                                    <th mat-header-cell *matHeaderCellDef translate>Status</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <ng-container *ngIf="element.isActive else InActive">
+                                            <span class="label text-success d-flex">
+                                                <div class="dot-label bg-success mr-1"></div>
+                                                <span>Active</span>
+                                            </span>
+                                        </ng-container>
+                                        <ng-template #InActive>
+                                            <span class="label text-warning d-flex">
+                                                <div class="dot-label bg-warning mr-1"></div>
+                                                <span>InActive</span>
+                                            </span>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="action">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">Action</th>
+                                    <td mat-cell *matCellDef="let element" class="text-right"
+                                        style="align-items: center;display: flex;">
+                                        <div class="media-body text-right icon-state">
+                                            <label title="Change Status" class="switch" style="top:7px"
+                                                *ngIf="isEditPermission">
+                                                <input type="checkbox" (click)="changeStatus(element)"
+                                                    [(ngModel)]="element.isActive"><span class="switch-state"
+                                                    [ngClass]="element.isActive ? 'bg-success' : 'bg-warning'"></span>
+                                            </label>
+                                        </div>
+                                        <a *ngIf="isEditPermission" title="Edit Service Document" href="javascript:;"
+                                            class="btn btn-sm btn-info"
+                                            style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                            (click)="editDialog(element,basicmodal)">
+                                            <i class="icon-pencil"></i>
+                                        </a>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayColumns;" class="student-element-row"
+                                    style="cursor: pointer;"></tr>
+                            </table>
+                        </div>
+                    </ng-container>
+                    <ng-template #NoDocument>
+                        <div class="d-flex vertical-center nodata" style="height:calc(100vh - 260px)">
+                        </div>
+                    </ng-template>
+                    <div class="card-footer" *ngIf="serviceDocuments && serviceDocuments.length > 0">
+                        <ul class="pagination mb-0 float-right">
+                            <li [ngClass]="{ disabled: paginate.currentPage == 1 }" class="page-item page-prev">
+                                <a class="page-link" href="javascript:;" tabindex="-1"
+                                    (click)="setPage(paginate.currentPage - 1)">
+                                    <span>Prev</span>
+                                </a>
+                            </li>
+                            <li *ngFor="let page of paginate.pages" class="page-item active"
+                                [ngClass]="{ active: paginate.currentPage == page }"><a
+                                    [ngClass]="{current:paginate.currentPage == page}" class="page-link"
+                                    href="javascript:;" (click)="setPage(page)">{{page}}</a></li>
+                            <li [ngClass]="{ disabled: paginate.currentPage === paginate.totalPages}"
+                                (click)="setPage(paginate.currentPage + 1)" class="page-item page-next">
+                                <a class="page-link" href="javascript:;"><span>Next</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <mat-drawer #drawer class="example-sidenav" mode="over" position="end">
+                    <div class="col-lg-12 px-3 pt-3">
+                        <div class="d-inline" style="width: 100%;"><i class="fa fa-filter"><span>Filter</span></i>
+                            <button v class="close" aria-label="Close" (click)="drawer.toggle();">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="position px-3">
+                        <div class="px-3 mb-3">
+                            <ng-select [items]="services" class="js-example-basic-single p-0"
+                                [formControl]="selectedServiceId" placeholder="Select Service" bindLabel="displayName"
+                                bindValue="id" name="service" [multiple]="true">
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="modal-footer px-3" style="padding-bottom: 35px;justify-content: center;">
+                        <div class="float-right d-inline">
+                            <button type="button" class="btn btn-info"
+                                style="margin-right: 5px;border-radius:10px;padding:8px 14px" title="Clear Filter"
+                                (click)="drawer.toggle();clearSearch();">
+                                <span>Clear</span>
+                            </button>
+                            <button type="button" class="btn btn-info"
+                                style="margin-right: 5px;border-radius: 10px;padding:8px 14px" title="Filter Loans"
+                                (click)="drawer.toggle();setPage(1);">
+                                <span>Search</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="px-3">
+                    </div>
+                </mat-drawer>
+            </mat-drawer-container>
+        </div>
+    </div>
+</div>
+<ng-template #basicmodal let-modal>
+    <div>
+        <form [formGroup]="documentForm">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pd-20" style="height:calc(100vh - 200px);overflow: auto;">
+                <div class="form-group">
+                    <label>Select Service <span style="color: red;">*</span></label>
+                    <ng-select [items]="services" class="js-example-basic-single p-0" formControlName="serviceId"
+                        placeholder="Select Service" bindLabel="displayName" bindValue="id" name="service" required>
+                    </ng-select>
+                    <mat-error
+                        *ngIf="(documentForm.get('serviceId') && !documentForm.get('serviceId').valid && documentForm.get('serviceId').touched)">
+                        Service is required
+                    </mat-error>
+                </div>
+                <div class="form-group">
+                    <label>Select Document <span style="color: red;">*</span></label>
+                    <ng-select [items]="documents" class="js-example-basic-single p-0" formControlName="documentId"
+                        placeholder="Select Document" bindLabel="name" bindValue="id" name="document" required>
+                    </ng-select>
+                    <mat-error
+                        *ngIf="(documentForm.get('documentId') && !documentForm.get('documentId').valid && documentForm.get('documentId').touched)">
+                        Document is required
+                    </mat-error>
+                </div>
+                <div class="form-group">
+                    <label>Select EmploymentType <span style="color: red;">*</span></label>
+                    <ng-select [items]="employmentTypes" class="js-example-basic-single p-0"
+                        formControlName="employmentTypeId" placeholder="Select Employment Type" bindLabel="name"
+                        bindValue="id" name="employmentType" required>
+                    </ng-select>
+                    <mat-error
+                        *ngIf="(documentForm.get('employmentTypeId') && !documentForm.get('employmentTypeId').valid && documentForm.get('employmentTypeId').touched)">
+                        EmploymentType is Required
+                    </mat-error>
+                </div>
+                <div class="form-group">
+                    <label for="name">Display Name <span style="color: red;">*</span></label>
+                    <input class="form-control" type="text" name="displayName" formControlName="displayName" required
+                        onlyAlphabets>
+                    <mat-error
+                        *ngIf="(documentForm.get('displayName') && !documentForm.get('displayName').valid && documentForm.get('displayName').touched)">
+                        Display Name is required
+                    </mat-error>
+                </div>
+                <div class="form-group">
+                    <label for="name">Document Count <span style="color: red;">*</span></label>
+                    <input class="form-control" type="text" name="cName" formControlName="documentCount" required
+                        onlyNumbers>
+                    <mat-error
+                        *ngIf="(documentForm.get('documentCount') && !documentForm.get('documentCount').valid && documentForm.get('documentCount').touched)">
+                        Document Count is required
+                    </mat-error>
+                </div>
+                <div>
+                    <div class="checkbox checkbox-primary d-inline">
+                        <input id="inputRequired" type="checkbox" formControlName="isRequired">
+                        <label for="inputRequired">isRequired</label>
+                    </div>
+                    <div class="checkbox checkbox-primary d-inline ml-3">
+                        <input id="inputPdf" type="checkbox" formControlName="isPdf">
+                        <label for="inputPdf">isPdf</label>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <label for="name" class="mr-2">Required For New?</label>
+                    <div class="d-inline">
+                        <input id="required" type="radio" value='Yes' formControlName="requiredForNew">
+                        <label for="required" class="ml-2">Yes</label>
+                    </div>
+                    <div class="d-inline ml-3">
+                        <input id="notRequired" type="radio" value='No' formControlName="requiredForNew">
+                        <label for="notRequired" class="ml-2">No</label>
+                    </div>
+                </div>
+                <div>
+                    <label for="name" class="mr-2">Required For Transfer?</label>
+
+                    <div class="d-inline">
+                        <input id="transferRequired" type="radio" value='Yes' formControlName="requiredForTransfer">
+                        <label for="inputRequired" class="ml-2">Yes</label>
+                    </div>
+                    <div class="d-inline ml-3">
+                        <input id="notRequiredForTransfer" type="radio" value='No'
+                            formControlName="requiredForTransfer">
+                        <label for="inputPdf" class="ml-2">No</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info btn-sm" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                    (click)="insertServiceDocument(documentForm)">
+                    Save
+                </button>
+                <button class="btn btn-info btn-sm" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                    (click)="closeDialog()">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

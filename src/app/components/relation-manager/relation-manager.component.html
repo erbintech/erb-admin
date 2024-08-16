@@ -1,0 +1,436 @@
+<title>Relation Manager</title>
+<app-breadcrumb [title]="'Relation Manager'" [items]="['Users', 'Relation Manager']" [active_item]="'Relation Manager'">
+</app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <app-alert *ngIf="isAlert" class="alert-top" [alertType]="alertType" [alertErrorMessage]="alertMessage">
+            </app-alert>
+            <mat-drawer-container autosize>
+                <div class="card">
+                    <div class="card-header p-1">
+                        <div class="d-flex justify-content-between">
+                            <div class="main-header-left ">
+                            </div>
+                            <div ngbDropdown class="btn-group">
+                                <div class="ml-2">
+                                    <a title="Add RM" href="javascript:;" class="btn btn-sm btn-info"
+                                        style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                        *ngIf="isWritePermission" (click)="modalOpen(basicmodal)">
+                                        <i class="icon-plus"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-info"
+                                        style="margin-right: 5px;border-radius: 10px;padding:8px 14px"
+                                        title="Filter Order" (click)="drawer.toggle();">
+                                        <i class="icon-filter p-0"></i>
+                                        <span>Filter</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="users && users.length > 0 else NoUsers">
+                        <div class="relation example-container table-responsive border-top userlist-table">
+                        <table mat-table [dataSource]="users"
+                            class="mat-elevation-z8 table-striped table-vcenter"
+                            style="min-width: 1000px;" aria-label="">
+                            <ng-container matColumnDef="id">
+                                <th mat-header-cell *matHeaderCellDef style="width:75px">#</th>
+                                <td mat-cell *matCellDef="let element; let i = index;" style="width:75px">
+                                    {{(paginate.currentPage - 1) * paginate.pageSize + i + 1}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="FullName">
+                                <th mat-header-cell *matHeaderCellDef style="width: 25%;">Name</th>
+                                <td mat-cell *matCellDef="let element" style="width: 25%;">
+                                    <ng-container *ngIf="element.fullName else NoValue">
+                                        {{element.fullName}}
+                                    </ng-container>
+                                    <ng-template #NoValue>
+                                        <span class="text-center">--</span>
+                                    </ng-template>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="ContactNo">
+                                <th mat-header-cell *matHeaderCellDef style="width: 12%;">ContactNo</th>
+                                <td mat-cell *matCellDef="let element" style="width: 12%;">
+                                    <ng-container *ngIf="element.contactNo else NoValue">
+                                        {{element.contactNo}}
+                                    </ng-container>
+                                    <ng-template #NoValue>
+                                        <span class="text-center">--</span>
+                                    </ng-template>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Email">
+                                <th mat-header-cell *matHeaderCellDef style="width: 22%;">Email</th>
+                                <td mat-cell *matCellDef="let element" style="width: 22%;">
+                                    <ng-container *ngIf="element.email else NoValue">
+                                        {{element.email}}
+                                    </ng-container>
+                                    <ng-template #NoValue>
+                                        <span class="text-center">--</span>
+                                    </ng-template>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Gender">
+                                <th mat-header-cell *matHeaderCellDef>Gender</th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.gender}}
+                                </td>
+                            </ng-container>
+                           
+                            <ng-container matColumnDef="Blocked">
+                                <th mat-header-cell *matHeaderCellDef>Blocked</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <span *ngIf="element.isBlocked else NoBlock" style="color: #ff0000;">
+                                        YES
+                                    </span>
+                                    <ng-template #NoBlock>
+                                        <span style="color: #0b9d0b;">NO</span>
+                                    </ng-template>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="Disabled">
+                                <th mat-header-cell *matHeaderCellDef>Disabled</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <span *ngIf="element.isDisabled else NoDisabled" style="color: #ff0000;">
+                                        YES
+                                    </span>
+                                    <ng-template #NoDisabled>
+                                        <span style="color: #0b9d0b;">NO</span>
+                                    </ng-template>
+                                </td>
+                            </ng-container>
+                        
+                            <ng-container matColumnDef="Action" stickyEnd>
+                                <th mat-header-cell *matHeaderCellDef class="text-right">Action</th>
+                                <td mat-cell *matCellDef="let element" class="text-right">
+                                    <button mat-button [matMenuTriggerFor]="beforeMenu" (click)="toggleMenuService.toggleMenuStyles()"> <a href="javascript:;"
+                                            class="btn btn-sm btn-info" title="Action"
+                                            style="padding: 10px 12px;border-radius: 10px;margin: 0 5px;" >
+                                            <i class="fa fa-angle-down"></i>
+                                        </a></button>
+                                    <mat-menu #beforeMenu="matMenu" xPosition="before">
+                                        <div mat-menu-item class="p-0 mx-2" *ngIf="isEditPermission"
+                                            (click)="editDialog(element,basicmodal)">
+                                            <a title="Edit RM" href="javascript:;" class="btn btn-sm btn-info"
+                                                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                                                <i class="icon-pencil"></i>
+                                            </a>Edit
+                                        </div>
+                                        <div mat-menu-item class="p-0 mx-2" *ngIf="isDeletePermission"
+                                            (click)="deleteDialog(element)">
+                                            <a title="Remove RM" href="javascript:;" class="btn btn-sm btn-info"
+                                                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                                                <i class="icon-trash"></i>
+                                            </a>Delete
+                                        </div>
+                                        <div mat-menu-item class="p-0 mx-2" *ngIf="isEditPermission"
+                                            (click)="blockUnBlockUser(element)">
+                                            <a title="BlockUnBlock RM" href="javascript:;" class="btn btn-sm btn-info"
+                                                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                                                <ng-container *ngIf="!element.isBlocked else disabled">
+                                                    <i class="icon-lock"></i>
+                                                </ng-container>
+                                                <ng-template #disabled>
+                                                    <i class="icon-unlock"></i>
+                                                </ng-template>
+                                            </a>Block
+                                        </div>
+                                        <div mat-menu-item class="p-0 mx-2" *ngIf="isEditPermission"
+                                            (click)="openPagePermissionDialog(element,pagePermissionModal)">
+                                            <a title="Assign Page Permission" href="javascript:;"
+                                                class="btn btn-sm btn-info"
+                                                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                                                <i class="icon-key"></i>
+                                            </a>Page Permission
+                                        </div>
+                                    </mat-menu>
+
+                              
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayColumns;" class="student-element-row"
+                                style="cursor: pointer;"></tr>
+                        </table>
+                        </div>
+                    </ng-container>
+                    <ng-template #NoUsers>
+                        <div class="d-flex vertical-center nodata" style="height:calc(100vh - 260px)">
+                          </div>
+                    </ng-template>
+                    <div class="card-footer" *ngIf="users && users.length > 0">
+                        <ul class="pagination mb-0 float-right">
+                            <li [ngClass]="{ disabled: paginate.currentPage == 1 }" class="page-item page-prev">
+                                <a class="page-link" href="javascript:;" tabindex="-1"
+                                    (click)="setPage(paginate.currentPage - 1)">
+                                    <span>Prev</span>
+                                </a>
+                            </li>
+                            <li *ngFor="let page of paginate.pages" class="page-item active"
+                                [ngClass]="{ active: paginate.currentPage == page }"><a
+                                    [ngClass]="{current:paginate.currentPage == page}" class="page-link"
+                                    href="javascript:;" (click)="setPage(page)">{{page}}</a></li>
+                            <li [ngClass]="{ disabled: paginate.currentPage === paginate.totalPages}"
+                                (click)="setPage(paginate.currentPage + 1)" class="page-item page-next">
+                                <a class="page-link" href="javascript:;"><span>Next</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <mat-drawer #drawer class="example-sidenav" mode="over" position="end">
+                    <div class="col-lg-12 px-3 pt-3">
+                        <div class="d-inline" style="width: 100%;"><i class="fa fa-filter"><span
+                                    class="ml-1">Filter</span></i>
+                            <button v class="close" aria-label="Close" (click)="drawer.toggle();">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="px-3">
+                        <div class="form-group">
+                            <input class="form-control" type="text" id="search" [(ngModel)]="searchString"
+                                placeholder="search" required>
+                        </div>
+                        <div class="float-right d-inline">
+                            <button type="button" class="btn btn-info"
+                                style="margin-right: 5px;border-radius:10px;padding:8px 14px" title="Clear Filter"
+                                (click)="drawer.toggle();clearSearch();">
+                                <span>Clear</span>
+                            </button>
+                            <button type="button" class="btn btn-info"
+                                style="margin-right: 5px;border-radius:10px;padding:8px 14px" title="Filter Loans"
+                                (click)="drawer.toggle();setPage(1);">
+                                <span>Search</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="px-3">
+                    </div>
+                </mat-drawer>
+            </mat-drawer-container>
+        </div>
+    </div>
+</div>
+<ng-template #basicmodal let-modal>
+    <div>
+        <form #userForm="ngForm">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pd-20">
+                
+
+                <div class="form-group col-md-12 text-center">
+                    <div class="main-contact-info-header pt-3">
+                        <div *ngIf="!profilePic else upload">
+                            <img src="../../../assets/images/userprofile.png" class="rounded-pill" alt=""
+                                (click)="fileInput.click()" />
+                        </div>
+                        <ng-template #upload>
+                            <img [src]="profilePic" class="rounded-pill" alt="" (click)="fileInput.click()" />
+                        </ng-template>
+                    </div>
+                    <a>
+                        <input type="file" #fileInput id="uploadFile" (change)="selectedImage($event)"
+                            name="profilePicUrl" accept="image/*" style="display:none;" />
+                    </a>
+                    <div class="center">
+                        <button class="p-2 text-black" *ngIf="profilePic" (click)="removeImage()"
+                            style="text-align:center; border: none; border-radius:40%; font-size: 20px;">
+                            <i class="icon-trash"></i>
+                        </button>
+                        <button class="p-2 text-black" *ngIf="!profilePic" (click)="fileInput.click()"
+                            style="text-align:center; border: none; border-radius:40%; font-size: 20px;">
+                            <i class="icon-gallery"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name">Name <span style="color: red;">*</span></label>
+                    <input class="form-control" type="text" name="name" [(ngModel)]="user.fullName" #FullName="ngModel"
+                        required>
+                    <mat-error *ngIf="(FullName.touched) && (FullName.errors['required'])">
+                        Name is required
+                    </mat-error>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email <span style="color: red;">*</span></label>
+                    <input class="form-control" type="text" name="email" [(ngModel)]="user.email" #Email="ngModel"
+                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+                    <mat-error *ngIf="(Email.touched) && (Email.errors && Email.errors['required'])">
+                        Email is required!
+                    </mat-error>
+                    <mat-error *ngIf="Email.errors && Email.errors['pattern']">
+                        Enter a valid mail id
+                    </mat-error>
+                </div>
+                <div class="form-group">
+                    <label for="email">Contact No <span style="color: red;">*</span></label>
+                    <input class="form-control" type="text" name="mobile" [(ngModel)]="user.contactNo"
+                        #Contact="ngModel" ContactNo>
+                  
+                    <mat-error
+                        *ngIf="(Contact.touched) && (Contact.errors['required']) && (Contact.valid) && (Contact.errors.pattern)">
+                        Contact No is required
+                    </mat-error>
+                </div>
+                <div class="form-group">
+                    <label for="email">Gender <span style="color: red;">*</span></label>
+                    <div class="form-group m-t-15 m-checkbox-inline mb-0 custom-radio-ml ml-2">
+                        <div class="radio radio-primary">
+                            <input id="radioinline1" type="radio" name="radio1" value="Male"
+                                [checked]="user.gender=='Male'" [(ngModel)]="user.gender">
+                            <label class="mb-0" for="radioinline1">Male</label>
+                        </div>
+                        <div class="radio radio-primary">
+                            <input id="radioinline2" type="radio" name="radio1" value="Female"
+                                [checked]="user.gender=='Female'" [(ngModel)]="user.gender">
+                            <label class="mb-0" for="radioinline2">Female</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="pass">Password <span style="color: red;">*</span></label>
+                    <div class="input-icons">
+                        <mat-icon matSuffix class="icon" (click)="hide = !hide">{{hide ? 'visibility'
+                            :'visibility_off'}}</mat-icon>
+                        <input class="form-control input-field" autocomplete="off" placeholder="password"
+                            [type]="hide ? 'text' : 'password'" [(ngModel)]="user.password" #Password="ngModel" required
+                            name="pass">
+                    </div>
+                    <mat-error *ngIf="Password.invalid && (Password.dirty ||Password.touched)">
+                        Password is Required
+                    </mat-error>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-info"
+                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" >
+                    Save
+                </button>
+                <button class="btn btn-sm btn-info"
+                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" (click)="cancelUser()">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #pagePermissionModal let-modal>
+    <div>
+        <form>
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-basic-title">Page Permission</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pd-20"
+                style="height: calc(100vh - 200px);overflow: auto;font-size: 18px;line-height: 1.5;">
+             
+                <div class="row mx-0">
+                    <div class="col-sm-6">Page</div>
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-3">Read</div>
+                            <div class="col-sm-3">Write</div>
+                            <div class="col-sm-3">Edit</div>
+                            <div class="col-sm-3">Delete</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mx-0">
+                    <ul style="width: 100%;">
+                        <li class="main" *ngFor="let page of pageList"
+                            style="margin: 0 0 5px 0;border-bottom: 1px solid #ddd;">
+                            <div class="row">
+                                <div
+                                    [ngClass]="!(page.children && page.children.length > 0) ? 'col-sm-6' : 'col-sm-12'">
+                                    <input id="checkbox-info-1" type="checkbox" [checked]="page.isChecked"
+                                        (click)="onCheckTreeview(page)">
+                                    <span class="pl-2">{{page.title}}</span>
+                                    <ul *ngIf="page.children && page.children.length > 0" style="margin: 0 0 0 20px;">
+                                        <li *ngFor="let child of page.children" class="sub pl-2">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <input id="checkbox-info-1" type="checkbox"
+                                                        [checked]="child.isChecked" (click)="onCheckTreeview(child)">
+                                                    <span class="pl-1"> {{child.title}}</span>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="row" *ngIf="child.isChecked">
+                                                        <span class="col-sm-3">
+                                                            <input id="checkbox-info-2" type="checkbox"
+                                                                [checked]="child.readPermission"
+                                                                (click)="onCheckReadPermission(child)">
+                                                        </span>
+                                                        <span class="col-sm-3">
+                                                            <input id="checkbox-info-2" type="checkbox"
+                                                                [checked]="child.writePermission"
+                                                                (click)="onCheckWritePermission(child)"></span>
+                                                        <span class="col-sm-3">
+                                                            <input id="checkbox-info-2" type="checkbox"
+                                                                [checked]="child.editPermission"
+                                                                (click)="onCheckEditPermission(child)"></span>
+                                                        <span class="col-sm-3">
+                                                            <input id="checkbox-info-2" type="checkbox"
+                                                                [checked]="child.deletePermission"
+                                                                (click)="onCheckDeletePermission(child)"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-sm-6">
+                                    <ng-container *ngIf="!(page.children && page.children.length > 0)">
+                                        <div class="row" *ngIf="page.isChecked">
+                                            <span class="col-sm-3">
+                                                <input id="checkbox-info-2" type="checkbox"
+                                                    [checked]="page.readPermission"
+                                                    (click)="onCheckReadPermission(page)">
+                                            </span>
+                                            <span class="col-sm-3">
+                                                <input id="checkbox-info-2" type="checkbox"
+                                                    [checked]="page.writePermission"
+                                                    (click)="onCheckWritePermission(page)"></span>
+                                            <span class="col-sm-3">
+                                                <input id="checkbox-info-2" type="checkbox"
+                                                    [checked]="page.editPermission"
+                                                    (click)="onCheckEditPermission(page)"></span>
+                                            <span class="col-sm-3">
+                                                <input id="checkbox-info-2" type="checkbox"
+                                                    [checked]="page.deletePermission"
+                                                    (click)="onCheckDeletePermission(page)"></span>
+
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            
+            </div>
+            <div class="modal-footer">
+                <button  (click)="insertUpdatePagePermission()" class="btn btn-sm btn-info"
+                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                    Save
+                </button>
+                <button  (click)="closePagePermissionDialog()" class="btn btn-sm btn-info"
+                style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

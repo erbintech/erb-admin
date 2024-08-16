@@ -1,0 +1,365 @@
+<title>Bank</title>
+<app-breadcrumb [title]="'Bank'" [active_item]="'Bank'">
+</app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-drawer-container class="example-container" autosize>
+                <div class="card">
+                    <div class="card-header p-1">
+                        <div class="d-flex justify-content-between">
+                            <div class="main-header-left "></div>
+                            <div ngbDropdown class="btn-group">
+                                <div class="ml-2">
+                                    <a title="Add Bank" href="javascript:;" class="btn btn-sm btn-info"
+                                        style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                        *ngIf="isWritePermission" (click)="modalOpen(basicmodal)">
+                                        <i class="icon-plus"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-info"
+                                        style="margin-right: 5px;border-radius: 0.25rem;padding:8px 14px"
+                                        title="Filter Bank" (click)="drawer.toggle();">
+                                        <i class="icon-filter p-0"></i>
+                                        <span>Filter</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="banks && banks.length > 0 else NoBanks">
+                        <div class="table-responsive border-top userlist-table">
+                            <table mat-table [dataSource]="banks"
+                                class=" maintable mat-elevation-z8 table-striped table-vcenter" aria-label="Banks">
+                                <ng-container matColumnDef="id">
+                                    <th mat-header-cell *matHeaderCellDef style="width:75px">#</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:75px">
+                                        {{(paginate.currentPage - 1) * paginate.pageSize + i + 1}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="bankLogo">
+                                    <th mat-header-cell *matHeaderCellDef style="width: 8%;">Image</th>
+                                    <td mat-cell *matCellDef="let element" style="width: 8%;">
+                                        <div *ngIf="element.bankLogo else defaultServicePic">
+                                            <img [src]="element.bankLogo | safe" class="rounded-circle my-1"
+                                                width="50px" height="60px" alt=""
+                                                style="padding-top: 8px; padding-bottom: 8px;" />
+                                        </div>
+                                        <ng-template #defaultServicePic>
+                                            <div style="width:50px; height:50px"
+                                                class="rounded-circle border d-flex vertical-center my-1">
+                                                <i class="fa fa-file-image-o m-auto" style="color:#a927f9"></i>
+                                            </div>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="name">
+                                    <th mat-header-cell *matHeaderCellDef>Name</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.name else NoValue">
+                                            {{element.name}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="description">
+                                    <th mat-header-cell *matHeaderCellDef>Description</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.description else defaultdescription">
+                                            {{element.description}}
+                                        </div>
+                                        <ng-template #defaultdescription>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="headquarters">
+                                    <th mat-header-cell *matHeaderCellDef>Headquarters</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.headquarters else defaultheadquarters">
+                                            {{element.headquarters}}
+                                        </div>
+                                        <ng-template #defaultheadquarters>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="bankCode">
+                                    <th mat-header-cell *matHeaderCellDef>BankCode</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.bankCode else defaultbankCode">
+                                            {{element.bankCode}}
+                                        </div>
+                                        <ng-template #defaultbankCode>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Status">
+                                    <th mat-header-cell *matHeaderCellDef translate>Status</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <ng-container *ngIf="element.isActive else InActive">
+                                            <span class="label text-success d-flex">
+                                                <span>Active</span>
+                                            </span>
+                                        </ng-container>
+                                        <ng-template #InActive>
+                                            <span class="label text-warning d-flex">
+                                                <span>InActive</span>
+                                            </span>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="createdDate">
+                                    <th mat-header-cell *matHeaderCellDef>Created Date</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                        <ng-container *ngIf="element.createdDate else NoValue">
+                                            {{element.createdDate | date:'medium'}}
+                                        </ng-container>
+                                        <ng-template #NoValue>
+                                            <span class="text-center">--</span>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="Action">
+                                    <th mat-header-cell *matHeaderCellDef translate class="text-right">Action</th>
+                                    <td mat-cell *matCellDef="let element" class="text-right"
+                                        style="align-items: center;display: flex;">
+                                        <div class="media-body text-right icon-state">
+                                            <label title="Change Status" class="switch" style="top:7px"
+                                                *ngIf="isEditPermission">
+                                                <input type="checkbox" (click)="changeStatus(element)"
+                                                    [(ngModel)]="element.isActive"><span class="switch-state"
+                                                    [ngClass]="element.isActive ? 'bg-success' : 'bg-warning'"></span>
+                                            </label>
+                                        </div>
+                                        <a *ngIf="element.childbusinessAnnualProfit && element.childbusinessAnnualProfit.length > 0"
+                                            title="Bank" href="javascript:;" class="btn btn-sm btn-info"
+                                            style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                            (click)="element.isExpanded = !element.isExpanded;">
+                                            <i [ngClass]="element.isExpanded ? 'icon-angle-up' : 'icon-angle-down'"></i>
+                                        </a>
+                                        <a title="Edit Bank" href="javascript:;" class="btn btn-sm btn-info"
+                                            style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                            *ngIf="isEditPermission" (click)="editDialog(element,basicmodal)">
+                                            <i class="icon-pencil"></i>
+                                        </a>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayColumns;" class="student-element-row"
+                                    style="cursor: pointer;"></tr>
+
+                            </table>
+                        </div>
+                    </ng-container>
+
+                    <ng-template #NoBanks>
+                        <div class="d-flex vertical-center nodata" style="height:calc(100vh - 260px)">
+                        </div>
+                    </ng-template>
+
+                    <div class="card-footer" *ngIf="banks && banks.length > 0">
+                        <ul class="pagination mb-0 float-right">
+                            <li [ngClass]="{ disabled: paginate.currentPage == 1 }" class="page-item page-prev">
+                                <a class="page-link" href="javascript:;" tabindex="-1"
+                                    (click)="setPage(paginate.currentPage - 1)">
+                                    <span>Prev</span>
+                                </a>
+                            </li>
+                            <li *ngFor="let page of paginate.pages" class="page-item active"
+                                [ngClass]="{ active: paginate.currentPage == page }"><a
+                                    [ngClass]="{current:paginate.currentPage == page}" class="page-link"
+                                    href="javascript:;" (click)="setPage(page)">{{page}}</a></li>
+                            <li [ngClass]="{ disabled: paginate.currentPage === paginate.totalPages}"
+                                (click)="setPage(paginate.currentPage + 1)" class="page-item page-next">
+                                <a class="page-link" href="javascript:;"><span>Next</span></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <mat-drawer #drawer class="example-sidenav" mode="over" position="end">
+                    <div class="col-lg-12 px-3 pt-3">
+                        <div class="d-inline" style="width: 100%;"><i class="fa fa-filter"><span>Filter</span></i>
+                            <button v class="close" aria-label="Close" (click)="drawer.toggle();">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="position px-3">
+                        <div class="form-group">
+                            <input class="form-control" type="text" id="search" [(ngModel)]="searchString"
+                                placeholder="search" required (keypress)="keyPressAlphanumeric($event)">
+                        </div>
+                    </div>
+                    <div class="modal-footer px-3" style="padding-bottom: 35px;justify-content: center;">
+                        <div class="float-right d-inline">
+                            <button type="button" class="btn btn-sm btn-info"
+                                style="margin-right: 5px;border-radius: 10px;padding:8px 14px" title="Clear Filter"
+                                (click)="drawer.toggle();clearSearch();">
+                                <span>Clear</span>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-info"
+                                style="margin-right: 5px;border-radius: 10px;padding:8px 14px" title="Filter Loans"
+                                (click)="drawer.toggle();setPage(1);">
+                                <span>Search</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="px-3">
+                    </div>
+                </mat-drawer>
+
+            </mat-drawer-container>
+        </div>
+    </div>
+</div>
+
+<ng-template #basicmodal let-modal>
+    <div>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body pd-20" style="height:calc(100vh - 180px);overflow: auto;">
+            <form [formGroup]="bankform">
+                <div class="row">
+                    <div class="form-group col-lg-4">
+                        <label for="name">Name <span style="color: red;">*</span></label>
+                        <input class="form-control" type="text" id="name" formControlName="name" required onlyAlphabets>
+                        <mat-error
+                            *ngIf="(bankform.get('name') && !bankform.get('name')?.valid && bankform.get('name')?.touched)">
+                            Name is required
+                        </mat-error>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label for="headquarters">Headquarters</label>
+                        <input class="form-control" type="text" id="headquarters" formControlName="headquarters"
+                            onlyAlphabets>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label for="bankCode">BankCode</label>
+                        <input class="form-control" type="text" id="bankCode" formControlName="bankCode" onlyNumbers>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-lg-4">
+                        <label for="minAge">Min Age</label>
+                        <input class="form-control" type="text" id="minAge" formControlName="minAge">
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label for="bankCode">max Age</label>
+                        <input class="form-control" type="text" id="maxAge" formControlName="maxAge">
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label for="description">Description</label>
+                        <input class="form-control" type="text" id="description" formControlName="description">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="imageUrl">Bank Logo </label>
+                    <div *ngIf="!bankform.get('bankLogo').value else Image">
+                        <a class="form-control" type="upload" id="bankLogo"
+                            style="height: 150px; width: 100%; text-align: center; border-style: dashed; border-color: rgb(63, 105, 223);display: flex;align-items: center;"
+                            (click)="fileUpload.click()">
+                            <div class="absolute text-center m-auto">
+                                <i class="icon-plus" style="font-size:30px"></i>
+                                <h4>Tap to upload image</h4>
+                            </div>
+                        </a>
+                    </div>
+                    <ng-template #Image>
+                        <div>
+                            <a class="form-control" type="upload" id="bankLogo"
+                                style="height: 150px; width: 100%; text-align: center; border-style: dashed; border-color: rgb(63, 105, 223);display: flex;align-items: center;">
+                                <div class="absolute text-center m-auto">
+                                    <div style="height:100px;width:100px">
+                                        <img [src]="bankform.get('bankLogo').value"
+                                            style="object-fit: contain;height: 100%;width: 100%;" alt="bankLogo">
+                                    </div>
+                                    <button class="btn btn-sm btn-info"
+                                        style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                                        (click)="fileUpload.click()">
+                                        Change
+                                    </button>
+                                </div>
+                            </a>
+                        </div>
+                    </ng-template>
+
+                    <input type="file" #fileUpload id="bankLogo" (change)="selectedImage($event)" name="bankLogo"
+                        style="display:none;" accept="image/*" />
+
+
+                </div>
+            </form>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="name">Company Category Type</label>
+                        <ng-select [items]="companyCategoryTypes" class="js-example-basic-single p-0" bindLabel="name"
+                            bindValue="id" name="category" [(ngModel)]="companyCategoryType"
+                            (change)="changeCompanyCategoryType()">
+                        </ng-select>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-0 border">
+                <div class="col-lg-6 border-right px-0">
+                    <div class="m-2">
+                        <h3 class=" d-inline">Company Category</h3>
+                        <input class="icon-rtl pl-2 d-inline float-right form-control form-control-sm" type="text"
+                            id="category" name="companyCategory" (keyup)="getCompanyCategory($event)" style="width:50%">
+                    </div>
+                    <div *ngIf="companyCategory && companyCategory.length > 0" class="row pl-2 m-0 border-top">
+                        <ul class="example-list">
+                            <li style="line-height:30px" *ngFor="let item  of companyCategory;let i = index">
+                                <input id="checkbox-info-1" type="checkbox" class="mr-2" [checked]="item.isSelected"
+                                    (change)="addInSelectedCategory($event,item,i)">{{item.companyName}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6 border-right px-0">
+                    <div class="m-2">
+                        <h3 class=" d-inline">Selected Company Category</h3>
+                        <input class="icon-rtl pl-2 d-inline float-right form-control form-control-sm" type="text"
+                            id="Selectedcategory" name="selectedcompanyCategory"
+                            (keyup)="getCompanyCategory($event,true)" style="width:50%">
+                    </div>
+                    <div class="col-lg-12" *ngFor="let categoryType of bank.companyCategoryTypes">
+                        <h2 class="border-top border-bottom">{{categoryType.name}}</h2>
+                        <div *ngIf="categoryType.filterCategory && categoryType.filterCategory.length > 0"
+                            class="row pl-2 m-0">
+                            <ul class="example-list">
+                                <li style="line-height:30px" *ngFor="let item  of categoryType.filterCategory">
+                                    <input id="checkbox-info-1" type="checkbox" class="mr-2" [checked]="true"
+                                        (change)="removeFromSelectedCategory($event,item,categoryType)">
+                                    {{item.companyName}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+            (click)="insertBank()">
+            Save
+        </button>
+        <button class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+            (click)="cancelUser()">
+            Cancel
+        </button>
+    </div>
+</ng-template>

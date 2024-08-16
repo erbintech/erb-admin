@@ -1,0 +1,64 @@
+export class AdminCustomerResponse {
+    fullName!: string;
+    birthdate!: Date;
+    contactNo!: string;
+    panCardNo!: string;
+    employmentTypeId!: number;
+    employmentType!: string;
+    monthlyIncome!: number;
+    companyName!: string;
+    officePincode!: string;
+    loanAmount!: number;
+    customerLoanId!: number;
+    customerLoanEmploymentId!: number;
+    dsaCode!: string;
+    rmFullName!: string
+    statusId!: number
+    status!: string
+    isDelete!: string
+    serviceId!: number
+    customerId!: number
+    customerLoanSpouseId!: number
+    gender!: string
+    maritalStatusId!: number
+    email!: string
+    residentTypeId!: number;
+    label!: string;
+    addressLine1!: string;
+    addressLine2!: string;
+    pincode!: string;
+    cityId!: number;
+    city!: string;
+    district!: string;
+    state!: string;
+    id!: number
+    tenureId!: number
+    currentAddressId!: number
+    addressTypeId!: number
+    customerLoanBusinessDetailId!: number;
+    customerAddressId!: number;
+    createdBy!: number
+    partnerFullName!: string
+    partnerContactNo!: number
+    partnerId!: number
+    isDone!: boolean
+    age!: number
+    cibilScore!: number
+    loanAmountTakenExisting!: number
+    approxDate!: Date
+    approxCurrentEMI!: number
+    bankId!: number
+    topupAmount!: number
+    loanType!: string
+    businessAnnualSale!: number
+    createdDate: Date;
+    tenure: any;
+    motherName: string
+    maritalStatus: string
+
+    bank!: any
+    residentType!: any
+    alternativeContactNo!: any
+    
+    constructor() { }
+}

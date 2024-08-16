@@ -1,0 +1,196 @@
+tr.student-element-row:not(.student-expanded-row):hover {
+    background: whitesmoke;
+}
+
+tr.student-element-row:not(.student-expanded-row):active {
+    background: #efefef;
+}
+
+.student-element-row td {
+    border-bottom-width: 0;
+}
+
+// ::ng-deep th,
+// td {
+//     z-index: 0 !important
+// }
+
+td.mat-cell:last-of-type {
+    padding-right: 11px;
+}
+
+@media screen and (max-width: 1500px) {
+    ::ng-deep table tbody .disbursed {
+        width: 1100px !important;
+        overflow: auto;
+    }
+}
+
+::ng-deep .detailTable tbody {
+    display : block;
+    height  : calc(100vh - 468px);
+    overflow: hidden;
+}
+
+::ng-deep .detailTable thead {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+::ng-deep .detailTable tr {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+// @media screen and (max-width: 776px) {
+//     ::ng-deep.mat-table tbody {
+//         display     : table;
+//         width       : 100%;
+//         table-layout: fixed;
+//         overflow    : auto;
+//         height      : calc(100vh - 475px);
+//     }
+
+//     ::ng-deep.mat-table thead {
+//         display     : table;
+//         width       : 100%;
+//         table-layout: fixed;
+//         // position: absolute;
+//     }
+
+//     ::ng-deep.mat-table tr {
+//         display     : table;
+//         width       : 100%;
+//         table-layout: fixed;
+//     }
+
+//     ::ng-deep.mat-table tbody {
+//         width   : 1200px !important;
+//         overflow: auto;
+//     }
+
+//     ::ng-deep.mat-table thead {
+//         width   : 1200px !important;
+//         overflow: auto;
+//     }
+// }
+
+// table {
+//     border-top: 1px solid #ddd
+// }
+
+::ng-deep.apexcharts-canvas {
+    width: 100% !important
+}
+
+::ng-deep.apexcharts-legend {
+    right:105px;
+}
+
+::ng-deep svg {
+    width: 100%;
+}
+
+::ng-deep foreignObject {
+    width: 100% !important;
+}
+
+::ng-deep.mat-expansion-panel {
+    border                    : 1px solid #ecf3fa !important;
+    border-radius             : 0.25rem !important;
+    border-bottom-right-radius: 0 !important;
+    border-bottom-left-radius : 0 !important;
+    box-shadow                : none !important;
+}
+
+::ng-deep.mat-expansion-panel-header {
+    border-bottom: 1px solid #ecf3fa !important;
+}
+
+.form-control[readonly] {
+    background-color: #fff !important;
+}
+
+.radio input[type=radio]:disabled+label {
+    opacity: 100% !important;
+}
+
+// ::ng-deep th,
+// td {
+//     z-index: 0 !important
+// }
+
+.fileUpload {
+    height          : 110px;
+    background-color: #fff;
+    border          : 1px solid #ececec;
+    border-radius   : 5px;
+    font-size       : 36px;
+    // /* display      : flex; */
+    align-items     : center;
+    justify-content : center;
+    // width:320px
+}
+
+.document {
+    height          : 220px;
+    width           : 100%;
+    text-align      : center;
+    border          : 1px solid #f1f1f1;
+    align-items     : center;
+    background-color: #f6f7fb;
+    color           : #7366ff;
+    font-size       : 14px
+}
+
+.border {
+    border: 1px dotted #dddd
+}
+
+dt {
+    padding: 5px
+}
+
+.personalloantab {
+    height  : calc(100vh - 300px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+::ng-deep .modal-backdrop.show {
+    z-index: 1050 !important;
+}
+
+.uploadDocument {
+    align-items  : center;
+    display      : flex;
+    height       : 130px;
+    margin-top   : 10px;
+    border-radius: 10px;
+    margin-right : 15px;
+    margin-left  : 15px;
+    width        : 100%
+}
+
+.uploadDocument i {
+    margin   : auto;
+    font-size: 50px;
+}
+
+.card .card-body {
+    padding: 20px;
+    background-color: transparent;
+}
+
+.table-striped thead tbody tr {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+table {
+    width      : 100%;
+    white-space: inherit !important;
+}

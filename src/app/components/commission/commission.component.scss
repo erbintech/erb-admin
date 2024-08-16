@@ -1,0 +1,167 @@
+tr.student-element-row:not(.student-expanded-row):hover {
+    background: whitesmoke;
+}
+
+tr.student-element-row:not(.student-expanded-row):active {
+    background: #efefef;
+}
+
+.student-element-row td {
+    border-bottom-width: 0;
+}
+
+.card {
+    height    : calc(100vh - 200px);
+    overflow-x: auto;
+}
+
+.card-footer {
+    padding: 10px !important;
+}
+
+::ng-deep .maintable tbody {
+    display : block;
+    height  : calc(100vh - 362px);
+    overflow: auto;
+}
+
+::ng-deep .maintable thead {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+::ng-deep .maintable tr {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+::ng-deep .mat-drawer-inner-container {
+    overflow: hidden !important;
+}
+
+
+.modal-title {
+    font-weight  : 500 !important;
+    font-size    : 18px !important;
+    margin-bottom: 0 !important;
+    line-height  : 1.2 !important;
+}
+
+.input-icons mat-icon {
+    position  : absolute;
+    text-align: end;
+    float     : right;
+    right     : 15px;
+    padding   : 7px !important;
+}
+
+.input-icons {
+    width        : 100%;
+    margin-bottom: 10px;
+}
+
+.icon {
+    padding  : 10px;
+    min-width: 50px;
+}
+
+.input-field {
+    width  : 100%;
+    padding: 10px;
+}
+
+::ng-deep .modal-backdrop.show {
+    z-index: 1050 !important;
+}
+
+::ng-deep {
+
+    .cdk-global-overlay-wrapper,
+    .cdk-overlay-container {
+        z-index: 9999 !important;
+    }
+}
+
+.position {
+    height    : calc(100vh - 331px);
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+@media screen and (max-width: 776px) {
+    ::ng-deep.mat-table tbody {
+        display     : table;
+        width       : 100%;
+        table-layout: fixed;
+        overflow    : auto;
+    }
+
+    ::ng-deep.mat-table thead {
+        display     : table;
+        width       : 100%;
+        table-layout: fixed;
+        // position: absolute;
+    }
+
+    ::ng-deep.mat-table tr {
+        display     : table;
+        width       : 100%;
+        table-layout: fixed;
+    }
+
+    ::ng-deep.mat-table tbody {
+        width   : 1200px !important;
+        overflow: auto;
+    }
+}
+
+::ng-deep.city .mat-form-field-infix {
+    border-top: none !important;
+}
+
+::ng-deep .commissiontable tbody {
+    display : block;
+    height  : calc(100vh - 665px);
+    overflow: auto;
+}
+
+::ng-deep .commissiontable thead {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+::ng-deep .commissiontable tr {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+.center {
+    display: block;
+    padding: 50px;
+}
+
+::ng-deep .morecommissiontable tbody {
+    display : block;
+    overflow: auto;
+}
+
+::ng-deep .morecommissiontable thead {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+::ng-deep .morecommissiontable tr {
+    display     : table;
+    width       : 100%;
+    table-layout: fixed;
+}
+
+.modal-body {
+    height  : calc(100vh - 200px);
+    overflow: auto;
+}

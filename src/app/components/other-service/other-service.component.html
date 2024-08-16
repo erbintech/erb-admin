@@ -1,0 +1,352 @@
+<title>Other Services</title>
+<app-breadcrumb [title]="'Other services'" [active_item]="'Other Service'"></app-breadcrumb>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <mat-drawer-container autosize>
+        <div class="card">
+          <div class="card-header p-1">
+            <div class="d-flex justify-content-between">
+              <div class="main-header-left "></div>
+              <div ngbDropdown class="btn-group">
+                <div class="ml-2">
+
+                  <button type="button" class="btn btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" title="Filter Other Service" (click)="drawer.toggle();">
+                    <i class="icon-filter p-0"></i>
+                    <span>Filter</span>
+                  </button>
+                  <button *ngIf="otherServices && otherServices.length > 0" type="button" class="btn btn-info" style="margin-right: 5px;border-radius: 10px;padding:8px 14px" title="DownLoad CSV"
+                    (click)="downloadCsv()">
+                    <i class="fa fa-download p-0"></i>
+                    <span>DownLoad CSV</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-container *ngIf="otherServices && otherServices.length > 0 else NoOtherServices">
+            <div class="otherservice example-container table-responsive border-top userlist-table">
+              <table mat-table [dataSource]="otherServices" class="mat-elevation-z8 table-striped table-vcenter lastcolumntable" style="min-width: 1800px; box-shadow: none;" aria-label="">
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef style="width:75px">#</th>
+                  <td mat-cell *matCellDef="let element; let i = index;" style="width:75px">
+                    {{(paginate.currentPage - 1) * paginate.pageSize + i + 1}}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="fullName">
+                  <th mat-header-cell *matHeaderCellDef style="width: 15%;">Full Name</th>
+                  <td mat-cell *matCellDef="let element" style="width: 15%;">
+                    <div *ngIf="element.fullName else NoValue">
+                      {{element.fullName}}
+                    </div>
+                    <ng-template #NoValue>
+                      --
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="birthdate">
+                  <th mat-header-cell *matHeaderCellDef>Date of Birth</th>
+                  <td mat-cell *matCellDef="let element">
+                    <div *ngIf="element.birthdate else NoValue">
+                      {{element.birthdate | date}}
+                    </div>
+                    <ng-template #NoValue>
+                      --
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="panCardNo">
+                  <th mat-header-cell *matHeaderCellDef>PAN Card No</th>
+                  <td mat-cell *matCellDef="let element">
+                    <div *ngIf="element.panCardNo else NoValue">
+                      {{element.panCardNo}}
+                    </div>
+                    <ng-template #NoValue>
+                      --
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="aadhaarCardNo">
+                  <th mat-header-cell *matHeaderCellDef>Aadhaar Card No</th>
+                  <td mat-cell *matCellDef="let element">
+                    <div *ngIf="element.aadhaarCardNo else NoValue">
+                      {{element.aadhaarCardNo}}
+                    </div>
+                    <ng-template #NoValue>
+                      --
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="contactNo">
+                  <th mat-header-cell *matHeaderCellDef>Contact No</th>
+                  <td mat-cell *matCellDef="let element">
+                    <div *ngIf="element.contactNo else NoValue">
+                      {{element.contactNo}}
+                    </div>
+                    <ng-template #NoValue>
+                      --
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="monthlyincome">
+                  <th mat-header-cell *matHeaderCellDef>Monthly Income</th>
+                  <td mat-cell *matCellDef="let element">
+                    <div *ngIf="element.monthlyincome else NoValue">
+                      ₹{{element.monthlyincome}}
+                    </div>
+                    <ng-template #NoValue>
+                      --
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="addressline1">
+                  <th mat-header-cell *matHeaderCellDef colspan="2" style="width:20%;">Address</th>
+                  <td mat-cell *matCellDef="let element" colspan="2" style="width:20%;">
+                    <div *ngIf="element.addressline1 || element.addressline2 else NoValue">
+                      {{element.addressline1}},{{element.addressline2}},{{element.city}} - {{element.pincode}}
+                    </div>
+                    <ng-template #NoValue>
+                      --
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="serviceName">
+                  <th mat-header-cell *matHeaderCellDef>Service Name</th>
+                  <td mat-cell *matCellDef="let element">
+                    <div *ngIf="element.serviceName else NoValue">
+                      {{element.serviceName}}
+                    </div>
+                    <ng-template #NoValue>
+                      --
+                    </ng-template>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="createdDate">
+                  <th mat-header-cell *matHeaderCellDef>Request date</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{element.createdDate | date :'medium'}}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="Action" stickyEnd>
+                  <th mat-header-cell *matHeaderCellDef translate class="text-right">Action</th>
+                  <td mat-cell *matCellDef="let element" class="text-center">
+                    <div class="media-body text-right icon-state">
+
+                      <a title="Edit Ohter Service" *ngIf="isEditPermission" href="javascript:;" class="btn btn-sm btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;"
+                        (click)="editDialog(element,basicmodal)">
+                        <i class="icon-pencil"></i>
+                      </a>
+                    </div>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayColumns;" class="student-element-row" style="cursor: pointer;"></tr>
+              </table>
+            </div>
+          </ng-container>
+
+          <ng-template #NoOtherServices>
+            <div class="d-flex vertical-center nodata" style="height:calc(100vh - 260px)">
+            </div>
+          </ng-template>
+
+          <div class="card-footer" *ngIf="otherServices && otherServices.length > 0">
+            <ul class="pagination mb-0 float-right">
+              <li [ngClass]="{ disabled: paginate.currentPage == 1 }" class="page-item page-prev">
+                <a class="page-link" href="javascript:;" tabindex="-1" (click)="setPage(paginate.currentPage - 1)">
+                  <span>Prev</span>
+                </a>
+              </li>
+              <li *ngFor="let page of paginate.pages" class="page-item active" [ngClass]="{ active: paginate.currentPage == page }"><a [ngClass]="{current:paginate.currentPage == page}"
+                  class="page-link" href="javascript:;" (click)="setPage(page)">{{page}}</a></li>
+              <li [ngClass]="{ disabled: paginate.currentPage === paginate.totalPages}" (click)="setPage(paginate.currentPage + 1)" class="page-item page-next">
+                <a class="page-link" href="javascript:;"><span>Next</span></a>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+        <mat-drawer #drawer class="example-sidenav" mode="over" position="end">
+          <div class="col-lg-12 px-3 pt-3">
+            <div class="d-inline" style="width: 100%;"><i class="fa fa-filter"><span>Filter</span></i>
+              <button v class="close" aria-label="Close" (click)="drawer.toggle();">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+          <hr>
+          <div class="position px-3">
+            <div class="form-group">
+              <input class="form-control" type="text" id="search" [(ngModel)]="searchString" placeholder="search" required>
+            </div>
+            <div class="form-group">
+              <ng-select [items]="serviceTypes" class="js-example-basic-single p-0" placeholder="Search by Service Name" bindLabel="name" bindValue="id" name="serviceId" [(ngModel)]="serviceId"
+                [multiple]="true"></ng-select>
+            </div>
+          </div>
+
+          <div class="modal-footer p-0" style="margin-bottom: 20px;justify-content: center;">
+            <div class="float-right d-inline">
+              <button type="button" class="btn btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" title="Clear Filter" (click)="drawer.toggle();clearSearch();">
+                <span>Clear</span>
+              </button>
+              <button type="button" class="btn btn-info" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;" title="Filter Loans" (click)="drawer.toggle();setPage(1);">
+                <span>Search</span>
+              </button>
+            </div>
+          </div>
+          <div class="px-3">
+          </div>
+        </mat-drawer>
+
+      </mat-drawer-container>
+    </div>
+  </div>
+</div>
+
+<ng-template #basicmodal let-modal>
+  <div>
+    <form [formGroup]="otherServiceform">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body p-20">
+        <div class="form-row">
+          <div class="form-group col-lg-6">
+            <label for="fullName">Full Name <span style="color: red;">*</span></label>
+            <input class="form-control" type="text" name="fullName" formControlName="fullName" onlyAlphabets required>
+            <mat-error *ngIf="(otherServiceform.get('fullName') && !otherServiceform.get('fullName').valid && otherServiceform.get('fullName').touched)">
+              Full Name is required
+            </mat-error>
+          </div>
+          <div class="form-group col-lg-6">
+            <label for="birthdate">Date of Birth <span style="color: red;">*</span></label>
+            <mat-form-field appearance="outline" class="w-100" style="margin-top: -0.25em;" (click)="toggleMenuService.togglePickerStyles()">
+              <input matInput [matDatepicker]="filterPickerFrom" placeholder="Select Birthdate" formControlName="birthdate" name="birthdate" [readonly]="true" (focus)="filterPickerFrom.open()" (click)="toggleMenuService.togglePickerStyles()">
+              <mat-datepicker-toggle matSuffix [for]="filterPickerFrom" (click)="toggleMenuService.togglePickerStyles()">
+              </mat-datepicker-toggle>
+              <mat-datepicker #filterPickerFrom></mat-datepicker>
+            </mat-form-field>
+            <mat-error *ngIf="(otherServiceform.get('birthdate') && !otherServiceform.get('birthdate').valid && otherServiceform.get('birthdate').touched)">
+              Birthdate is required
+            </mat-error>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-lg-4">
+            <label for="panCardNo">PAN Card No <span style="color: red;">*</span></label>
+            <input class="form-control" type="text" name="panCardNo" formControlName="panCardNo" maxlength="10" required>
+            <mat-error *ngIf="(otherServiceform.get('panCardNo') && !otherServiceform.get('panCardNo').valid && otherServiceform.get('panCardNo').touched)">
+              <span *ngIf="otherServiceform.get('panCardNo').errors.required">PanCardNo
+                is Required</span>
+              <span *ngIf="otherServiceform.get('panCardNo').errors.pattern">Enter
+                Valid PanCard</span>
+            </mat-error>
+          </div>
+          <div class="form-group col-lg-4">
+            <label for="aadhaarCardNo">Aadhaar Card No <span style="color: red;">*</span></label>
+            <input class="form-control" type="text" name="aadhaarCardNo" formControlName="aadhaarCardNo" maxlength="12" required onlyNumbers>
+            <mat-error *ngIf="(otherServiceform.get('aadhaarCardNo') && !otherServiceform.get('aadhaarCardNo').valid && otherServiceform.get('aadhaarCardNo').touched)">
+              <span *ngIf="otherServiceform.get('aadhaarCardNo').errors.required">Aadhaar Card No
+                is Required</span>
+              <span *ngIf="otherServiceform.get('aadhaarCardNo').errors.pattern">Enter
+                Valid Aadhaar Card No</span>
+            </mat-error>
+          </div>
+          <div class="form-group col-lg-4">
+            <label for="contactNo">Contact No <span style="color: red;">*</span></label>
+            <input class="form-control" type="text" name="contactNo" formControlName="contactNo" ContactNo required>
+            <mat-error *ngIf="(otherServiceform.get('contactNo') && !otherServiceform.get('contactNo').valid  && otherServiceform.get('contactNo').touched)">
+              <span *ngIf="otherServiceform.get('contactNo').errors.required">
+                ContactNo is Required</span>
+              <span *ngIf="otherServiceform.get('contactNo').errors.minlength">Enter
+                Valid ContactNo</span>
+            </mat-error>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-lg-4">
+            <label for="email">Email Id<span style="color: red;">*</span></label>
+            <input class="form-control" type="text" name="email" formControlName="email" required>
+            <mat-error *ngIf="(otherServiceform.get('email') && !otherServiceform.get('email').valid && otherServiceform.get('email').touched)">
+              <span *ngIf="otherServiceform.get('email').errors.required">
+                Email is Required</span>
+              <span *ngIf="otherServiceform.get('email').errors.pattern">Enter
+                Valid Email</span>
+            </mat-error>
+          </div>
+          <div class="form-group col-lg-4">
+            <label for="employmentTypeId">Employment Type <span style="color: red;">*</span></label>
+            <ng-select [items]="employments" class="js-example-basic-single p-0" placeholder="Select Employment Type" bindLabel="name" bindValue="id" formControlName="employmentTypeId"
+              name="employmentTypeId">
+            </ng-select>
+            <mat-error *ngIf="(otherServiceform.get('employmentTypeId') && !otherServiceform.get('employmentTypeId')?.valid && otherServiceform.get('employmentTypeId')?.touched)">
+              Employment Type is required
+            </mat-error>
+          </div>
+          <div class="form-group col-lg-4">
+            <label for="serviceId">Service Name <span style="color: red;">*</span></label>
+            <ng-select [items]="serviceTypes" class="js-example-basic-single p-0" placeholder="Select Loan Type" bindLabel="name" bindValue="id" formControlName="serviceId" name="serviceId">
+            </ng-select>
+            <mat-error *ngIf="(otherServiceform.get('serviceId') && !otherServiceform.get('serviceId')?.valid && otherServiceform.get('serviceId')?.touched)">
+              Loan Type is required
+            </mat-error>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="addressline1">Address Line 1 <span style="color: red;">*</span></label>
+            <input class="form-control" type="text" id="addressline1" formControlName="addressline1" placeholder="Type here" name="addressline1" onlyAlphabets required />
+            <mat-error *ngIf="(otherServiceform.get('addressline1') && !otherServiceform.get('addressline1')?.valid && otherServiceform.get('addressline1')?.touched)">
+              AddressLine1 is required
+            </mat-error>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="addressline2">Address Line 2 </label>
+            <input class="form-control" type="text" id="addressline2" formControlName="addressline2" placeholder="Type here" name="addressline2" onlyAlphabets />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-lg-4">
+            <label for="pincode">Pin Code <span style="color: red;">*</span></label>
+            <input class="form-control" type="text" id="pincode" formControlName="pincode" placeholder="Type here" maxlength="6" onlyNumbers (keyup)="onKeyUpEvent($event,false)" required>
+            <mat-error *ngIf="(otherServiceform.get('pincode') && !otherServiceform.get('pincode')?.valid && otherServiceform.get('pincode')?.touched)">
+              Pin Code is required
+            </mat-error>
+          </div>
+          <div class="form-group col-lg-4">
+            <label for="cityId">City <span style="color: red;">*</span></label>
+            <ng-select [items]="cities" class="js-example-basic-single p-0" placeholder="Select city" bindLabel="name" bindValue="id" formControlName="cityId" name="cityId">
+            </ng-select>
+            <mat-error *ngIf="(otherServiceform.get('cityId') && !otherServiceform.get('cityId')?.valid && otherServiceform.get('cityId')?.touched)">
+              City is required
+            </mat-error>
+          </div>
+          <div class="form-group col-lg-4">
+            <label for="monthlyincome">Monthly Income <span style="color: red;">*</span></label>
+            <input class="form-control" type="text" name="monthlyincome" formControlName="monthlyincome" required onlyNumbers>
+            <mat-error *ngIf="(otherServiceform.get('monthlyincome') && !otherServiceform.get('monthlyincome').valid && otherServiceform.get('monthlyincome').touched)">
+              Monthly Income is required
+            </mat-error>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-info" (click)="insertUpdateotherService()" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+          Save
+        </button>
+        <button class="btn btn-sm btn-info" (click)="cancelUser()" style="padding: 10px 12px;border-radius: 10px;margin: 0 3px;">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

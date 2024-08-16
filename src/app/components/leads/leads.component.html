@@ -1,0 +1,312 @@
+<title>Leads</title>
+<app-breadcrumb [title]="'Leads'" [active_item]="'Leads'">
+</app-breadcrumb>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <mat-drawer-container autosize>
+                <div class="card">
+                    <div class="card-header p-1">
+                        <div class="d-flex justify-content-between">
+                            <div class="main-header-left "></div>
+                            <div ngbDropdown class="btn-group">
+                                <div class="ml-2">
+                                    <a *ngIf="isWritePermission" title="Add Employment Nature" href="javascript:;"
+                                        class="btn btn-sm btn-info" style="padding: 12.3px 12px;
+                                        border-radius: 10px;
+                                        margin: 0 5px;
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: center;" (click)="navigateAddLead()">
+                                        <i class="icon-plus"></i>
+                                    </a>
+                                </div>
+                                <button type="button" class="btn btn-info" *ngIf="isWritePermission" style="margin-right: 5px;
+                                    border-radius: 10px;
+                                    padding:8px 14px;
+                                    align-items: center;
+                                    display: flex;
+                                    justify-content: center" title="Filter Leads" (click)="drawer.toggle();">
+                                    <i class="icon-filter p-0"></i>
+                                    <span>Filter</span>
+                                </button>
+                                <button *ngIf="leads && leads.length > 0" type="button" class="btn btn-info" style="margin-right: 5px;
+                                    border-radius: 10px;
+                                    padding:8px 14px;
+                                    align-items: center;
+                                    display: flex;
+                                    justify-content: center" title="DownLoad CSV" (click)="downloadCsv()">
+                                    <i class="fa fa-download p-0"></i>
+                                    <span>DownLoad CSV</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="leads && isFlag else NoLeads">
+                        <div class="leads table-responsive border-top userlist-table">
+                            <!-- table-responsive border-top userlist-table -->
+                            <table mat-table [dataSource]="leads" class="mat-elevation-z8 table-striped table-vcenter lastcolumntable"
+                                style="min-width: 1900px; box-shadow: none;" aria-label="">
+                                <ng-container matColumnDef="id">
+                                    <th mat-header-cell *matHeaderCellDef style="width:75px">#</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;" style="width:75px">
+                                        {{(paginate.currentPage - 1) * paginate.pageSize + i + 1}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="name">
+                                    <th mat-header-cell *matHeaderCellDef>Name</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.customerFullName else NoValue">
+                                            {{element.customerFullName}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="contactNo">
+                                    <th mat-header-cell *matHeaderCellDef>ContactNo</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.contactNo else NoValue">
+                                            {{element.contactNo}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="aadhaarCardNo">
+                                    <th mat-header-cell *matHeaderCellDef>AadharCard</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.aadhaarCardNo else NoValue">
+                                            {{element.aadhaarCardNo}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="panCardNo">
+                                    <th mat-header-cell *matHeaderCellDef>PanCard No</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.panCardNo else NoValue">
+                                            {{element.panCardNo}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="service">
+                                    <th mat-header-cell *matHeaderCellDef>Service</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.serviceName else NoValue">
+                                            {{element.serviceName}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="loanAmount">
+                                    <th mat-header-cell *matHeaderCellDef>Loan Amount</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngIf="element.loanAmount else NoValue">
+                                            ₹{{element.loanAmount}}
+                                        </div>
+                                        <ng-template #NoValue>
+                                            --
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="createdBy">
+                                    <th mat-header-cell *matHeaderCellDef style="width: 15%;">Created By</th>
+                                    <td mat-cell *matCellDef="let element" style="width: 15%;">
+                                        {{element.createdByUser}}-{{element.createdByContactNo}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="leadStatus">
+                                    <th mat-header-cell *matHeaderCellDef>Status</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <span
+                                            [ngStyle]="{'color':element?.statusHistory && element?.statusHistory.length > 0 && element?.statusHistory[0]?.name == 'CloseWon'? '#78b144':'red' }">{{element?.statusHistory
+                                            && element?.statusHistory[0]?.name}}</span>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="assignToPartner">
+                                    <th mat-header-cell *matHeaderCellDef style="width: 12%;">Assign Partner</th>
+                                    <td mat-cell *matCellDef="let element" style="width: 12%;">
+                                        {{element.partnerName}} - {{element.partnerContactNo}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="createdDate">
+                                    <th mat-header-cell *matHeaderCellDef>CreatedDate</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.createdDate | date:'medium'}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="action" stickyEnd>
+                                    <th mat-header-cell *matHeaderCellDef translate class="text-right" style="width: 6%;"
+                                       >Action</th>
+                                    <td mat-cell *matCellDef="let element" class="text-right" style="width: 6%;"
+                                        >
+                                        <a *ngIf="isEditPermission && element?.statusHistory && element?.statusHistory.length > 0 && element?.statusHistory[0].name =='Pending' && element?.statusHistory[0].name!='CloseWon'"
+                                            title="Assign To Partner" href="javascript:;" class="btn btn-sm btn-info"
+                                            style="padding: 10px 12px;border-radius: 10px;margin: 3px 22px 3px 0;"
+                                            (click)="modalOpen(element,basicmodal,'assignPartner')">
+                                            <i class="icon-user"></i>
+                                        </a>
+                                        <a *ngIf="isEditPermission && element.partnerContactNo  && element?.statusHistory && element?.statusHistory.length > 0 && element?.statusHistory[0].name!='CloseWon'"
+                                            title=" Change Status" href="javascript:;" class="btn btn-sm btn-info"
+                                            style="padding: 10px 12px;border-radius: 10px;margin: 0 22px 0 0;"
+                                            (click)="modalOpen(element,basicmodal,'changeStatus')">
+                                            <i class="icon-control-forward"></i>
+                                        </a>
+                                        <a *ngIf="isEditPermission && !element.partnerContactNo  && element?.statusHistory && element?.statusHistory.length > 0 && element?.statusHistory[0].name!='CloseWon'"
+                                            title="Edit Lead" href="javascript:;" class="btn btn-sm btn-info"
+                                            style="padding: 10px 12px;border-radius: 10px;margin: 0 22px 0 0;"
+                                            (click)="navigateAddLead(element)">
+                                            <i class="icon-pencil"></i>
+                                        </a>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayColumns;" class="student-element-row"
+                                    style="cursor: pointer;"></tr>
+
+                            </table>
+                        </div>
+                    </ng-container>
+
+                    <ng-template #NoLeads>
+                        <div class="d-flex vertical-center nodata" style="height:calc(100vh - 260px)">
+                        </div>
+                    </ng-template>
+
+                    <div class="card-footer" *ngIf="leads && leads.length > 0">
+                        <ul class="pagination mb-0 float-right">
+                            <li [ngClass]="{ disabled: paginate.currentPage == 1 }" class="page-item page-prev">
+                                <a class="page-link" href="javascript:;" tabindex="-1"
+                                    (click)="setPage(paginate.currentPage - 1)">
+                                    <span>Prev</span>
+                                </a>
+                            </li>
+                            <li *ngFor="let page of paginate.pages" class="page-item active"
+                                [ngClass]="{ active: paginate.currentPage == page }">
+                                <a [ngClass]="{current:paginate.currentPage == page}" class="page-link"
+                                    href="javascript:;" (click)="setPage(page)">
+                                    {{page}}
+                                </a>
+                            </li>
+                            <li [ngClass]="{ disabled: paginate.currentPage === paginate.totalPages}"
+                                (click)="setPage(paginate.currentPage + 1)" class="page-item page-next">
+                                <a class="page-link" href="javascript:;"><span>Next</span></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <mat-drawer #drawer class="example-sidenav" mode="over" position="end">
+                    <div class="col-lg-12 px-3 pt-3">
+                        <div class="d-inline" style="width: 100%;"><i class="fa fa-filter pr-1"><span
+                                    class="ml-1">Filter</span></i>
+                            <button v class="close" aria-label="Close" (click)="drawer.toggle();">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="px-3" style="height: calc(100vh - 310px);">
+                        <div class=" mb-3">
+                            <label for="services">Select Service</label>
+                            <ng-select [items]="services" class="js-example-basic-single p-0"
+                                [(ngModel)]="selectedServices" placeholder="Select Service" bindLabel="displayName"
+                                bindValue="id" name="service" [multiple]="true" id="services">
+                            </ng-select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="partners">Select Partner</label>
+                            <ng-select [items]="partner" class="js-example-basic-single p-0"
+                                [(ngModel)]="selectedPartner" placeholder="Select Partners" bindLabel="fullName"
+                                bindValue="id" name="selectedPartner" [multiple]="true" id="partners">
+                            </ng-select>
+                        </div>
+
+                    </div>
+                    
+                    <div class="modal-footer p-0" style="margin-bottom: 20px; justify-content: center;">
+                        <div class="float-right d-inline">
+                            <button type="button" class="btn btn-info"
+                                style="margin-right: 5px;border-radius: 10px;padding:8px 14px; margin-top: 3px;"
+                                title="Clear Filter" (click)="drawer.toggle();clearSearch();">
+                                <span>Clear</span>
+                            </button>
+                            <button type="button" class="btn btn-info"
+                                style="margin-right: 5px;border-radius: 10px;padding:8px 14px; margin-top: 3px;"
+                                title="Filter Loans" (click)="drawer.toggle();setPage(1);">
+                                <span>Search</span>
+                            </button>
+                        </div>
+                    </div>
+
+
+
+                    <div class="px-3">
+                    </div>
+                </mat-drawer>
+            </mat-drawer-container>
+        </div>
+    </div>
+</div>
+
+<ng-template #basicmodal let-modal>
+    <div>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">{{title}}</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body pd-20">
+            <ng-container *ngIf="isAssignPartner">
+                <div class="form-group">
+                    <label for="name">Select Partner</label>
+                    <ng-select [items]="partner" class="js-example-basic-single p-0" [(ngModel)]="partnerId"
+                        placeholder="Select Partner" bindLabel="fullName" bindValue="id" name="partner" required
+                        #selectedPartnerId="ngModel">
+                    </ng-select>
+                    <mat-error *ngIf="!selectedPartnerId?.valid && selectedPartnerId?.touched">
+                        Partner is required
+                    </mat-error>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="isChangeStatus">
+                <div class="form-group">
+                    <label for="name">Select Status <span style="color: red;">*</span></label>
+                    <ng-select [items]="selectedLeadStatuses" class="js-example-basic-single p-0" [(ngModel)]="statusId"
+                        placeholder="Select Status" bindLabel="name" bindValue="id" name="status" required
+                        #selectedStatusId="ngModel">
+                    </ng-select>
+                    <mat-error *ngIf="!selectedStatusId?.valid && selectedStatusId?.touched">
+                        Status is required
+                    </mat-error>
+                </div>
+            </ng-container>
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="isAssignPartner" class="btn btn-info"
+                style="margin-right: 5px;border-radius: 10px;padding:8px 14px" (click)="assignToPartner()">
+                Assign
+            </button>
+            <button *ngIf="isChangeStatus" class="btn btn-info"
+                style="margin-right: 5px;border-radius: 10px;padding:8px 14px" (click)="getSelectedStatus()">
+                Save
+            </button>
+            <button class="btn btn-info" style="margin-right: 5px;border-radius: 10px;padding:8px 14px"
+                (click)="closeDialog()">
+                Cancel
+            </button>
+        </div>
+    </div>
+</ng-template>

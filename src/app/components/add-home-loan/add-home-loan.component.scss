@@ -1,0 +1,82 @@
+.modalButton {
+    border-top: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 40px;
+}
+
+.setup-content {
+    height: calc(100vh - 382px);
+    overflow: auto;
+    overflow-x: hidden
+}
+
+.document {
+    border: 1px solid #ddd;
+    align-items: center;
+    display: flex;
+    height: 190px;
+    margin-right: 50px;
+    margin-left: 50px;
+}
+
+.document i {
+    font-size: 50px;
+    margin: auto
+}
+
+.file-content .files .file-box {
+    width: calc(25% - 8px);
+}
+
+.documentUpload {
+    border: 1px dotted #ddd;
+    align-items: center;
+    display: flex;
+    height: 160px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border-color: #a927f9;
+}
+
+.documentUpload i {
+    font-size: 60px;
+    margin: auto;
+}
+
+::ng-deep.mat-form-field-wrapper {
+    padding-bottom: 0px !important
+}
+
+::ng-deep.mat-form-field-infix {
+    border-top: 0px !important;
+    padding: 0.7em !important;
+}
+
+::ng-deep.mat-form-field-flex {
+    padding: 0px !important;
+}
+
+.fileUpload {
+    height: 130px;
+    background-color: #fff;
+    border: 1px solid #ececec;
+    border-radius: 5px;
+    font-size: 36px;
+    /* display      : flex; */
+    align-items: center;
+    justify-content: center;
+    // width:320px
+}
+
+.documentcard {
+    height: 220px;
+    width: 100%;
+    text-align: center;
+    border: 1px solid #f1f1f1;
+    align-items: center;
+    background-color: #f6f7fb;
+}
+
+::ng-deep .mat-horizontal-stepper-header{
+    pointer-events: none !important;
+}
